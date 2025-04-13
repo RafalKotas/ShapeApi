@@ -1,5 +1,6 @@
 package com.shape.shape_api.rectangle.v2;
 
+import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
 import com.shape.shape_api.shape.ShapeParameterMapper;
 import org.springframework.stereotype.Component;
@@ -20,5 +21,9 @@ public class RectangleV2Mapper implements ShapeParameterMapper<RectangleDTOv2> {
                 parameters.get("a"),
                 parameters.get("b")
         );
+    }
+
+    public Rectangle mapToEntity(RectangleDTOv2 rectangleDTOv2) {
+        return new Rectangle(rectangleDTOv2.getB(), rectangleDTOv2.getA());
     }
 }

@@ -1,4 +1,4 @@
-package com.shape.shape_api.exception;
+package com.shape.shape_api.common;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

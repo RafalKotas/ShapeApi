@@ -27,8 +27,7 @@ public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2, Square> {
 
     @Override
     public Square createShape(SquareDTOv2 squareDTOv2) {
-        Square square = new Square();
-        square.setA(squareDTOv2.getA());
+        Square square = new Square(squareDTOv2.getA());
 
         return squareRepository.save(square);
     }

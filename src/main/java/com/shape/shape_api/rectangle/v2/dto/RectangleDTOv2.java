@@ -1,7 +1,16 @@
 package com.shape.shape_api.rectangle.v2.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public class RectangleDTOv2 {
+
+    @NotNull(message = "Side 'a' must not be null")
+    @Min(value = 1, message = "Side 'a' must be greater than 0")
     private Long a;
+
+    @NotNull(message = "Side 'b' must not be null")
+    @Min(value = 1, message = "Side 'b' must be greater than 0")
     private Long b;
 
     public RectangleDTOv2(Long a, Long b) {

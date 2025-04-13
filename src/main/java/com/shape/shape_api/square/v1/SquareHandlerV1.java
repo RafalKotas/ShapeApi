@@ -1,5 +1,6 @@
 package com.shape.shape_api.square.v1;
 
+import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.square.SquareRepository;
@@ -7,7 +8,7 @@ import com.shape.shape_api.square.v1.dto.SquareDTOv1;
 
 import java.util.List;
 
-public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1> {
+public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, Square> {
 
     private final SquareRepository squareRepository;
 
@@ -28,12 +29,11 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1> {
     }
 
     @Override
-    public SquareDTOv1 createShape(SquareDTOv1 squareDTOv1) {
+    public Square createShape(SquareDTOv1 squareDTOv1) {
         Square square = new Square();
         square.setA(squareDTOv1.getA());
 
-        Square savedSquare = squareRepository.save(square);
+        return squareRepository.save(square);
 
-        return new SquareDTOv1(savedSquare.getA());
     }
 }

@@ -7,7 +7,7 @@ import com.shape.shape_api.shape.ShapeHandler;
 
 import java.util.List;
 
-public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1> {
+public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, Circle> {
 
     private final CircleRepository circleRepository;
 
@@ -28,12 +28,10 @@ public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1> {
     }
 
     @Override
-    public CircleDTOv1 createShape(CircleDTOv1 circleDTOv1) {
+    public Circle createShape(CircleDTOv1 circleDTOv1) {
         Circle circle = new Circle();
         circle.setRadius(circleDTOv1.getRadius());
 
-        Circle savedCircle = circleRepository.save(circle);
-
-        return new CircleDTOv1(savedCircle.getRadius());
+        return circleRepository.save(circle);
     }
 }

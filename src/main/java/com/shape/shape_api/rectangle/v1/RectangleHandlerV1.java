@@ -7,7 +7,7 @@ import com.shape.shape_api.shape.ShapeHandler;
 
 import java.util.List;
 
-public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1> {
+public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1, Rectangle> {
 
     private final RectangleRepository rectangleRepository;
 
@@ -28,13 +28,11 @@ public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1> {
     }
 
     @Override
-    public RectangleDTOv1 createShape(RectangleDTOv1 rectangleDTOv1) {
+    public Rectangle createShape(RectangleDTOv1 rectangleDTOv1) {
         Rectangle rectangle = new Rectangle();
         rectangle.setHeight(rectangleDTOv1.getHeight());
         rectangle.setWidth(rectangleDTOv1.getWidth());
 
-        Rectangle savedRectangle = rectangleRepository.save(rectangle);
-
-        return new RectangleDTOv1(savedRectangle.getHeight(), savedRectangle.getWidth());
+        return rectangleRepository.save(rectangle);
     }
 }

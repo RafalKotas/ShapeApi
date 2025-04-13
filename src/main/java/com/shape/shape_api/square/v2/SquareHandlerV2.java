@@ -21,10 +21,8 @@ public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2, Square> {
     }
 
     @Override
-    public List<SquareDTOv2> getAllShapes() {
-        return squareRepository.findAll().stream()
-                .map(square -> new SquareDTOv2(square.getA()))
-                .toList();
+    public List<Square> getAllShapes() {
+        return squareRepository.findAll();
     }
 
     @Override

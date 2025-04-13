@@ -21,10 +21,8 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDTOv2, Circle> {
     }
 
     @Override
-    public List<CircleDTOv2> getAllShapes() {
-        return circleRepository.findAll().stream()
-                .map(circle -> new CircleDTOv2(circle.getRadius()))
-                .toList();
+    public List<Circle> getAllShapes() {
+        return circleRepository.findAll();
     }
 
     @Override

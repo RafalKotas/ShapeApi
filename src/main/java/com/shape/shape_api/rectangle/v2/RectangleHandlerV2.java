@@ -21,10 +21,8 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangl
     }
 
     @Override
-    public List<RectangleDTOv2> getAllShapes() {
-        return rectangleRepository.findAll().stream()
-                .map(rectangle -> new RectangleDTOv2(rectangle.getHeight(), rectangle.getWidth()))
-                .toList();
+    public List<Rectangle> getAllShapes() {
+        return rectangleRepository.findAll();
     }
 
     @Override

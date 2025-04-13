@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-circle-table
+      author: RafalKotas
+      changes:
+        - createTable:
+            tableName: circle
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: radius
+                  type: int
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: circle

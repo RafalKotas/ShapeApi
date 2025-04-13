@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-create-square-table.yml
+  - include:
+      file: db/changelog/002-create-circle-table.yml
+  - include:
+      file: db/changelog/003-create-rectangle-table.yml

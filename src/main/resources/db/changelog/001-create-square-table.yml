@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-square-table
+      author: RafalKotas
+      changes:
+        - createTable:
+            tableName: square
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: a
+                  type: int
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: square

@@ -35,6 +35,3 @@ build/
 ### documentation files
 src/main/resources/documentation/
 
-### application.yaml passwords etc
-src/main/resources/application.yaml
-

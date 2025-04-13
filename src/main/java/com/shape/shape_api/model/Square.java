@@ -4,14 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Square {
 
     @Id
@@ -22,6 +18,14 @@ public class Square {
 
     public Square(Long a) {
         this.a = a;
+    }
+
+    public Square(Long id, Long a) {
+        this.id = id;
+        this.a = a;
+    }
+
+    public Square() {
     }
 
     public Long getId() {

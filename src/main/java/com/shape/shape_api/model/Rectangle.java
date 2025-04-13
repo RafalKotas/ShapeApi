@@ -4,14 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Rectangle {
 
     @Id
@@ -24,6 +20,15 @@ public class Rectangle {
     public Rectangle(Long width, Long height) {
         this.width = width;
         this.height = height;
+    }
+
+    public Rectangle(Long id, Long width, Long height) {
+        this.id = id;
+        this.width = width;
+        this.height = height;
+    }
+
+    public Rectangle() {
     }
 
     public Long getId() {

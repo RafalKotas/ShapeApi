@@ -27,9 +27,7 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangl
 
     @Override
     public Rectangle createShape(RectangleDTOv2 rectangleDTOv2) {
-        Rectangle rectangle = new Rectangle();
-        rectangle.setHeight(rectangleDTOv2.getA());
-        rectangle.setWidth(rectangleDTOv2.getB());
+        Rectangle rectangle = new Rectangle(rectangleDTOv2.getA(), rectangleDTOv2.getB());
 
         return rectangleRepository.save(rectangle);
     }

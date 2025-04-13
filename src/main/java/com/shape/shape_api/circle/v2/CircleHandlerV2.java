@@ -27,8 +27,7 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDTOv2, Circle> {
 
     @Override
     public Circle createShape(CircleDTOv2 circleDTOv2) {
-        Circle circle = new Circle();
-        circle.setRadius(circleDTOv2.getDiameter() / 2);
+        Circle circle = new Circle(circleDTOv2.getDiameter() / 2);
 
         return circleRepository.save(circle);
     }

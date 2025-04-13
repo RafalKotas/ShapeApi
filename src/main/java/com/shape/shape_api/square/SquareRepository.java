@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SquareRepository extends JpaRepository<Square, Long> {
-
+    Square findByA(Long a);
 }

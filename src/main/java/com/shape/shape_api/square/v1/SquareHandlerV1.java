@@ -10,9 +10,11 @@ import java.util.List;
 public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, Square> {
 
     private final SquareRepository squareRepository;
+    private final SquareV1Mapper squareV1Mapper;
 
-    public SquareHandlerV1(SquareRepository squareRepository) {
+    public SquareHandlerV1(SquareRepository squareRepository, SquareV1Mapper squareV1Mapper) {
         this.squareRepository = squareRepository;
+        this.squareV1Mapper = squareV1Mapper;
     }
 
     @Override
@@ -27,10 +29,8 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, Square> {
 
     @Override
     public Square createShape(SquareDTOv1 squareDTOv1) {
-        Square square = new Square();
-        square.setA(squareDTOv1.getA());
+        Square square = squareV1Mapper.mapToEntity(squareDTOv1);
 
         return squareRepository.save(square);
-
     }
 }

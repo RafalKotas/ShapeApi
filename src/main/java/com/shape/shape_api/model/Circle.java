@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 @Entity
 public class Circle {
 
+    public Circle(Long radius) {
+        this.radius = radius;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

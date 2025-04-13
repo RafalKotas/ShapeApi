@@ -5,32 +5,32 @@ import jakarta.validation.constraints.NotNull;
 
 public class RectangleDTOv2 {
 
-    @NotNull(message = "Side 'a' must not be null")
-    @Min(value = 1, message = "Side 'a' must be greater than 0")
-    private Long a;
+    @NotNull(message = "Side 'h' must not be null")
+    @Min(value = 1, message = "Side 'h' must be greater than 0")
+    private Long h;
 
-    @NotNull(message = "Side 'b' must not be null")
-    @Min(value = 1, message = "Side 'b' must be greater than 0")
-    private Long b;
+    @NotNull(message = "Side 'w' must not be null")
+    @Min(value = 1, message = "Side 'w' must be greater than 0")
+    private Long w;
 
-    public RectangleDTOv2(Long a, Long b) {
-        this.a = a;
-        this.b = b;
+    public RectangleDTOv2(Long h, Long w) {
+        this.h = h;
+        this.w = w;
     }
 
-    public Long getA() {
-        return this.a;
+    public Long getH() {
+        return this.h;
     }
 
-    public Long getB() {
-        return this.b;
+    public Long getW() {
+        return this.w;
     }
 
-    public void setA(Long a) {
-        this.a = a;
+    public void setH(Long h) {
+        this.h = h;
     }
 
-    public void setB(Long b) {
-        this.b = b;
+    public void setW(Long w) {
+        this.w = w;
     }
 }

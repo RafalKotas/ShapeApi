@@ -10,9 +10,11 @@ import java.util.List;
 public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, Circle> {
 
     private final CircleRepository circleRepository;
+    private final CircleV1Mapper circleV1Mapper;
 
-    public CircleHandlerV1(CircleRepository circleRepository) {
+    public CircleHandlerV1(CircleRepository circleRepository, CircleV1Mapper circleV1Mapper) {
         this.circleRepository = circleRepository;
+        this.circleV1Mapper = circleV1Mapper;
     }
 
     @Override
@@ -27,8 +29,7 @@ public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, Circle> {
 
     @Override
     public Circle createShape(CircleDTOv1 circleDTOv1) {
-        Circle circle = new Circle();
-        circle.setRadius(circleDTOv1.getRadius());
+        Circle circle = circleV1Mapper.mapToEntity(circleDTOv1);
 
         return circleRepository.save(circle);
     }

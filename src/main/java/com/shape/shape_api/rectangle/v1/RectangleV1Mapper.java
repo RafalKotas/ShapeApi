@@ -1,5 +1,6 @@
 package com.shape.shape_api.rectangle.v1;
 
+import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v1.dto.RectangleDTOv1;
 import com.shape.shape_api.shape.ShapeParameterMapper;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,10 @@ public class RectangleV1Mapper implements ShapeParameterMapper<RectangleDTOv1> {
                 parameters.get("height"),
                 parameters.get("width")
         );
+    }
+
+    public Rectangle mapToEntity(RectangleDTOv1 rectangleDTOv1) {
+        return new Rectangle(rectangleDTOv1.getWidth(), rectangleDTOv1.getHeight());
     }
 }
 

@@ -1,17 +1,5 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.circle.CircleRepository;
-import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
-import com.shape.shape_api.model.Circle;
-import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.model.Square;
-import com.shape.shape_api.rectangle.RectangleRepository;
-import com.shape.shape_api.rectangle.v1.dto.RectangleDTOv1;
-import com.shape.shape_api.square.SquareRepository;
-import com.shape.shape_api.square.v1.dto.SquareDTOv1;
-import com.shape.shape_api.square.v2.dto.SquareDTOv2;
-import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
-import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

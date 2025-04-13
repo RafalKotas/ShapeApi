@@ -1,6 +1,7 @@
 package com.shape.shape_api.square;
 
 import com.shape.shape_api.model.Square;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,6 +13,11 @@ public class SquareRepositoryTest {
 
     @Autowired
     private SquareRepository squareRepository;
+
+    @AfterEach
+    void cleanUp() {
+        squareRepository.deleteAll();
+    }
 
     @Test
     void shouldSaveAndFindSquare() {

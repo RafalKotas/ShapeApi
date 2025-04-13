@@ -1,6 +1,7 @@
 package com.shape.shape_api.rectangle;
 
 import com.shape.shape_api.model.Rectangle;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,6 +15,11 @@ public class RectangleRepositoryTest {
 
     @Autowired
     private RectangleRepository rectangleRepository;
+
+    @AfterEach
+    void cleanUp() {
+        rectangleRepository.deleteAll();
+    }
 
     @Test
     void shouldSaveAndFindRectangle() {

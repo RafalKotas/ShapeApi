@@ -1,6 +1,12 @@
 package com.shape.shape_api.square.v1.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public class SquareDTOv1 {
+
+    @NotNull(message = "Side 'a' must not be null")
+    @Min(value = 1, message = "Side 'a' must be greater than 0")
     private Long a;
 
     public SquareDTOv1(Long a) {

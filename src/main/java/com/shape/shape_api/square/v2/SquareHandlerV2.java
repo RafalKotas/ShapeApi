@@ -7,7 +7,7 @@ import com.shape.shape_api.square.v2.dto.SquareDTOv2;
 
 import java.util.List;
 
-public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2> {
+public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2, Square> {
 
     private final SquareRepository squareRepository;
 
@@ -21,19 +21,15 @@ public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2> {
     }
 
     @Override
-    public List<SquareDTOv2> getAllShapes() {
-        return squareRepository.findAll().stream()
-                .map(square -> new SquareDTOv2(square.getA()))
-                .toList();
+    public List<Square> getAllShapes() {
+        return squareRepository.findAll();
     }
 
     @Override
-    public SquareDTOv2 createShape(SquareDTOv2 squareDTOv2) {
+    public Square createShape(SquareDTOv2 squareDTOv2) {
         Square square = new Square();
         square.setA(squareDTOv2.getA());
 
-        Square savedSquare = squareRepository.save(square);
-
-        return new SquareDTOv2(savedSquare.getA());
+        return squareRepository.save(square);
     }
 }

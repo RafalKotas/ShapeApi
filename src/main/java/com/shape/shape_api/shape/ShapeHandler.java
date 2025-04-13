@@ -2,8 +2,8 @@ package com.shape.shape_api.shape;
 
 import java.util.List;
 
-public interface ShapeHandler<T> {
+public interface ShapeHandler<T, E> {
     String getKey();
-    List<T> getAllShapes();
-    T createShape(T shapeDTO);
+    List<E> getAllShapes();
+    E createShape(T shapeDTO);
 }

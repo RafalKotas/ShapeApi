@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class ShapeController {
      * @return created shape object
      */
     @PostMapping
-    public Object createShape(@RequestBody ShapeCreationRequest shapeCreationRequest) {
+    public Object createShape(@RequestBody @Valid ShapeCreationRequest shapeCreationRequest) {
         return shapeService.createShape(shapeCreationRequest.getType(), shapeCreationRequest.getParameters());
     }
 }

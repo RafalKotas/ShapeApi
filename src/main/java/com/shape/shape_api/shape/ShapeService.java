@@ -1,21 +1,29 @@
 package com.shape.shape_api.shape;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class ShapeService {
 
     private final Map<String, ShapeHandler<?, ?>> shapeHandlers;
     private final ShapeMapperRegistry shapeMapperRegistry;
+    private final Validator validator;
 
     @Autowired
-    public ShapeService(Map<String, ShapeHandler<?, ?>> shapeHandlers, ShapeMapperRegistry shapeMapperRegistry) {
+    public ShapeService(Map<String, ShapeHandler<?, ?>> shapeHandlers,
+                        ShapeMapperRegistry shapeMapperRegistry,
+                        Validator validator) {
         this.shapeHandlers = shapeHandlers;
         this.shapeMapperRegistry = shapeMapperRegistry;
+        this.validator = validator;
     }
 
     // Method to create shape based on given type and parameters
@@ -26,6 +34,12 @@ public class ShapeService {
         }
 
         Object dto = shapeMapperRegistry.mapParametersToDto(type, parameters);
+
+        Set<ConstraintViolation<Object>> violations = validator.validate(dto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+
         return handler.createShape(dto);
     }
 

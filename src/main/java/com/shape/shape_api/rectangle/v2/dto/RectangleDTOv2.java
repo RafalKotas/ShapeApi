@@ -25,12 +25,4 @@ public class RectangleDTOv2 {
     public Long getW() {
         return this.w;
     }
-
-    public void setH(Long h) {
-        this.h = h;
-    }
-
-    public void setW(Long w) {
-        this.w = w;
-    }
 }

@@ -18,7 +18,7 @@ class RectangleHandlerV2Test {
             if (dto == null) {
                 throw new IllegalArgumentException("DTO cannot be null");
             }
-            return new Rectangle(dto.getA(), dto.getB());
+            return new Rectangle(dto.getH(), dto.getW());
         }
 
         @Override
@@ -43,8 +43,8 @@ class RectangleHandlerV2Test {
 
         // then
         assertNotNull(result);
-        assertEquals(5L, result.getHeight());
-        assertEquals(10L, result.getWidth());
+        assertEquals(10L, result.getHeight());
+        assertEquals(5L, result.getWidth());
     }
 
     @Test
@@ -66,10 +66,10 @@ class RectangleHandlerV2Test {
 
         // then
         assertEquals(2, shapes.size());
-        assertEquals(5L, shapes.get(0).getHeight());
-        assertEquals(10L, shapes.get(0).getWidth());
-        assertEquals(10L, shapes.get(1).getHeight());
-        assertEquals(20L, shapes.get(1).getWidth());
+        assertEquals(10L, shapes.get(0).getHeight());
+        assertEquals(5L, shapes.get(0).getWidth());
+        assertEquals(20L, shapes.get(1).getHeight());
+        assertEquals(10L, shapes.get(1).getWidth());
     }
 
     @Test

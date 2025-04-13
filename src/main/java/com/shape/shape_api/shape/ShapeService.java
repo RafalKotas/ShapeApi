@@ -21,11 +21,11 @@ import java.util.Map;
 @Service
 public class ShapeService {
 
-    private final Map<String, ShapeHandler<?>> shapeHandlers;
+    private final Map<String, ShapeHandler<?, ?>> shapeHandlers;
     private final ShapeMapperRegistry shapeMapperRegistry;
 
     @Autowired
-    public ShapeService(Map<String, ShapeHandler<?>> shapeHandlers, ShapeMapperRegistry shapeMapperRegistry) {
+    public ShapeService(Map<String, ShapeHandler<?, ?>> shapeHandlers, ShapeMapperRegistry shapeMapperRegistry) {
         this.shapeHandlers = shapeHandlers;
         this.shapeMapperRegistry = shapeMapperRegistry;
     }
@@ -47,7 +47,7 @@ public class ShapeService {
      * @return List of shapes
      */
     public List<?> getShapesByType(String type) {
-        ShapeHandler<?> shapeHandler = shapeHandlers.get(type);
+        ShapeHandler<?, ?> shapeHandler = shapeHandlers.get(type);
         if (shapeHandler == null) {
             throw new IllegalArgumentException("Unknown shape type: " + type);
         }

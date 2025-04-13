@@ -5,6 +5,9 @@ import com.shape.shape_api.circle.v1.CircleHandlerV1;
 import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
 import com.shape.shape_api.circle.v2.CircleHandlerV2;
 import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
+import com.shape.shape_api.model.Circle;
+import com.shape.shape_api.model.Rectangle;
+import com.shape.shape_api.model.Square;
 import com.shape.shape_api.rectangle.RectangleRepository;
 import com.shape.shape_api.rectangle.v1.RectangleHandlerV1;
 import com.shape.shape_api.rectangle.v1.dto.RectangleDTOv1;
@@ -37,50 +40,50 @@ public class ShapeHandlerConfig {
 
     @Bean
     @Qualifier("circleHandlerV1")
-    public ShapeHandler<CircleDTOv1> circleHandlerV1() {
+    public ShapeHandler<CircleDTOv1, Circle> circleHandlerV1() {
         return new CircleHandlerV1(circleRepository);
     }
 
     @Bean
     @Qualifier("squareHandlerV1")
-    public ShapeHandler<SquareDTOv1> squareHandlerV1() {
+    public ShapeHandler<SquareDTOv1, Square> squareHandlerV1() {
         return new SquareHandlerV1(squareRepository);
     }
 
     @Bean
     @Qualifier("rectangleHandlerV1")
-    public ShapeHandler<RectangleDTOv1> rectangleHandlerV1() {
+    public ShapeHandler<RectangleDTOv1, Rectangle> rectangleHandlerV1() {
         return new RectangleHandlerV1(rectangleRepository);
     }
 
     @Bean
     @Qualifier("circleHandlerV2")
-    public ShapeHandler<CircleDTOv2> circleHandlerV2() {
+    public ShapeHandler<CircleDTOv2, Circle> circleHandlerV2() {
         return new CircleHandlerV2(circleRepository);
     }
 
     @Bean
     @Qualifier("squareHandlerV2")
-    public ShapeHandler<SquareDTOv2> squareHandlerV2() {
+    public ShapeHandler<SquareDTOv2, Square> squareHandlerV2() {
         return new SquareHandlerV2(squareRepository);
     }
 
     @Bean
     @Qualifier("rectangleHandlerV2")
-    public ShapeHandler<RectangleDTOv2> rectangleHandlerV2() {
+    public ShapeHandler<RectangleDTOv2, Rectangle> rectangleHandlerV2() {
         return new RectangleHandlerV2(rectangleRepository);
     }
 
     @Bean
-    public Map<String, ShapeHandler<?>> shapeHandlers(
-            ShapeHandler<CircleDTOv1> circleHandlerV1,
-            ShapeHandler<SquareDTOv1> squareHandlerV1,
-            ShapeHandler<RectangleDTOv1> rectangleHandlerV1,
-            ShapeHandler<CircleDTOv2> circleHandlerV2,
-            ShapeHandler<SquareDTOv2> squareHandlerV2,
-            ShapeHandler<RectangleDTOv2> rectangleHandlerV2
+    public Map<String, ShapeHandler<?, ?>> shapeHandlers(
+            ShapeHandler<CircleDTOv1, Circle> circleHandlerV1,
+            ShapeHandler<SquareDTOv1, Square> squareHandlerV1,
+            ShapeHandler<RectangleDTOv1, Rectangle> rectangleHandlerV1,
+            ShapeHandler<CircleDTOv2, Circle> circleHandlerV2,
+            ShapeHandler<SquareDTOv2, Square> squareHandlerV2,
+            ShapeHandler<RectangleDTOv2, Rectangle> rectangleHandlerV2
     ) {
-        Map<String, ShapeHandler<?>> handlers = new HashMap<>();
+        Map<String, ShapeHandler<?, ?>> handlers = new HashMap<>();
 
         handlers.put("v1:circle", circleHandlerV1);
         handlers.put("v1:square", squareHandlerV1);

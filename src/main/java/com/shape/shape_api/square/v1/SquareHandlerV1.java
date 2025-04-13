@@ -1,6 +1,5 @@
 package com.shape.shape_api.square.v1;
 
-import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.square.SquareRepository;

@@ -30,7 +30,6 @@ public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1, Rectangl
     @Override
     public Rectangle createShape(RectangleDTOv1 rectangleDTOv1) {
         Rectangle rectangle = rectangleV1Mapper.mapToEntity(rectangleDTOv1);
-
         return rectangleRepository.save(rectangle);
     }
 }

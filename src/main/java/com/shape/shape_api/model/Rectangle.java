@@ -6,8 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rectangle {
@@ -35,16 +37,5 @@ public class Rectangle {
     public Long getHeight() {
         return this.height;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setWidth(Long width) {
-        this.width = width;
-    }
-
-    public void setHeight(Long height) {
-        this.height = height;
-    }
 }
+

@@ -30,7 +30,6 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDTOv2, Circle> {
     @Override
     public Circle createShape(CircleDTOv2 circleDTOv2) {
         Circle circle = circleV2Mapper.mapToEntity(circleDTOv2);
-
         return circleRepository.save(circle);
     }
 }

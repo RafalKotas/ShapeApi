@@ -4,13 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Circle {
-
-    public Circle(Long radius) {
-        this.radius = radius;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +20,7 @@ public class Circle {
 
     private Long radius;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setRadius(Long radius) {
+    public Circle(Long radius) {
         this.radius = radius;
     }
 
@@ -34,4 +32,3 @@ public class Circle {
         return this.radius;
     }
 }
-

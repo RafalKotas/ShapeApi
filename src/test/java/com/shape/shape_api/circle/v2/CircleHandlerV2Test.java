@@ -1,7 +1,8 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.circle.v2;
 
 import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
 import com.shape.shape_api.model.Circle;
+import com.shape.shape_api.shape.ShapeHandler;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

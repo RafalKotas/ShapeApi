@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CircleRepository extends JpaRepository<Circle, Long> {
-
+    Circle findByRadius(Long radius);
 }

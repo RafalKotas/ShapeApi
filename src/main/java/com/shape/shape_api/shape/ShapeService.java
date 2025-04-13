@@ -26,32 +26,35 @@ public class ShapeService {
         this.validator = validator;
     }
 
-    // Method to create shape based on given type and parameters
-    public Object createShape(String type, Map<String, Long> parameters) {
-        ShapeHandler handler = shapeHandlers.get(type);
+    public Object createShape(String version, String type, Map<String, Long> parameters) {
+        String fullType = version + ":" + type;
+        ShapeHandler handler = shapeHandlers.get(fullType);
         if (handler == null) {
-            throw new IllegalArgumentException("Unsupported shape type: " + type);
+            throw new IllegalArgumentException("Unsupported shape type: " + fullType);
         }
 
-        Object dto = shapeMapperRegistry.mapParametersToDto(type, parameters);
+        Object dto = shapeMapperRegistry.mapParametersToDto(fullType, parameters);
 
         Set<ConstraintViolation<Object>> violations = validator.validate(dto);
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+            throw new ConstraintViolationException("Validation failed", violations);
         }
 
         return handler.createShape(dto);
     }
 
     /**
-     * method to get all shapes by shape type
-     * @param type shape type
-     * @return List of shapes
+     * Retrieves all shape entities based on version and shape type.
+     *
+     * @param version API version (e.g. "v1" or "v2")
+     * @param type    shape type (e.g. "circle", "square")
+     * @return List of shape entities or DTOs
      */
-    public List<?> getShapesByType(String type) {
-        ShapeHandler<?, ?> shapeHandler = shapeHandlers.get(type);
+    public List<?> getShapesByType(String version, String type) {
+        String fullType = version + ":" + type;
+        ShapeHandler<?, ?> shapeHandler = shapeHandlers.get(fullType);
         if (shapeHandler == null) {
-            throw new IllegalArgumentException("Unknown shape type: " + type);
+            throw new IllegalArgumentException("Unknown shape type: " + fullType);
         }
         return shapeHandler.getAllShapes();
     }

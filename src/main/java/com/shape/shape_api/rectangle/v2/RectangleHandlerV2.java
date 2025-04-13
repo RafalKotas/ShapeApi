@@ -10,9 +10,11 @@ import java.util.List;
 public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangle> {
 
     private final RectangleRepository rectangleRepository;
+    private final RectangleV2Mapper rectangleV2Mapper;
 
-    public RectangleHandlerV2(RectangleRepository rectangleRepository) {
+    public RectangleHandlerV2(RectangleRepository rectangleRepository, RectangleV2Mapper rectangleV2Mapper) {
         this.rectangleRepository = rectangleRepository;
+        this.rectangleV2Mapper = rectangleV2Mapper;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangl
 
     @Override
     public Rectangle createShape(RectangleDTOv2 rectangleDTOv2) {
-        Rectangle rectangle = new Rectangle(rectangleDTOv2.getA(), rectangleDTOv2.getB());
+        Rectangle rectangle = rectangleV2Mapper.mapToEntity(rectangleDTOv2);
 
         return rectangleRepository.save(rectangle);
     }

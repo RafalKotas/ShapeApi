@@ -6,21 +6,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Square {
-
-    public Square(Long a) {
-        this.a = a;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long a;
+
+    public Square(Long a) {
+        this.a = a;
+    }
 
     public Long getId() {
         return this.id;
@@ -29,13 +31,4 @@ public class Square {
     public Long getA() {
         return this.a;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setA(Long a) {
-        this.a = a;
-    }
 }
-

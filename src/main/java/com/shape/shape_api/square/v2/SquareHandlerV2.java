@@ -30,7 +30,6 @@ public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2, Square> {
     @Override
     public Square createShape(SquareDTOv2 squareDTOv2) {
         Square square = squareV2Mapper.mapToEntity(squareDTOv2);
-
         return squareRepository.save(square);
     }
 }

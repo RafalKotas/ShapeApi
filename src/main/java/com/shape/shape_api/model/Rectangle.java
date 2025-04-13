@@ -19,6 +19,11 @@ public class Rectangle {
     private Long width;
     private Long height;
 
+    public Rectangle(Long width, Long height) {
+        this.width = width;
+        this.height = height;
+    }
+
     public Long getId() {
         return this.id;
     }

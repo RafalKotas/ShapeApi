@@ -6,16 +6,18 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Map;
 
-@Schema(description = "Request to create a shape")
+import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
+
+@Schema(description = SHAPE_CREATION_REQUEST_DESCRIPTION)
 public class ShapeCreationRequest {
 
-    @Schema(description = "Type of the shape", example = "rectangle")
-    @NotBlank(message = "Shape type must not be empty")
+    @Schema(description = SHAPE_TYPE_DESCRIPTION, example = RECTANGLE)
+    @NotBlank(message = SHAPE_TYPE_NOT_EMPTY)
     private String type;
 
-    @NotNull(message = "Parameters must not be null")
-    @Schema(description = "Shape params, depends on type. F.e. rectangle: {\"width\": 10, \"height\": 20}",
-            example = "{\"width\": 10, \"height\": 20}")
+    @NotNull(message = SHAPE_PARAMETERS_NOT_NULL)
+    @Schema(description = SHAPE_PARAMETERS_DESCRIPTION,
+            example = SHAPE_PARAMETERS_EXAMPLE)
     private Map<String, Long> parameters;
 
     public ShapeCreationRequest() {

@@ -6,8 +6,22 @@ public class SwaggerDescriptions {
 
     }
 
+    // ======= ShapeCreationRequest =======
+    public static final String SHAPE_CREATION_REQUEST_DESCRIPTION = "Request to create a shape";
+
+    public static final String SHAPE_TYPE_DESCRIPTION = "Type of the shape";
+
+    public static final String SHAPE_PARAMETERS_DESCRIPTION =
+            "Shape params, depends on type. f.e. rectangle: {\"width\": 10, \"height\": 20}";
+    public static final String SHAPE_PARAMETERS_EXAMPLE = "{\"width\": 10, \"height\": 20}";
+
+
+    public static final String SHAPE_TYPE_NOT_EMPTY = "Shape type must not be empty";
+    public static final String SHAPE_PARAMETERS_NOT_NULL = "Parameters must not be null";
+
     public static final String CIRCLE = "cirlce";
     public static final String SQUARE = "square";
+    public static final String RECTANGLE = "rectangle";
 
     public static final String APPLICATION_JSON = "application/json";
 

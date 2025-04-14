@@ -1,8 +1,10 @@
 package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.RectangleRepository;
+import com.shape.shape_api.square.SquareRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,19 @@ class ShapeIntegrationTest {
     private RectangleRepository rectangleRepository;
 
     @Autowired
+    private SquareRepository squareRepository;
+
+    @Autowired
+    private CircleRepository circleRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {
         rectangleRepository.deleteAll();
+        squareRepository.deleteAll();
+        circleRepository.deleteAll();
     }
 
     @Test

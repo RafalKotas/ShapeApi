@@ -85,17 +85,20 @@ class ShapeIntegrationTest {
         mockMvc.perform(post("/api/v1/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                            {
-                              "type": "rectangle",
-                              "parameters": {
-                                "width": -10,
-                                "height": 20
-                              }
-                            }
-                            """))
+                        {
+                          "type": "rectangle",
+                          "parameters": {
+                            "width": -10,
+                            "height": 20
+                          }
+                        }
+                        """))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.width").value("'width' must be greater than 0"));
+                .andExpect(jsonPath("$.errorCode").value("CONSTRAINT_VIOLATION"))
+                .andExpect(jsonPath("$.message").value("'width' must be greater than 0"))
+                .andExpect(jsonPath("$.httpCode").value(400));
     }
+
 
     @Test
     void shouldCreateCircleSuccessfully() throws Exception {
@@ -140,16 +143,20 @@ class ShapeIntegrationTest {
         mockMvc.perform(post("/api/v1/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {
-                          "type": "unknown",
-                          "parameters": {
-                            "side": 5
-                          }
-                        }
-                        """))
+                    {
+                      "type": "unknown",
+                      "parameters": {
+                        "side": 5
+                      }
+                    }
+                    """))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("Unsupported shape type: v1:unknown"));
+                .andExpect(jsonPath("$.message").value("Unknown shape type: v1:unknown"))
+                .andExpect(jsonPath("$.errorCode").value("SHAPE_TYPE_UNKNOWN"))
+                .andExpect(jsonPath("$.httpCode").value(400))
+                .andExpect(jsonPath("$.timestamp").exists());
     }
+
 
 
     @Test

@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.common.exception.ShapeNotSupportedException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -30,7 +31,7 @@ public class ShapeService {
         String fullType = version + ":" + type;
         ShapeHandler handler = shapeHandlers.get(fullType);
         if (handler == null) {
-            throw new IllegalArgumentException("Unsupported shape type: " + fullType);
+            throw new ShapeNotSupportedException(fullType);
         }
 
         Object dto = shapeMapperRegistry.mapParametersToDto(fullType, parameters);
@@ -54,7 +55,7 @@ public class ShapeService {
         String fullType = version + ":" + type;
         ShapeHandler<?, ?> shapeHandler = shapeHandlers.get(fullType);
         if (shapeHandler == null) {
-            throw new IllegalArgumentException("Unknown shape type: " + fullType);
+            throw new ShapeNotSupportedException(fullType);
         }
         return shapeHandler.getAllShapes();
     }

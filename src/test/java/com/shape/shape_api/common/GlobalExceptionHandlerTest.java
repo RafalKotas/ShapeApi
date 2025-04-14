@@ -11,11 +11,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,12 +34,15 @@ class GlobalExceptionHandlerTest {
         when(ex.getBindingResult()).thenReturn(bindingResult);
 
         // when
-        ResponseEntity<Map<String, String>> response = exceptionHandler.handleValidationExceptions(ex);
+        ResponseEntity<ApiError> response = exceptionHandler.handleValidationExceptions(ex);
 
         // then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(response.getBody().containsKey("error"));
-        assertEquals("Field is invalid", response.getBody().get("error"));
+        ApiError body = response.getBody();
+        assertEquals("Field is invalid", body.getMessage());
+        assertEquals("VALIDATION_FAILED", body.getErrorCode());
+        assertEquals(400, body.getHttpCode());
+        assertNotNull(body.getTimestamp());
     }
 
 
@@ -59,12 +61,15 @@ class GlobalExceptionHandlerTest {
         when(constraintViolationException.getConstraintViolations()).thenReturn(Set.of(constraintViolation));
 
         // when
-        ResponseEntity<Map<String, String>> response = exceptionHandler.handleConstraintViolation(constraintViolationException);
+        ResponseEntity<ApiError> response = exceptionHandler.handleConstraintViolation(constraintViolationException);
 
         // then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(response.getBody().containsKey("field"));
-        assertEquals("Constraint violation error", response.getBody().get("field"));
+        ApiError body = response.getBody();
+        assertEquals("Constraint violation error", body.getMessage());
+        assertEquals("CONSTRAINT_VIOLATION", body.getErrorCode());
+        assertEquals(400, body.getHttpCode());
+        assertNotNull(body.getTimestamp());
     }
 
     @Test
@@ -73,11 +78,14 @@ class GlobalExceptionHandlerTest {
         Exception ex = new Exception("An unexpected error occurred");
 
         // when
-        ResponseEntity<Map<String, String>> response = exceptionHandler.handleOtherExceptions(ex);
+        ResponseEntity<ApiError> response = exceptionHandler.handleOtherExceptions(ex);
 
         // then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertTrue(response.getBody().containsKey("error"));
-        assertEquals("An unexpected error occurred", response.getBody().get("error"));
+        ApiError body = response.getBody();
+        assertEquals("An unexpected error occurred", body.getMessage());
+        assertEquals("INTERNAL_ERROR", body.getErrorCode());
+        assertEquals(500, body.getHttpCode());
+        assertNotNull(body.getTimestamp());
     }
 }

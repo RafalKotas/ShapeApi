@@ -4,9 +4,13 @@ import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
 import com.shape.shape_api.model.Circle;
 import com.shape.shape_api.shape.ShapeHandler;
+import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Hidden
+@Component
 public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, Circle> {
 
     private final CircleRepository circleRepository;

@@ -1,8 +1,10 @@
 package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.RectangleRepository;
+import com.shape.shape_api.square.SquareRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,19 @@ class ShapeIntegrationTest {
     private RectangleRepository rectangleRepository;
 
     @Autowired
+    private SquareRepository squareRepository;
+
+    @Autowired
+    private CircleRepository circleRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {
         rectangleRepository.deleteAll();
+        squareRepository.deleteAll();
+        circleRepository.deleteAll();
     }
 
     @Test
@@ -75,17 +85,20 @@ class ShapeIntegrationTest {
         mockMvc.perform(post("/api/v1/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                            {
-                              "type": "rectangle",
-                              "parameters": {
-                                "width": -10,
-                                "height": 20
-                              }
-                            }
-                            """))
+                        {
+                          "type": "rectangle",
+                          "parameters": {
+                            "width": -10,
+                            "height": 20
+                          }
+                        }
+                        """))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.width").value("'width' must be greater than 0"));
+                .andExpect(jsonPath("$.errorCode").value("CONSTRAINT_VIOLATION"))
+                .andExpect(jsonPath("$.message").value("'width' must be greater than 0"))
+                .andExpect(jsonPath("$.httpCode").value(400));
     }
+
 
     @Test
     void shouldCreateCircleSuccessfully() throws Exception {
@@ -130,16 +143,20 @@ class ShapeIntegrationTest {
         mockMvc.perform(post("/api/v1/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {
-                          "type": "unknown",
-                          "parameters": {
-                            "side": 5
-                          }
-                        }
-                        """))
+                    {
+                      "type": "unknown",
+                      "parameters": {
+                        "side": 5
+                      }
+                    }
+                    """))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("Unsupported shape type: v1:unknown"));
+                .andExpect(jsonPath("$.message").value("Unknown shape type: v1:unknown"))
+                .andExpect(jsonPath("$.errorCode").value("SHAPE_TYPE_UNKNOWN"))
+                .andExpect(jsonPath("$.httpCode").value(400))
+                .andExpect(jsonPath("$.timestamp").exists());
     }
+
 
 
     @Test

@@ -65,6 +65,8 @@ class ShapeControllerV1Test {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"type\":\"square\",\"parameters\":{\"a\":-5}}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.a").value("Side 'a' must be greater than 0"));
+                .andExpect(jsonPath("$.errorCode").value("CONSTRAINT_VIOLATION"))
+                .andExpect(jsonPath("$.message").value("Side 'a' must be greater than 0"))
+                .andExpect(jsonPath("$.httpCode").value(400));
     }
 }

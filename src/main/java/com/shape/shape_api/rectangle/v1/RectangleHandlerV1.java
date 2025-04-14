@@ -4,9 +4,13 @@ import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.RectangleRepository;
 import com.shape.shape_api.rectangle.v1.dto.RectangleDTOv1;
 import com.shape.shape_api.shape.ShapeHandler;
+import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Hidden
+@Component
 public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1, Rectangle> {
 
     private final RectangleRepository rectangleRepository;

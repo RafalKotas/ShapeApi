@@ -4,9 +4,13 @@ import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.square.SquareRepository;
 import com.shape.shape_api.square.v1.dto.SquareDTOv1;
+import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Hidden
+@Component
 public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, Square> {
 
     private final SquareRepository squareRepository;

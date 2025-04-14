@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
+import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.BAD_REQUEST_400;
+import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.OK_200;
+
 @RestController
 @RequestMapping("/api/v1/shapes")
-@Tag(name = "shape-controller-v1", description = "Managing geometric shapes - version 1")
+@Tag(name = SHAPE_CONTROLLER_V1_TAG, description = SHAPE_CONTROLLER_V1_DESCRIPTION)
 public class ShapeControllerV1 {
-
-    private final String VERSION_1 = "v1";
 
     private final ShapeService shapeService;
 
@@ -26,30 +28,23 @@ public class ShapeControllerV1 {
 
     @PostMapping
     @Operation(
-            summary = "Create a shape",
-            description = "Creates a shape based on the provided type and parameters.",
+            summary = CREATE_SHAPE_SUMMARY,
+            description = CREATE_SHAPE_DESCRIPTION,
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Shape successfully created"),
-                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+                    @ApiResponse(responseCode = OK_200, description = SHAPE_CREATED_RESPONSE),
+                    @ApiResponse(responseCode = BAD_REQUEST_400, description = BAD_REQUEST_RESPONSE)
             }
     )
     public Object createShape(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Shape creation payload",
+                    description = SHAPE_REQUEST_BODY_DESCRIPTION,
                     required = true,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = APPLICATION_JSON,
                             examples = @ExampleObject(
-                                    name = "Circle Example",
-                                    summary = "Create a circle",
-                                    value = """
-                        {
-                          "type": "circle",
-                          "parameters": {
-                            "radius": 5
-                          }
-                        }
-                    """
+                                    name = CIRCLE_EXAMPLE_NAME,
+                                    summary = CIRCLE_EXAMPLE_SUMMARY,
+                                    value = CIRCLE_REQUEST_EXAMPLE
                             )
                     )
             )
@@ -61,16 +56,16 @@ public class ShapeControllerV1 {
 
     @GetMapping
     @Operation(
-            summary = "Get shapes by type",
-            description = "Returns all shapes of the given type (e.g. circle, square, rectangle).",
+            summary = GET_SHAPES_SUMMARY,
+            description = GET_SHAPES_DESCRIPTION,
             responses = {
-                    @ApiResponse(responseCode = "200", description = "List of shapes"),
-                    @ApiResponse(responseCode = "400", description = "Missing or invalid shape type")
+                    @ApiResponse(responseCode = OK_200, description = SHAPE_LIST_RESPONSE),
+                    @ApiResponse(responseCode = BAD_REQUEST_400, description = MISSING_OR_INVALID_SHAPE_TYPE)
             }
     )
     public List<?> getShapesByType(
             @RequestParam
-            @Parameter(description = "Shape type (e.g. circle, rectangle)", example = "square") String type
+            @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION, example = SQUARE) String type
     ) {
         return shapeService.getShapesByType(VERSION_1, type);
     }

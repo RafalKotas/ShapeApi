@@ -88,4 +88,22 @@ class GlobalExceptionHandlerTest {
         assertEquals(500, body.getHttpCode());
         assertNotNull(body.getTimestamp());
     }
+
+
+    @Test
+    void shouldHandleIllegalArgumentException() {
+        // given
+        IllegalArgumentException exception = new IllegalArgumentException("Invalid argument");
+
+        // when
+        ResponseEntity<ApiError> responseEntity = exceptionHandler.handleIllegalArgument(exception);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        ApiError error = responseEntity.getBody();
+        assertEquals(400, error.getHttpCode());
+        assertEquals("Invalid argument", error.getMessage());
+        assertEquals("SHAPE_TYPE_UNKNOWN", error.getErrorCode());
+    }
 }

@@ -6,10 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,4 +33,21 @@ class ShapeMapperRegistryTest {
         assertNotNull(dto);
         assertEquals(10L, dto.getA());
     }
+
+    @Test
+    void shouldThrowExceptionWhenMapperIsNull() {
+        // given
+        shapeMapperRegistry = new ShapeMapperRegistry(Collections.emptyList());
+        String key = "nonExistingShape";
+        Map<String, Long> parameters = Map.of("param1", 1L);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            shapeMapperRegistry.mapParametersToDto(key, parameters);
+        });
+
+        // then
+        assertEquals("No mapper found for shape type: " + key, exception.getMessage());
+    }
+
 }

@@ -1,8 +1,8 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.common.exception.ShapeNotSupportedException;
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v1.dto.SquareDTOv1;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -67,33 +66,18 @@ class ShapeServiceTest {
     }
 
     @Test
-    void shouldThrowValidationExceptionWhenDtoIsInvalid() {
+    void shouldThrowExceptionWhenShapeHandlerIsNull() {
         // given
         String version = "v1";
-        String type = "square";
-        String fullType = "v1:square";
-
-        Map<String, Long> parameters = Map.of("a", -5L);
-        SquareDTOv1 dto = new SquareDTOv1(-5L);
-
-        @SuppressWarnings("unchecked")
-        ShapeHandler<SquareDTOv1, Square> handler = mock(ShapeHandler.class);
-        shapeHandlers.put(fullType, handler);
-
-        when(shapeMapperRegistry.mapParametersToDto(fullType, parameters)).thenReturn(dto);
-
-        ConstraintViolation<Object> violation = mock(ConstraintViolation.class);
-
-        Set<ConstraintViolation<Object>> violations = Set.of(violation);
-        when(validator.validate(any())).thenReturn(violations);
+        String type = "triangle";
 
         // when & then
-        jakarta.validation.ValidationException exception = assertThrows(jakarta.validation.ValidationException.class, () ->
-                shapeService.createShape(version, type, parameters)
-        );
+        ShapeNotSupportedException exception = assertThrows(ShapeNotSupportedException.class, () -> {
+            shapeService.getShapesByType(version, type);
+        });
 
-        assertTrue(exception.getMessage().contains("Validation failed"));
+        // then
+        assertEquals("Unknown shape type: v1:triangle", exception.getMessage());
     }
-
 
 }

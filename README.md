@@ -1,4 +1,4 @@
-# ShapeApi
+# ShapeAPI
 
 ## About
 

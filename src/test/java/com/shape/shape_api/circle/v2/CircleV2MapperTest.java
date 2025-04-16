@@ -3,6 +3,7 @@ package com.shape.shape_api.circle.v2;
 import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
 import com.shape.shape_api.model.Circle;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.Map;
 
@@ -40,8 +41,12 @@ class CircleV2MapperTest {
         // given
         Map<String, Long> parameters = Map.of();
 
-        // when & then
-        assertThrows(IllegalArgumentException.class, () -> new CircleV2Mapper().map(parameters));
+        // when
+        CircleV2Mapper circleV2Mapper = new CircleV2Mapper();
+        Executable action = () -> circleV2Mapper.map(parameters);
+
+        // then
+        assertThrows(IllegalArgumentException.class, action);
     }
 
 }

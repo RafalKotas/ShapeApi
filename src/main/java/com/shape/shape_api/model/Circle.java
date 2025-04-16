@@ -18,7 +18,7 @@ public class Circle {
 
     private Long radius;
 
-    protected Circle() {
+    public Circle() {
     }
 
     public Circle(Long radius) {

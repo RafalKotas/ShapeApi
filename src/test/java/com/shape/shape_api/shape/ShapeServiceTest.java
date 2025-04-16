@@ -47,7 +47,6 @@ class ShapeServiceTest {
         SquareDTOv1 dto = new SquareDTOv1(10L);
         Square expectedEntity = new Square(10L);
 
-        // mock handler
         @SuppressWarnings("unchecked")
         ShapeHandler<SquareDTOv1, Square> handler = mock(ShapeHandler.class);
 

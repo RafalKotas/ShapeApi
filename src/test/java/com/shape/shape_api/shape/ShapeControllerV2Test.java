@@ -85,7 +85,6 @@ class ShapeControllerV2Test {
     }
 
 
-    // TODO add element to list (not to be empty)
     @Test
     void shouldGetShapesSuccessfully() throws Exception {
         // given

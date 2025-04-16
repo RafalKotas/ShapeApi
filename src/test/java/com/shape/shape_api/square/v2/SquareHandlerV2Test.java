@@ -1,80 +1,75 @@
 package com.shape.shape_api.square.v2;
 
 import com.shape.shape_api.model.Square;
-import com.shape.shape_api.shape.ShapeHandler;
+import com.shape.shape_api.square.SquareRepository;
 import com.shape.shape_api.square.v2.dto.SquareDTOv2;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 class SquareHandlerV2Test {
 
-    private static class TestSquareHandlerV2 implements ShapeHandler<SquareDTOv2, Square> {
+    private SquareRepository squareRepository;
+    private SquareV2Mapper squareV2Mapper;
+    private SquareHandlerV2 squareHandlerV2;
 
-        @Override
-        public Square createShape(SquareDTOv2 dto) {
-            if (dto == null) {
-                throw new IllegalArgumentException("DTO cannot be null");
-            }
-            return new Square(dto.getA());
-        }
-
-        @Override
-        public String getKey() {
-            return "v2:square";
-        }
-
-        @Override
-        public List<Square> getAllShapes() {
-            return List.of(new Square(5L), new Square(10L));
-        }
-    }
-
-    @Test
-    void shouldCreateSquareSuccessfully() {
-        // given
-        ShapeHandler<SquareDTOv2, Square> handler = new TestSquareHandlerV2();
-        SquareDTOv2 dto = new SquareDTOv2(5L);
-
-        // when
-        Square result = handler.createShape(dto);
-
-        // then
-        assertNotNull(result);
-        assertEquals(5L, result.getA());
+    @BeforeEach
+    void setUp() {
+        squareRepository = mock(SquareRepository.class);
+        squareV2Mapper = mock(SquareV2Mapper.class);
+        squareHandlerV2 = new SquareHandlerV2(squareRepository, squareV2Mapper);
     }
 
     @Test
     void shouldReturnCorrectKey() {
-        // given
-        ShapeHandler<SquareDTOv2, Square> handler = new TestSquareHandlerV2();
+        // when
+        String key = squareHandlerV2.getKey();
 
         // then
-        assertEquals("v2:square", handler.getKey());
+        assertEquals("v2:square", key);
     }
 
     @Test
     void shouldReturnAllShapes() {
         // given
-        ShapeHandler<SquareDTOv2, Square> handler = new TestSquareHandlerV2();
+        Square square1 = new Square(1L, 5L);
+        Square square2 = new Square(2L, 10L);
+        List<Square> expectedShapes = List.of(square1, square2);
+        when(squareRepository.findAll()).thenReturn(expectedShapes);
 
         // when
-        List<Square> shapes = handler.getAllShapes();
+        List<Square> result = squareHandlerV2.getAllShapes();
 
         // then
-        assertEquals(2, shapes.size());
-        assertEquals(5L, shapes.get(0).getA());
-        assertEquals(10L, shapes.get(1).getA());
+        assertEquals(2, result.size());
+        assertEquals(5L, result.get(0).getA());
+        assertEquals(10L, result.get(1).getA());
+        verify(squareRepository).findAll();
     }
 
     @Test
-    void shouldThrowExceptionForNullDto() {
+    void shouldCreateShape() {
         // given
-        ShapeHandler<SquareDTOv2, Square> handler = new TestSquareHandlerV2();
+        SquareDTOv2 dto = new SquareDTOv2(5L);
+        Square mappedSquare = new Square(null, 5L);
+        Square savedSquare = new Square(1L, 5L);
 
-        // when & then
-        assertThrows(IllegalArgumentException.class, () -> handler.createShape(null));
+        when(squareV2Mapper.mapToEntity(dto)).thenReturn(mappedSquare);
+        when(squareRepository.save(mappedSquare)).thenReturn(savedSquare);
+
+        // when
+        Square result = squareHandlerV2.createShape(dto);
+
+        // then
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(5L, result.getA());
+        verify(squareV2Mapper).mapToEntity(dto);
+        verify(squareRepository).save(mappedSquare);
     }
 }

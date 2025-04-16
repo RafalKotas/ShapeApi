@@ -1,83 +1,77 @@
 package com.shape.shape_api.rectangle.v2;
 
 import com.shape.shape_api.model.Rectangle;
+import com.shape.shape_api.rectangle.RectangleRepository;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
-import com.shape.shape_api.shape.ShapeHandler;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 class RectangleHandlerV2Test {
 
-    private static class TestRectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangle> {
+    private RectangleRepository rectangleRepository;
+    private RectangleV2Mapper rectangleV2Mapper;
+    private RectangleHandlerV2 rectangleHandler;
 
-        @Override
-        public Rectangle createShape(RectangleDTOv2 dto) {
-            if (dto == null) {
-                throw new IllegalArgumentException("DTO cannot be null");
-            }
-            return new Rectangle(dto.getH(), dto.getW());
-        }
-
-        @Override
-        public String getKey() {
-            return "v2:rectangle";
-        }
-
-        @Override
-        public List<Rectangle> getAllShapes() {
-            return List.of(new Rectangle(5L, 10L), new Rectangle(10L, 20L));
-        }
-    }
-
-    @Test
-    void shouldCreateRectangleSuccessfully() {
-        // given
-        ShapeHandler<RectangleDTOv2, Rectangle> handler = new TestRectangleHandlerV2();
-        RectangleDTOv2 dto = new RectangleDTOv2(5L, 10L);
-
-        // when
-        Rectangle result = handler.createShape(dto);
-
-        // then
-        assertNotNull(result);
-        assertEquals(10L, result.getHeight());
-        assertEquals(5L, result.getWidth());
+    @BeforeEach
+    void setUp() {
+        rectangleRepository = mock(RectangleRepository.class);
+        rectangleV2Mapper = mock(RectangleV2Mapper.class);
+        rectangleHandler = new RectangleHandlerV2(rectangleRepository, rectangleV2Mapper);
     }
 
     @Test
     void shouldReturnCorrectKey() {
-        // given
-        ShapeHandler<RectangleDTOv2, Rectangle> handler = new TestRectangleHandlerV2();
+        // when
+        String key = rectangleHandler.getKey();
 
         // then
-        assertEquals("v2:rectangle", handler.getKey());
+        assertEquals("v2:rectangle", key);
     }
 
     @Test
     void shouldReturnAllShapes() {
         // given
-        ShapeHandler<RectangleDTOv2, Rectangle> handler = new TestRectangleHandlerV2();
+        List<Rectangle> rectangles = List.of(
+                new Rectangle(1L, 3L, 4L),
+                new Rectangle(2L, 5L, 6L)
+        );
+        when(rectangleRepository.findAll()).thenReturn(rectangles);
 
         // when
-        List<Rectangle> shapes = handler.getAllShapes();
+        List<Rectangle> result = rectangleHandler.getAllShapes();
 
         // then
-        assertEquals(2, shapes.size());
-        assertEquals(10L, shapes.get(0).getHeight());
-        assertEquals(5L, shapes.get(0).getWidth());
-        assertEquals(20L, shapes.get(1).getHeight());
-        assertEquals(10L, shapes.get(1).getWidth());
+        assertEquals(2, result.size());
+        assertEquals(3L, result.get(0).getWidth());
+        assertEquals(6L, result.get(1).getHeight());
+        verify(rectangleRepository).findAll();
     }
 
     @Test
-    void shouldThrowExceptionForNullDto() {
+    void shouldCreateShape() {
         // given
-        ShapeHandler<RectangleDTOv2, Rectangle> handler = new TestRectangleHandlerV2();
+        RectangleDTOv2 dto = new RectangleDTOv2(10L, 20L);
+        Rectangle mappedRectangle = new Rectangle(null, 10L, 20L);
+        Rectangle savedRectangle = new Rectangle(1L, 10L, 20L);
 
-        // when & then
-        assertThrows(IllegalArgumentException.class, () -> handler.createShape(null));
+        when(rectangleV2Mapper.mapToEntity(dto)).thenReturn(mappedRectangle);
+        when(rectangleRepository.save(mappedRectangle)).thenReturn(savedRectangle);
+
+        // when
+        Rectangle result = rectangleHandler.createShape(dto);
+
+        // then
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(10L, result.getWidth());
+        assertEquals(20L, result.getHeight());
+        verify(rectangleV2Mapper).mapToEntity(dto);
+        verify(rectangleRepository).save(mappedRectangle);
     }
 }

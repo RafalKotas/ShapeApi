@@ -1,80 +1,58 @@
 package com.shape.shape_api.circle.v2;
 
+import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
 import com.shape.shape_api.model.Circle;
-import com.shape.shape_api.shape.ShapeHandler;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class CircleHandlerV2Test {
 
-    private static class TestCircleHandlerV2 implements ShapeHandler<CircleDTOv2, Circle> {
+    private CircleRepository circleRepository;
+    private CircleV2Mapper circleV2Mapper;
+    private CircleHandlerV2 handler;
 
-        @Override
-        public Circle createShape(CircleDTOv2 dto) {
-            if (dto == null) {
-                throw new IllegalArgumentException("DTO cannot be null");
-            }
-            return new Circle(dto.getDiameter() / 2);
-        }
-
-        @Override
-        public String getKey() {
-            return "v2:circle";
-        }
-
-        @Override
-        public List<Circle> getAllShapes() {
-            return List.of(new Circle(5L), new Circle(10L));
-        }
-    }
-
-    @Test
-    void shouldCreateCircleSuccessfully() {
-        // given
-        ShapeHandler<CircleDTOv2, Circle> handler = new TestCircleHandlerV2();
-        CircleDTOv2 dto = new CircleDTOv2(10L); // diameter 10, radius = 5
-
-        // when
-        Circle result = handler.createShape(dto);
-
-        // then
-        assertNotNull(result);
-        assertEquals(5L, result.getRadius());
+    @BeforeEach
+    void setUp() {
+        circleRepository = mock(CircleRepository.class);
+        circleV2Mapper = mock(CircleV2Mapper.class);
+        handler = new CircleHandlerV2(circleRepository, circleV2Mapper);
     }
 
     @Test
     void shouldReturnCorrectKey() {
-        // given
-        ShapeHandler<CircleDTOv2, Circle> handler = new TestCircleHandlerV2();
-
-        // then
         assertEquals("v2:circle", handler.getKey());
     }
 
     @Test
-    void shouldReturnAllShapes() {
-        // given
-        ShapeHandler<CircleDTOv2, Circle> handler = new TestCircleHandlerV2();
+    void shouldReturnAllCircles() {
+        List<Circle> expected = List.of(new Circle(1L), new Circle(2L));
+        when(circleRepository.findAll()).thenReturn(expected);
 
-        // when
-        List<Circle> shapes = handler.getAllShapes();
+        List<Circle> result = handler.getAllShapes();
 
-        // then
-        assertEquals(2, shapes.size());
-        assertEquals(5L, shapes.get(0).getRadius());
-        assertEquals(10L, shapes.get(1).getRadius());
+        assertEquals(expected, result);
+        verify(circleRepository, times(1)).findAll();
     }
 
     @Test
-    void shouldThrowExceptionForNullDto() {
-        // given
-        ShapeHandler<CircleDTOv2, Circle> handler = new TestCircleHandlerV2();
+    void shouldCreateCircleSuccessfully() {
+        CircleDTOv2 dto = new CircleDTOv2(10L);
+        Circle mappedCircle = new Circle(5L);
+        Circle savedCircle = new Circle(5L);
 
-        // when & then
-        assertThrows(IllegalArgumentException.class, () -> handler.createShape(null));
+        when(circleV2Mapper.mapToEntity(dto)).thenReturn(mappedCircle);
+        when(circleRepository.save(mappedCircle)).thenReturn(savedCircle);
+
+        Circle result = handler.createShape(dto);
+
+        assertEquals(savedCircle, result);
+        verify(circleV2Mapper).mapToEntity(dto);
+        verify(circleRepository).save(mappedCircle);
     }
 }

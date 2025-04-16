@@ -17,7 +17,11 @@ public class CircleV2Mapper implements ShapeParameterMapper<CircleDTOv2> {
 
     @Override
     public CircleDTOv2 map(Map<String, Long> parameters) {
-        return new CircleDTOv2(parameters.get("diameter"));
+        Long diameter = parameters.get("diameter");
+        if (diameter == null) {
+            throw new IllegalArgumentException("Diameter is required but was not provided");
+        }
+        return new CircleDTOv2(diameter);
     }
 
     public Circle mapToEntity(CircleDTOv2 circleDTOv2) {

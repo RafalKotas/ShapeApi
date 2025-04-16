@@ -13,11 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,4 +85,20 @@ class ShapeControllerV2Test {
     }
 
 
+    // TODO add element to list (not to be empty)
+    @Test
+    void shouldGetShapesSuccessfully() throws Exception {
+        // given
+        String version = "v2";
+        String type = "square";
+
+        when(shapeService.getShapesByType(version, type)).thenReturn(List.of());
+
+        // when & then
+        mockMvc.perform(get("/api/v2/shapes")
+                        .param("type", "square")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"type\":\"square\"}"))
+                .andExpect(status().isOk());
+    }
 }

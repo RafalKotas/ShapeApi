@@ -41,6 +41,8 @@ public class SwaggerDescriptions {
     public static final String GET_SHAPES_SUMMARY = "Get shapes by type";
     public static final String GET_SHAPES_DESCRIPTION = "Returns all shapes of the given type (e.g. circle, square, rectangle).";
 
+    public static final String NOT_BLANK_VALIDATION_INFO = "Shape type must not be blank";
+
     public static final String SHAPE_TYPE_PARAM_DESCRIPTION_SHORT = "Shape type";
     public static final String SHAPE_TYPE_PARAM_DESCRIPTION = "Shape type (e.g. circle, rectangle)";
     public static final String SHAPE_REQUEST_BODY_DESCRIPTION = "Shape creation payload";

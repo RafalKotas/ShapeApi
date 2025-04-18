@@ -23,4 +23,8 @@ public class SquareV1Mapper implements ShapeParameterMapper<SquareDTOv1> {
     public Square mapToEntity(SquareDTOv1 squareDTOv1) {
         return new Square(squareDTOv1.getA());
     }
+
+    public SquareDTOv1 mapToDto(Square square) {
+        return new SquareDTOv1(square.getA());
+    }
 }

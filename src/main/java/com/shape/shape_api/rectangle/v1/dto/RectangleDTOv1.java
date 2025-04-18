@@ -1,11 +1,12 @@
 package com.shape.shape_api.rectangle.v1.dto;
 
+import com.shape.shape_api.ShapeDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Setter;
 
 @Setter
-public class RectangleDTOv1 {
+public class RectangleDTOv1 extends ShapeDTO {
 
     @NotNull(message = "'height' must not be null")
     @Min(value = 1, message = "'height' must be greater than 0")

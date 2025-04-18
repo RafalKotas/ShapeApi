@@ -2,13 +2,13 @@ package com.shape.shape_api.rectangle.v1;
 
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v1.dto.RectangleDTOv1;
-import com.shape.shape_api.shape.ShapeParameterMapper;
+import com.shape.shape_api.shape.ShapeMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
-public class RectangleV1Mapper implements ShapeParameterMapper<RectangleDTOv1> {
+public class RectangleV1Mapper implements ShapeMapper<RectangleDTOv1, Rectangle> {
 
     @Override
     public String getKey() {
@@ -16,19 +16,27 @@ public class RectangleV1Mapper implements ShapeParameterMapper<RectangleDTOv1> {
     }
 
     @Override
+    public Rectangle mapToEntity(RectangleDTOv1 dto) {
+        Rectangle rectangle = new Rectangle();
+        rectangle.setHeight(dto.getHeight());
+        rectangle.setWidth(dto.getWidth());
+        return rectangle;
+    }
+
+    @Override
+    public RectangleDTOv1 mapToDTO(Rectangle entity) {
+        return new RectangleDTOv1(entity.getHeight(), entity.getWidth());
+    }
+
+    @Override
     public RectangleDTOv1 map(Map<String, Long> parameters) {
-        return new RectangleDTOv1(
-                parameters.get("height"),
-                parameters.get("width")
-        );
-    }
+        Long height = parameters.get("height");
+        Long width = parameters.get("width");
 
-    public Rectangle mapToEntity(RectangleDTOv1 rectangleDTOv1) {
-        return new Rectangle(rectangleDTOv1.getWidth(), rectangleDTOv1.getHeight());
-    }
+        if (height == null || width == null) {
+            throw new IllegalArgumentException("Missing required parameters: 'height' and/or 'width'.");
+        }
 
-    public RectangleDTOv1 mapToDto(Rectangle rectangle) {
-        return new RectangleDTOv1(rectangle.getHeight(), rectangle.getWidth());
+        return new RectangleDTOv1(height, width);
     }
 }
-

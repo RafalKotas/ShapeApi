@@ -1,11 +1,12 @@
 package com.shape.shape_api.square.v2.dto;
 
+import com.shape.shape_api.ShapeDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Setter;
 
 @Setter
-public class SquareDTOv2 {
+public class SquareDTOv2 extends ShapeDTO {
 
     @NotNull(message = "Side 'a' must not be null")
     @Min(value = 1, message = "Side 'a' must be greater than 0")

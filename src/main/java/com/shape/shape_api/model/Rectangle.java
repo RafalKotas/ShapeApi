@@ -1,38 +1,26 @@
 package com.shape.shape_api.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Setter;
 
 @Entity
-@Setter
-public class Rectangle {
+public class Rectangle extends Shape {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Long width;
     private Long height;
+    private Long width;
 
-    public Rectangle(Long width, Long height) {
-        this.width = width;
+
+    public Rectangle(Long id, Long height,  Long width) {
+        super();
         this.height = height;
+        this.width = width;
     }
 
-    public Rectangle(Long id, Long width, Long height) {
-        this.id = id;
-        this.width = width;
+    public Rectangle(Long height, Long width) {
         this.height = height;
+        this.width = width;
     }
 
     public Rectangle() {
-    }
-
-    public Long getId() {
-        return this.id;
     }
 
     public Long getWidth() {
@@ -42,5 +30,12 @@ public class Rectangle {
     public Long getHeight() {
         return this.height;
     }
-}
 
+    public void setWidth(Long width) {
+        this.width = width;
+    }
+
+    public void setHeight(Long height) {
+        this.height = height;
+    }
+}

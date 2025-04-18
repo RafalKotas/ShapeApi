@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.model.Shape;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
 import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.BAD_REQUEST_400;
@@ -21,9 +23,11 @@ import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.OK_200;
 public class ShapeControllerV2 {
 
     private final ShapeService shapeService;
+    private final ShapeMapperRegistry shapeMapperRegistry;
 
-    public ShapeControllerV2(ShapeService shapeService) {
+    public ShapeControllerV2(ShapeService shapeService, ShapeMapperRegistry shapeMapperRegistry) {
         this.shapeService = shapeService;
+        this.shapeMapperRegistry = shapeMapperRegistry;
     }
 
     @PostMapping
@@ -35,7 +39,7 @@ public class ShapeControllerV2 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = BAD_REQUEST_RESPONSE)
             }
     )
-    public Object createShape(
+    public ShapeResponseDto createShape(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = SHAPE_REQUEST_BODY_DESCRIPTION,
                     required = true,
@@ -50,7 +54,8 @@ public class ShapeControllerV2 {
             )
             @RequestBody @Valid ShapeCreationRequest request
     ) {
-        return shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
+        Shape shape = shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
+        return shapeMapperRegistry.mapEntityToDto(VERSION_2 + ":" + request.getType(), shape);
     }
 
     @GetMapping
@@ -62,10 +67,16 @@ public class ShapeControllerV2 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = MISSING_OR_INVALID_SHAPE_TYPE)
             }
     )
-    public List<?> getShapesByType(
+    public List<ShapeResponseDto> getShapesByType(
             @RequestParam
             @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION_SHORT, example = CIRCLE) String type) {
-        return shapeService.getShapesByType(VERSION_2, type);
+
+        List<? extends Shape> entities = shapeService.getShapesByType(VERSION_2, type);
+        String key = VERSION_2 + ":" + type;
+
+        return entities.stream()
+                .map(entity -> (ShapeResponseDto) shapeMapperRegistry.mapEntityToDto(key, entity))
+                .collect(Collectors.toList());
     }
 }
 

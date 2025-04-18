@@ -1,11 +1,12 @@
 package com.shape.shape_api.circle.v2.dto;
 
+import com.shape.shape_api.ShapeDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Setter;
 
 @Setter
-public class CircleDTOv2 {
+public class CircleDTOv2 extends ShapeDTO {
 
     @NotNull(message = "Diameter must not be null")
     @Min(value = 2, message = "Diameter must be greater than 1")

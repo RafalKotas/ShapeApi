@@ -1,38 +1,30 @@
 package com.shape.shape_api.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Setter;
 
 @Entity
-@Setter
-public class Square {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Square extends Shape {
 
     private Long a;
 
-    public Square(Long a) {
+    public Square(Long id, Long a) {
+        super();
         this.a = a;
     }
 
-    public Square(Long id, Long a) {
-        this.id = id;
+    public Square(Long a) {
+        super();
         this.a = a;
     }
 
     public Square() {
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
     public Long getA() {
         return this.a;
+    }
+
+    public void setA(Long a) {
+        this.a = a;
     }
 }

@@ -1,35 +1,24 @@
 package com.shape.shape_api.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Setter
-@AllArgsConstructor
-public class Circle {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@NoArgsConstructor
+public class Circle extends Shape {
 
     private Long radius;
 
-    public Circle() {
-    }
-
     public Circle(Long radius) {
+        super();
         this.radius = radius;
     }
 
-    public Long getId() {
-        return this.id;
+    public Long getRadius() {
+        return radius;
     }
 
-    public Long getRadius() {
-        return this.radius;
+    public void setRadius(Long radius) {
+        this.radius = radius;
     }
 }

@@ -1,24 +1,24 @@
 package com.shape.shape_api.circle.v2;
 
-import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
 import com.shape.shape_api.model.Circle;
+import com.shape.shape_api.model.Shape;
 import com.shape.shape_api.shape.ShapeHandler;
+import com.shape.shape_api.shape.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Hidden
 @Component
 public class CircleHandlerV2 implements ShapeHandler<CircleDTOv2, CircleDTOv2> {
 
-    private final CircleRepository circleRepository;
+    private final ShapeRepository shapeRepository;
     private final CircleV2Mapper circleV2Mapper;
 
-    public CircleHandlerV2(CircleRepository circleRepository, CircleV2Mapper circleV2Mapper) {
-        this.circleRepository = circleRepository;
+    public CircleHandlerV2(ShapeRepository shapeRepository, CircleV2Mapper circleV2Mapper) {
+        this.shapeRepository = shapeRepository;
         this.circleV2Mapper = circleV2Mapper;
     }
 
@@ -29,15 +29,16 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDTOv2, CircleDTOv2> {
 
     @Override
     public List<CircleDTOv2> getAllShapes() {
-        return circleRepository.findAll().stream()
-                .map(circleV2Mapper::mapToDto)
-                .collect(Collectors.toList());
+        return shapeRepository.findAllByShapeType(Circle.class).stream()
+                .map(shape -> (Circle) shape)
+                .map(circleV2Mapper::mapToDTO)
+                .toList();
     }
 
     @Override
     public CircleDTOv2 createShape(CircleDTOv2 circleDTOv2) {
         Circle circle = circleV2Mapper.mapToEntity(circleDTOv2);
-        Circle savedCircle = circleRepository.save(circle);
-        return circleV2Mapper.mapToDto(savedCircle);
+        Shape saved = shapeRepository.save(circle);
+        return circleV2Mapper.mapToDTO((Circle) saved);
     }
 }

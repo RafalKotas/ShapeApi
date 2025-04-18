@@ -46,8 +46,12 @@ class ShapeHandlerConfigTest {
         );
 
         // then
-        assertEquals(6, result.size());
+        assertEquals(6, result.size(), "Map should contain 6 shape handlers");
         assertEquals(circleHandlerV1, result.get("v1:circle"));
+        assertEquals(circleHandlerV2, result.get("v2:circle"));
+        assertEquals(squareHandlerV1, result.get("v1:square"));
         assertEquals(squareHandlerV2, result.get("v2:square"));
+        assertEquals(rectangleHandlerV1, result.get("v1:rectangle"));
+        assertEquals(rectangleHandlerV2, result.get("v2:rectangle"));
     }
 }

@@ -1,58 +1,80 @@
 package com.shape.shape_api.circle.v1;
 
-import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
 import com.shape.shape_api.model.Circle;
+import com.shape.shape_api.model.Shape;
+import com.shape.shape_api.shape.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class CircleHandlerV1Test {
 
-    private CircleRepository circleRepository;
+    private ShapeRepository shapeRepository;
     private CircleV1Mapper circleV1Mapper;
-    private CircleHandlerV1 handler;
+    private CircleHandlerV1 circleHandler;
 
     @BeforeEach
     void setUp() {
-        circleRepository = mock(CircleRepository.class);
+        shapeRepository = mock(ShapeRepository.class);
         circleV1Mapper = mock(CircleV1Mapper.class);
-        handler = new CircleHandlerV1(circleRepository, circleV1Mapper);
+        circleHandler = new CircleHandlerV1(shapeRepository, circleV1Mapper);
     }
 
     @Test
     void shouldReturnCorrectKey() {
-        assertEquals("v1:circle", handler.getKey());
+        assertEquals("v1:circle", circleHandler.getKey());
     }
 
     @Test
     void shouldReturnAllCircles() {
-        List<Circle> expected = List.of(new Circle(1L), new Circle(2L));
-        when(circleRepository.findAll()).thenReturn(expected);
+        // given
+        List<Shape> circles = List.of(new Circle(1L), new Circle(2L));
 
-        List<Circle> result = handler.getAllShapes();
+        when(shapeRepository.findAllByShapeType(Circle.class)).thenReturn(circles);
+        when(circleV1Mapper.mapToDTO(any(Circle.class)))
+                .thenAnswer(invocation -> {
+                    Circle circle = invocation.getArgument(0);
+                    return new CircleDTOv1(circle.getRadius());  // Assuming CircleDTOv1 has a constructor that accepts an ID
+                });
 
-        assertEquals(expected, result);
-        verify(circleRepository, times(1)).findAll();
+        // when
+        List<CircleDTOv1> result = circleHandler.getAllShapes();
+
+        // then
+        assertEquals(2, result.size());
+        assertEquals(1L, result.get(0).getRadius());
+        verify(shapeRepository).findAllByShapeType(Circle.class);
     }
+
 
     @Test
     void shouldCreateCircleSuccessfully() {
-        CircleDTOv1 dto = new CircleDTOv1(10L);
-        Circle mappedCircle = new Circle(10L);
-        Circle savedCircle = new Circle(10L);
+        // given
+        CircleDTOv1 dto = new CircleDTOv1(10L);  // DTO
+        Circle mappedCircle = new Circle(10L);  // Entity
+        Circle savedCircle = new Circle(10L);   // Entity (the saved one)
+        CircleDTOv1 expectedDTO = new CircleDTOv1(10L); // Expected result as DTO
 
-        when(circleV1Mapper.mapToEntity(dto)).thenReturn(mappedCircle);
-        when(circleRepository.save(mappedCircle)).thenReturn(savedCircle);
+        // Mocking the mappings and save operation
+        when(circleV1Mapper.mapToEntity(dto)).thenReturn(mappedCircle);   // Mapping DTO to Entity
+        when(shapeRepository.save(mappedCircle)).thenReturn(savedCircle);  // Saving Entity
+        when(circleV1Mapper.mapToDTO(savedCircle)).thenReturn(expectedDTO); // Mapping saved Entity back to DTO
 
-        Circle result = handler.createShape(dto);
+        // when
+        CircleDTOv1 result = circleHandler.createShape(dto);
 
-        assertEquals(savedCircle, result);
-        verify(circleV1Mapper).mapToEntity(dto);
-        verify(circleRepository).save(mappedCircle);
+        // then
+        assertNotNull(result, "The result should not be null");
+        assertEquals(expectedDTO, result, "The result should match the expected DTO");
+        verify(circleV1Mapper).mapToEntity(dto);  // Verify that the DTO was mapped to an entity
+        verify(shapeRepository).save(mappedCircle); // Verify that the entity was saved
+        verify(circleV1Mapper).mapToDTO(savedCircle); // Verify that the saved entity was mapped back to DTO
     }
+
 }

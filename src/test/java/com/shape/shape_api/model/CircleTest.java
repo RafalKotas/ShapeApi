@@ -4,13 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RectangleTest {
+public class CircleTest {
 
     @Test
     void testAllArgsConstructorWithId() {
-        Rectangle rect = new Rectangle(30L, 40L);
+        Circle circle = new Circle(30L);
 
-        assertEquals(30L, rect.getHeight());
-        assertEquals(40L, rect.getWidth());
+        assertEquals(30L, circle.getRadius());
     }
 }

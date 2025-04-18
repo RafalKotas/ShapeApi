@@ -3,12 +3,12 @@ package com.shape.shape_api.rectangle.v2;
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RectangleV2MapperTest {
 
@@ -30,7 +30,7 @@ class RectangleV2MapperTest {
     @Test
     void shouldMapParametersToRectangleDTOv2() {
         // given
-        Map<String, Long> parameters = Map.of("a", 10L, "b", 20L);
+        Map<String, Long> parameters = Map.of("h", 10L, "w", 20L);
 
         // when
         RectangleDTOv2 result = subject.map(parameters);
@@ -39,5 +39,17 @@ class RectangleV2MapperTest {
         assertNotNull(result);
         assertEquals(10L, result.getH());
         assertEquals(20L, result.getW());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenHIsMissing() {
+        // given
+        Map<String, Long> parameters = Map.of("w", 20L);
+
+        // when
+        Executable action = () -> subject.map(parameters);
+
+        // then
+        assertThrows(IllegalArgumentException.class, action);
     }
 }

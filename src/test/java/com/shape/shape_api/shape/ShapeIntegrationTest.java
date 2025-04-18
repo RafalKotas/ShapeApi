@@ -1,10 +1,7 @@
 package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.rectangle.RectangleRepository;
-import com.shape.shape_api.square.SquareRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +26,14 @@ class ShapeIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private RectangleRepository rectangleRepository;
-
-    @Autowired
-    private SquareRepository squareRepository;
-
-    @Autowired
-    private CircleRepository circleRepository;
+    private ShapeRepository shapeRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {
-        rectangleRepository.deleteAll();
-        squareRepository.deleteAll();
-        circleRepository.deleteAll();
+        shapeRepository.deleteAll();
     }
 
     @Test
@@ -74,8 +63,8 @@ class ShapeIntegrationTest {
                 .andExpect(jsonPath("$[0].height").value(30));
 
         // and also assert repository directly
-        assertThat(rectangleRepository.findAll()).hasSize(1);
-        Rectangle saved = rectangleRepository.findAll().get(0);
+        assertThat(shapeRepository.findAll()).hasSize(1);
+        Rectangle saved = (Rectangle) shapeRepository.findAll().get(0);
         assertThat(saved.getWidth()).isEqualTo(15);
         assertThat(saved.getHeight()).isEqualTo(30);
     }

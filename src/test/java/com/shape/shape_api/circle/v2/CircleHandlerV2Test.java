@@ -1,58 +1,76 @@
 package com.shape.shape_api.circle.v2;
 
-import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
 import com.shape.shape_api.model.Circle;
+import com.shape.shape_api.model.Shape;
+import com.shape.shape_api.shape.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class CircleHandlerV2Test {
 
-    private CircleRepository circleRepository;
+    private ShapeRepository shapeRepository;
     private CircleV2Mapper circleV2Mapper;
-    private CircleHandlerV2 handler;
+    private CircleHandlerV2 circleHandlerV2;
 
     @BeforeEach
     void setUp() {
-        circleRepository = mock(CircleRepository.class);
+        shapeRepository = mock(ShapeRepository.class);
         circleV2Mapper = mock(CircleV2Mapper.class);
-        handler = new CircleHandlerV2(circleRepository, circleV2Mapper);
+        circleHandlerV2 = new CircleHandlerV2(shapeRepository, circleV2Mapper);
     }
 
     @Test
     void shouldReturnCorrectKey() {
-        assertEquals("v2:circle", handler.getKey());
+        assertEquals("v2:circle", circleHandlerV2.getKey());
     }
 
     @Test
     void shouldReturnAllCircles() {
-        List<Circle> expected = List.of(new Circle(1L), new Circle(2L));
-        when(circleRepository.findAll()).thenReturn(expected);
+        // given
+        Circle circleEntity1 = new Circle(1L);
+        Circle circleEntity2 = new Circle(2L);
+        List<Shape> circles = List.of(circleEntity1, circleEntity2);
 
-        List<Circle> result = handler.getAllShapes();
+        when(shapeRepository.findAllByShapeType(Circle.class)).thenReturn(circles);
+        when(circleV2Mapper.mapToDTO(any(Circle.class)))
+                .thenAnswer(invocation -> {
+                    Circle circle = invocation.getArgument(0);
+                    return new CircleDTOv2(circle.getRadius() * 2);
+                });
 
-        assertEquals(expected, result);
-        verify(circleRepository, times(1)).findAll();
+        // when
+        List<CircleDTOv2> result = circleHandlerV2.getAllShapes();
+
+        // then
+        assertEquals(2L, result.get(0).getDiameter());
+        assertEquals(4L, result.get(1).getDiameter());
+        verify(shapeRepository).findAllByShapeType(Circle.class);
     }
 
     @Test
-    void shouldCreateCircleSuccessfully() {
+    void shouldCreateCircleV2() {
         CircleDTOv2 dto = new CircleDTOv2(10L);
         Circle mappedCircle = new Circle(5L);
         Circle savedCircle = new Circle(5L);
+        CircleDTOv2 expectedDTO = new CircleDTOv2(10L);
 
         when(circleV2Mapper.mapToEntity(dto)).thenReturn(mappedCircle);
-        when(circleRepository.save(mappedCircle)).thenReturn(savedCircle);
+        when(shapeRepository.save(mappedCircle)).thenReturn(savedCircle);
+        when(circleV2Mapper.mapToDTO(savedCircle)).thenReturn(expectedDTO);
 
-        Circle result = handler.createShape(dto);
+        CircleDTOv2 result = circleHandlerV2.createShape(dto);
 
-        assertEquals(savedCircle, result);
+        // then
+        assertNotNull(result, "The result should not be null");
+        assertEquals(10L, result.getDiameter(), "The 'diameter' value in the result should be 10L");
         verify(circleV2Mapper).mapToEntity(dto);
-        verify(circleRepository).save(mappedCircle);
+        verify(shapeRepository).save(mappedCircle);
     }
 }

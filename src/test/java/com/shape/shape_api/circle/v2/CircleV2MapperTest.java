@@ -12,13 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CircleV2MapperTest {
 
+    CircleV2Mapper subject = new CircleV2Mapper();
+
     @Test
     void shouldMapCircleDTOv2ToCircleEntity() {
         // given
         CircleDTOv2 circleDTOv2 = new CircleDTOv2(20L);
 
         // when
-        Circle circle = new CircleV2Mapper().mapToEntity(circleDTOv2);
+        Circle circle = subject.mapToEntity(circleDTOv2);
 
         // then
         assertThat(circle.getRadius()).isEqualTo(10L);
@@ -30,7 +32,7 @@ class CircleV2MapperTest {
         Map<String, Long> parameters = Map.of("diameter", 30L);
 
         // when
-        CircleDTOv2 result = new CircleV2Mapper().map(parameters);
+        CircleDTOv2 result = subject.map(parameters);
 
         // then
         assertThat(result.getDiameter()).isEqualTo(30L);
@@ -42,8 +44,7 @@ class CircleV2MapperTest {
         Map<String, Long> parameters = Map.of();
 
         // when
-        CircleV2Mapper circleV2Mapper = new CircleV2Mapper();
-        Executable action = () -> circleV2Mapper.map(parameters);
+        Executable action = () -> subject.map(parameters);
 
         // then
         assertThrows(IllegalArgumentException.class, action);

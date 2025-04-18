@@ -1,6 +1,7 @@
 package com.shape.shape_api.shape;
 
 import com.shape.shape_api.common.exception.ShapeNotSupportedException;
+import com.shape.shape_api.model.Shape;
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v1.dto.SquareDTOv1;
 import jakarta.validation.Validator;
@@ -26,7 +27,7 @@ class ShapeServiceTest {
     @Mock
     private Validator validator;
 
-    private Map<String, ShapeHandler<?, ?>> shapeHandlers;
+    private Map<String, ShapeHandler<?, ? extends Shape>> shapeHandlers;
 
     private ShapeService shapeService;
 

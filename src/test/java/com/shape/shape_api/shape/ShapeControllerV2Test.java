@@ -1,19 +1,17 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.square.v2.dto.SquareDTOv2;
+import com.shape.shape_api.model.Square;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Path;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,31 +26,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ShapeControllerV2Test {
 
-    @InjectMocks
-    private ShapeControllerV2 shapeControllerV2;
-
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @Autowired
     private ShapeService shapeService;
+
+    @TestConfiguration
+    static class TestConfig {
+
+        @Bean
+        public ShapeService shapeService() {
+            return mock(ShapeService.class);
+        }
+
+        @Bean
+        public ShapeMapperRegistry shapeMapperRegistry() {
+            return mock(ShapeMapperRegistry.class);
+        }
+    }
 
     @Test
     void shouldCreateShapeSuccessfully() throws Exception {
         // given
         String version = "v2";
         String type = "square";
-        Map<String, Long> parameters = Map.of("a", 10L);
+        Map<String, Long> parameters = Map.of("a", 5L);
 
-        SquareDTOv2 dto = new SquareDTOv2(10L);
-        when(shapeService.createShape(version, type, parameters)).thenReturn(dto);
+        Square square = new Square(5L);
+        when(shapeService.createShape(version, type, parameters)).thenReturn(square);
 
         // when & then
         mockMvc.perform(post("/api/v2/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"type\":\"square\",\"parameters\":{\"a\":10}}"))
+                        .content("{\"type\":\"square\",\"parameters\":{\"a\":5}}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.a").value(10));
+                .andExpect(jsonPath("$.a").value(5));
     }
 
     @Test
@@ -62,14 +71,11 @@ class ShapeControllerV2Test {
         String type = "square";
         Map<String, Long> parameters = Map.of("a", -5L);
 
-        Path path = mock(Path.class);
-        when(path.toString()).thenReturn("a");
+        ConstraintViolation<?> violation = mock(ConstraintViolation.class);
 
-        ConstraintViolation<Object> violation = mock(ConstraintViolation.class);
-        when(violation.getPropertyPath()).thenReturn(path);
         when(violation.getMessage()).thenReturn("Side 'a' must be greater than 0");
 
-        Set<ConstraintViolation<?>> violations = Set.of((ConstraintViolation<?>) violation);
+        Set<ConstraintViolation<?>> violations = Set.of(violation);
 
         when(shapeService.createShape(version, type, parameters))
                 .thenThrow(new ConstraintViolationException("Validation failed", violations));
@@ -84,20 +90,12 @@ class ShapeControllerV2Test {
                 .andExpect(jsonPath("$.httpCode").value(400));
     }
 
-
     @Test
     void shouldGetShapesSuccessfully() throws Exception {
-        // given
-        String version = "v2";
-        String type = "square";
-
-        when(shapeService.getShapesByType(version, type)).thenReturn(List.of());
-
-        // when & then
         mockMvc.perform(get("/api/v2/shapes")
                         .param("type", "square")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"type\":\"square\"}"))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
+

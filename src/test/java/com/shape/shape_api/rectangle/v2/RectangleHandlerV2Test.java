@@ -1,8 +1,9 @@
 package com.shape.shape_api.rectangle.v2;
 
 import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.rectangle.RectangleRepository;
+import com.shape.shape_api.model.Shape;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
+import com.shape.shape_api.shape.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,15 +15,15 @@ import static org.mockito.Mockito.*;
 
 class RectangleHandlerV2Test {
 
-    private RectangleRepository rectangleRepository;
+    private ShapeRepository shapeRepository;
     private RectangleV2Mapper rectangleV2Mapper;
     private RectangleHandlerV2 rectangleHandler;
 
     @BeforeEach
     void setUp() {
-        rectangleRepository = mock(RectangleRepository.class);
+        shapeRepository = mock(ShapeRepository.class);
         rectangleV2Mapper = mock(RectangleV2Mapper.class);
-        rectangleHandler = new RectangleHandlerV2(rectangleRepository, rectangleV2Mapper);
+        rectangleHandler = new RectangleHandlerV2(shapeRepository, rectangleV2Mapper);
     }
 
     @Test
@@ -35,43 +36,50 @@ class RectangleHandlerV2Test {
     }
 
     @Test
-    void shouldReturnAllShapes() {
+    void shouldReturnAllRectangles() {
         // given
-        List<Rectangle> rectangles = List.of(
+        List<Shape> rectangles = List.of(
                 new Rectangle(1L, 3L, 4L),
                 new Rectangle(2L, 5L, 6L)
         );
-        when(rectangleRepository.findAll()).thenReturn(rectangles);
+        when(shapeRepository.findAllByShapeType(Rectangle.class)).thenReturn(rectangles);
+        when(rectangleV2Mapper.mapToDTO(any(Rectangle.class)))
+                .thenAnswer(invocation -> {
+                    Rectangle rect = invocation.getArgument(0);
+                    return new RectangleDTOv2(rect.getHeight(), rect.getWidth());
+                });
 
         // when
-        List<Rectangle> result = rectangleHandler.getAllShapes();
+        List<RectangleDTOv2> result = rectangleHandler.getAllShapes();
 
         // then
         assertEquals(2, result.size());
-        assertEquals(3L, result.get(0).getWidth());
-        assertEquals(6L, result.get(1).getHeight());
-        verify(rectangleRepository).findAll();
+        assertEquals(3L, result.get(0).getH());
+        assertEquals(4L, result.get(0).getW());
+        verify(shapeRepository).findAllByShapeType(Rectangle.class);
     }
 
     @Test
     void shouldCreateShape() {
         // given
         RectangleDTOv2 dto = new RectangleDTOv2(10L, 20L);
-        Rectangle mappedRectangle = new Rectangle(null, 10L, 20L);
+        Rectangle mappedRectangle = new Rectangle(10L, 20L);
         Rectangle savedRectangle = new Rectangle(1L, 10L, 20L);
+        RectangleDTOv2 expectedDto = new RectangleDTOv2(10L, 20L);
 
         when(rectangleV2Mapper.mapToEntity(dto)).thenReturn(mappedRectangle);
-        when(rectangleRepository.save(mappedRectangle)).thenReturn(savedRectangle);
+        when(shapeRepository.save(mappedRectangle)).thenReturn(savedRectangle);
+        when(rectangleV2Mapper.mapToDTO(savedRectangle)).thenReturn(expectedDto);
 
         // when
-        Rectangle result = rectangleHandler.createShape(dto);
+        RectangleDTOv2 result = rectangleHandler.createShape(dto);
 
         // then
         assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals(10L, result.getWidth());
-        assertEquals(20L, result.getHeight());
+        assertEquals(10L, result.getH());
+        assertEquals(20L, result.getW());
         verify(rectangleV2Mapper).mapToEntity(dto);
-        verify(rectangleRepository).save(mappedRectangle);
+        verify(shapeRepository).save(mappedRectangle);
+        verify(rectangleV2Mapper).mapToDTO(savedRectangle);
     }
 }

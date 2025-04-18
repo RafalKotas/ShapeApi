@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class ShapeControllerV1 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = BAD_REQUEST_RESPONSE)
             }
     )
+
     public Object createShape(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = SHAPE_REQUEST_BODY_DESCRIPTION,
@@ -65,7 +67,8 @@ public class ShapeControllerV1 {
     )
     public List<?> getShapesByType(
             @RequestParam
-            @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION, example = SQUARE) String type
+            @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION, example = SQUARE)
+            @NotBlank(message = NOT_BLANK_VALIDATION_INFO) String type
     ) {
         return shapeService.getShapesByType(VERSION_1, type);
     }

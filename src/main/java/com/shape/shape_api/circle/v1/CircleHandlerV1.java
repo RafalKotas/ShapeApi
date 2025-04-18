@@ -8,10 +8,11 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Hidden
 @Component
-public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, Circle> {
+public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, CircleDTOv1> {
 
     private final CircleRepository circleRepository;
     private final CircleV1Mapper circleV1Mapper;
@@ -27,14 +28,16 @@ public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, Circle> {
     }
 
     @Override
-    public List<Circle> getAllShapes() {
-        return circleRepository.findAll();
+    public List<CircleDTOv1> getAllShapes() {
+        return circleRepository.findAll().stream()
+                .map(circleV1Mapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Circle createShape(CircleDTOv1 circleDTOv1) {
+    public CircleDTOv1 createShape(CircleDTOv1 circleDTOv1) {
         Circle circle = circleV1Mapper.mapToEntity(circleDTOv1);
-
-        return circleRepository.save(circle);
+        Circle savedCircle = circleRepository.save(circle);
+        return circleV1Mapper.mapToDto(savedCircle);
     }
 }

@@ -8,10 +8,11 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Hidden
 @Component
-public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1, Rectangle> {
+public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1, RectangleDTOv1> {
 
     private final RectangleRepository rectangleRepository;
     private final RectangleV1Mapper rectangleV1Mapper;
@@ -27,13 +28,16 @@ public class RectangleHandlerV1 implements ShapeHandler<RectangleDTOv1, Rectangl
     }
 
     @Override
-    public List<Rectangle> getAllShapes() {
-        return rectangleRepository.findAll();
+    public List<RectangleDTOv1> getAllShapes() {
+        return rectangleRepository.findAll().stream()
+                .map(rectangleV1Mapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Rectangle createShape(RectangleDTOv1 rectangleDTOv1) {
+    public RectangleDTOv1 createShape(RectangleDTOv1 rectangleDTOv1) {
         Rectangle rectangle = rectangleV1Mapper.mapToEntity(rectangleDTOv1);
-        return rectangleRepository.save(rectangle);
+        Rectangle savedRectangle = rectangleRepository.save(rectangle);
+        return rectangleV1Mapper.mapToDto(savedRectangle);
     }
 }

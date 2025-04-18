@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface ShapeHandler<T, E> {
     String getKey();
-    List<E> getAllShapes();
+    List<T> getAllShapes();
     E createShape(T shapeDTO);
 }

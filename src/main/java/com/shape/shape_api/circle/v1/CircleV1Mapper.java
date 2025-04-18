@@ -23,5 +23,9 @@ public class CircleV1Mapper implements ShapeParameterMapper<CircleDTOv1> {
     public Circle mapToEntity(CircleDTOv1 circleDTOv1) {
         return new Circle(circleDTOv1.getRadius());
     }
+
+    public CircleDTOv1 mapToDto(Circle circle) {
+        return new CircleDTOv1(circle.getRadius());
+    }
 }
 

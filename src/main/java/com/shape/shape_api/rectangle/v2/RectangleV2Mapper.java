@@ -26,4 +26,8 @@ public class RectangleV2Mapper implements ShapeParameterMapper<RectangleDTOv2> {
     public Rectangle mapToEntity(RectangleDTOv2 rectangleDTOv2) {
         return new Rectangle(rectangleDTOv2.getW(), rectangleDTOv2.getH());
     }
+
+    public RectangleDTOv2 mapToDto(Rectangle rectangle) {
+        return new RectangleDTOv2(rectangle.getHeight(), rectangle.getWidth());
+    }
 }

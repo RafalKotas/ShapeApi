@@ -8,10 +8,11 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Hidden
 @Component
-public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, Square> {
+public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, SquareDTOv1> {
 
     private final SquareRepository squareRepository;
     private final SquareV1Mapper squareV1Mapper;
@@ -27,14 +28,16 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, Square> {
     }
 
     @Override
-    public List<Square> getAllShapes() {
-        return squareRepository.findAll();
+    public List<SquareDTOv1> getAllShapes() {
+        return squareRepository.findAll().stream()
+                .map(squareV1Mapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Square createShape(SquareDTOv1 squareDTOv1) {
+    public SquareDTOv1 createShape(SquareDTOv1 squareDTOv1) {
         Square square = squareV1Mapper.mapToEntity(squareDTOv1);
-
-        return squareRepository.save(square);
+        Square savedSquare = squareRepository.save(square);
+        return squareV1Mapper.mapToDto(savedSquare);
     }
 }

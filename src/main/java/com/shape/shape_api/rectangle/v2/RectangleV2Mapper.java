@@ -18,8 +18,8 @@ public class RectangleV2Mapper implements ShapeParameterMapper<RectangleDTOv2> {
     @Override
     public RectangleDTOv2 map(Map<String, Long> parameters) {
         return new RectangleDTOv2(
-                parameters.get("a"),
-                parameters.get("b")
+                parameters.get("h"),
+                parameters.get("w")
         );
     }
 

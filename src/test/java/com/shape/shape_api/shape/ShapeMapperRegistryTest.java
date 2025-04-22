@@ -1,11 +1,13 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.square.v1.dto.SquareDTOv1;
+import com.shape.shape_api.model.Square;
+import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -19,19 +21,21 @@ class ShapeMapperRegistryTest {
     private ShapeMapperRegistry shapeMapperRegistry;
 
     @Test
-    void shouldMapParametersToDto() {
+    void shouldMapParametersToEntity() {
         // given
         String fullType = "v1:square";
-        Map<String, Long> parameters = Map.of("a", 10L);
-        SquareDTOv1 expectedDto = new SquareDTOv1(10L);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(10L));
+        SquareDtoInV1 expectedDto = new SquareDtoInV1(BigDecimal.valueOf(10L));
         when(shapeMapperRegistry.mapParametersToDto(fullType, parameters)).thenReturn(expectedDto);
 
         // when
-        SquareDTOv1 dto = (SquareDTOv1) shapeMapperRegistry.mapParametersToDto(fullType, parameters);
+        Square square = (Square) shapeMapperRegistry.mapParametersToEntity(fullType, parameters);
 
         // then
-        assertNotNull(dto);
-        assertEquals(10L, dto.getA());
+        assertNotNull(square);
+        BigDecimal expectedSide = BigDecimal.valueOf(10L);
+        assertEquals(0, expectedSide.compareTo(square.getA()),
+                "The result a should match the expected square a(10L)");
     }
 
     @Test
@@ -39,7 +43,7 @@ class ShapeMapperRegistryTest {
         // given
         shapeMapperRegistry = new ShapeMapperRegistry(Collections.emptyList());
         String key = "nonExistingShape";
-        Map<String, Long> parameters = Map.of("param1", 1L);
+        Map<String, BigDecimal> parameters = Map.of("param1", BigDecimal.valueOf(1L));
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {

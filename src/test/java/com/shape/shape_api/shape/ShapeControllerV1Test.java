@@ -1,6 +1,6 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Square;
+import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,9 +51,9 @@ class ShapeControllerV1Test {
         // given
         String version = "v1";
         String type = "square";
-        Map<String, Long> parameters = Map.of("a", 5L);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(5L));
 
-        Square square = new Square(5L);
+        SquareDtoOutV1 square = new SquareDtoOutV1(BigDecimal.valueOf(5L));
         when(shapeService.createShape(version, type, parameters)).thenReturn(square);
 
         // when & then
@@ -68,7 +69,7 @@ class ShapeControllerV1Test {
         // given
         String version = "v1";
         String type = "square";
-        Map<String, Long> parameters = Map.of("a", -5L);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(-5L));
 
         ConstraintViolation<?> violation = mock(ConstraintViolation.class);
 

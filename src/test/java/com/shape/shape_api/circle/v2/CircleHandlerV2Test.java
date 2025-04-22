@@ -1,12 +1,14 @@
 package com.shape.shape_api.circle.v2;
 
-import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
+import com.shape.shape_api.circle.v2.dto.CircleDtoInV2;
+import com.shape.shape_api.circle.v2.dto.CircleDtoOutV2;
 import com.shape.shape_api.model.Circle;
 import com.shape.shape_api.model.Shape;
 import com.shape.shape_api.shape.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,43 +36,44 @@ class CircleHandlerV2Test {
     @Test
     void shouldReturnAllCircles() {
         // given
-        Circle circleEntity1 = new Circle(1L);
-        Circle circleEntity2 = new Circle(2L);
+        Circle circleEntity1 = new Circle(BigDecimal.valueOf(2L));
+        Circle circleEntity2 = new Circle(BigDecimal.valueOf(4L));
         List<Shape> circles = List.of(circleEntity1, circleEntity2);
 
         when(shapeRepository.findAllByShapeType(Circle.class)).thenReturn(circles);
         when(circleV2Mapper.mapToDTO(any(Circle.class)))
                 .thenAnswer(invocation -> {
                     Circle circle = invocation.getArgument(0);
-                    return new CircleDTOv2(circle.getRadius() * 2);
+                    return new CircleDtoOutV2( circle.getRadius().multiply(BigDecimal.valueOf(2)));
                 });
 
         // when
-        List<CircleDTOv2> result = circleHandlerV2.getAllShapes();
+        List<CircleDtoOutV2> result = circleHandlerV2.getAllShapes();
 
         // then
-        assertEquals(2L, result.get(0).getDiameter());
-        assertEquals(4L, result.get(1).getDiameter());
+        assertEquals(4L, result.get(0).getDiameter());
+        assertEquals(8L, result.get(1).getDiameter());
         verify(shapeRepository).findAllByShapeType(Circle.class);
     }
 
     @Test
     void shouldCreateCircleV2() {
-        CircleDTOv2 dto = new CircleDTOv2(10L);
-        Circle mappedCircle = new Circle(5L);
-        Circle savedCircle = new Circle(5L);
-        CircleDTOv2 expectedDTO = new CircleDTOv2(10L);
+        CircleDtoInV2 dtoInV2 = new CircleDtoInV2(BigDecimal.valueOf(10L));
+        Circle mappedCircle = new Circle(BigDecimal.valueOf(5L));
+        Circle savedCircle = new Circle(BigDecimal.valueOf(5L));
+        CircleDtoOutV2 expectedDTO = new CircleDtoOutV2(BigDecimal.valueOf(10L));
 
-        when(circleV2Mapper.mapToEntity(dto)).thenReturn(mappedCircle);
+        when(circleV2Mapper.mapToEntity(dtoInV2)).thenReturn(mappedCircle);
         when(shapeRepository.save(mappedCircle)).thenReturn(savedCircle);
         when(circleV2Mapper.mapToDTO(savedCircle)).thenReturn(expectedDTO);
 
-        CircleDTOv2 result = circleHandlerV2.createShape(dto);
+        CircleDtoOutV2 result = circleHandlerV2.createShape(dtoInV2);
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(10L, result.getDiameter(), "The 'diameter' value in the result should be 10L");
-        verify(circleV2Mapper).mapToEntity(dto);
+        assertEquals(0, expectedDTO.getDiameter().compareTo(result.getDiameter()), "The 'diameter' value in the result should be 10L");
+        verify(circleV2Mapper).mapToEntity(dtoInV2);
         verify(shapeRepository).save(mappedCircle);
+        verify(circleV2Mapper).mapToDTO(savedCircle);
     }
 }

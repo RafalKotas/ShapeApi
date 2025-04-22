@@ -1,9 +1,8 @@
 package com.shape.shape_api.shape;
 
 import com.shape.shape_api.common.exception.ShapeNotSupportedException;
-import com.shape.shape_api.model.Shape;
-import com.shape.shape_api.model.Square;
-import com.shape.shape_api.square.v1.dto.SquareDTOv1;
+import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ class ShapeServiceTest {
     @Mock
     private Validator validator;
 
-    private Map<String, ShapeHandler<?, ? extends Shape>> shapeHandlers;
+    private Map<String, ShapeHandler<?, ?>> shapeHandlers;
 
     private ShapeService shapeService;
 
@@ -44,24 +44,24 @@ class ShapeServiceTest {
         String type = "square";
         String fullType = "v1:square";
 
-        Map<String, Long> parameters = Map.of("a", 10L);
-        SquareDTOv1 dto = new SquareDTOv1(10L);
-        Square expectedEntity = new Square(10L);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(10L));
+        SquareDtoInV1 dto = new SquareDtoInV1(BigDecimal.valueOf(10L));
+        SquareDtoOutV1 expectedDto = new SquareDtoOutV1(BigDecimal.valueOf(10L));
 
         @SuppressWarnings("unchecked")
-        ShapeHandler<SquareDTOv1, Square> handler = mock(ShapeHandler.class);
+        ShapeHandler<SquareDtoInV1, SquareDtoOutV1> handler = mock(ShapeHandler.class);
 
         shapeHandlers.put(fullType, handler);
         when(shapeMapperRegistry.mapParametersToDto(fullType, parameters)).thenReturn(dto);
         when(validator.validate(dto)).thenReturn(Collections.emptySet());
-        when(handler.createShape(dto)).thenReturn(expectedEntity);
+        when(handler.createShape(dto)).thenReturn(expectedDto);
 
         // when
         Object result = shapeService.createShape(version, type, parameters);
 
         // then
         assertNotNull(result);
-        assertEquals(expectedEntity, result);
+        assertEquals(expectedDto, result);
         verify(handler).createShape(dto);
     }
 

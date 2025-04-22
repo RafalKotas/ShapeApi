@@ -1,6 +1,7 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Square;
+import com.shape.shape_api.square.SquareResponseDto;
+import com.shape.shape_api.square.v2.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,17 +35,20 @@ class ShapeControllerV2Test {
     @Autowired
     private ShapeService shapeService;
 
+    @Autowired
+    private ShapeMapperRegistry shapeMapperRegistry;
+
     @TestConfiguration
     static class TestConfig {
 
         @Bean
         public ShapeService shapeService() {
-            return mock(ShapeService.class);
+            return mock(ShapeService.class); // Mockowanie ShapeService
         }
 
         @Bean
         public ShapeMapperRegistry shapeMapperRegistry() {
-            return mock(ShapeMapperRegistry.class);
+            return mock(ShapeMapperRegistry.class); // Mockowanie ShapeMapperRegistry
         }
     }
 
@@ -51,10 +57,12 @@ class ShapeControllerV2Test {
         // given
         String version = "v2";
         String type = "square";
-        Map<String, Long> parameters = Map.of("a", 5L);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(5L));
 
-        Square square = new Square(5L);
+        SquareDtoOutV2 square = new SquareDtoOutV2(BigDecimal.valueOf(5L));
+        SquareResponseDto squareResponseDto = new SquareResponseDto(BigDecimal.valueOf(5L));
         when(shapeService.createShape(version, type, parameters)).thenReturn(square);
+        when(shapeMapperRegistry.mapEntityToDto(version + ":" + type, square)).thenReturn(squareResponseDto);
 
         // when & then
         mockMvc.perform(post("/api/v2/shapes")
@@ -69,10 +77,9 @@ class ShapeControllerV2Test {
         // given
         String version = "v2";
         String type = "square";
-        Map<String, Long> parameters = Map.of("a", -5L);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(-5L));
 
         ConstraintViolation<?> violation = mock(ConstraintViolation.class);
-
         when(violation.getMessage()).thenReturn("Side 'a' must be greater than 0");
 
         Set<ConstraintViolation<?>> violations = Set.of(violation);
@@ -91,11 +98,38 @@ class ShapeControllerV2Test {
     }
 
     @Test
-    void shouldGetShapesSuccessfully() throws Exception {
-        mockMvc.perform(get("/api/v2/shapes")
-                        .param("type", "square")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-}
+    void shouldGetShapesSuccessfullyForValidType() throws Exception {
+        // given
+        String type = "square";
+        SquareDtoOutV2 squareDtoOutV2 = new SquareDtoOutV2(BigDecimal.valueOf(5L));
+        List<ShapeDTO> shapeDTOS = List.of(squareDtoOutV2);
 
+        when(shapeService.getShapesByType("v2", type)).thenReturn(shapeDTOS);
+        when(shapeMapperRegistry.mapEntityToDto("v2:square", shapeDTOS)).thenReturn(new SquareResponseDto(BigDecimal.valueOf(5L)));
+
+        // when & then
+        mockMvc.perform(get("/api/v2/shapes")
+                        .param("type", type)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].a").value(5));
+    }
+
+    @Test
+    void shouldReturnEmptyListForUnknownShapeType() throws Exception {
+        // given
+        String type = "hexagon";
+        List<ShapeDTO> shapes = List.of();
+
+        when(shapeService.getShapesByType("v2", type)).thenReturn(shapes);
+
+        // when & then
+        mockMvc.perform(get("/api/v2/shapes")
+                        .param("type", type)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+}

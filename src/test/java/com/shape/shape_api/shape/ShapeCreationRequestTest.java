@@ -6,6 +6,7 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ class ShapeCreationRequestTest {
     @Test
     void shouldValidateValidShapeCreationRequest() {
         // given
-        ShapeCreationRequest request = new ShapeCreationRequest("square", Map.of("a", 10L));
+        ShapeCreationRequest request = new ShapeCreationRequest("square", Map.of("a", BigDecimal.valueOf(10L)));
 
         // when
         Set<ConstraintViolation<ShapeCreationRequest>> violations = validator.validate(request);
@@ -36,7 +37,7 @@ class ShapeCreationRequestTest {
     @Test
     void shouldInvalidateShapeCreationRequestWithInvalidType() {
         // given
-        ShapeCreationRequest request = new ShapeCreationRequest("", Map.of("a", 10L));
+        ShapeCreationRequest request = new ShapeCreationRequest("", Map.of("a", BigDecimal.valueOf(10L)));
 
         // when
         Set<ConstraintViolation<ShapeCreationRequest>> violations = validator.validate(request);

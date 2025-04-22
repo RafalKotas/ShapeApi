@@ -1,22 +1,19 @@
-package com.shape.shape_api.model;
+package com.shape.shape_api.circle.v1.dto;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import com.shape.shape_api.shape.ShapeDTO;
 
 import java.math.BigDecimal;
 
-@Entity
-@DiscriminatorValue("circle")
-public class Circle extends Shape {
-
+public class CircleDtoInV1 extends ShapeDTO {
     private BigDecimal radius;
 
-    public Circle(BigDecimal radius) {
+    public CircleDtoInV1(BigDecimal radius) {
         super();
         this.radius = radius;
     }
 
-    public Circle() {
+    public CircleDtoInV1() {
+
     }
 
     public BigDecimal getRadius() {
@@ -27,3 +24,4 @@ public class Circle extends Shape {
         this.radius = radius;
     }
 }
+

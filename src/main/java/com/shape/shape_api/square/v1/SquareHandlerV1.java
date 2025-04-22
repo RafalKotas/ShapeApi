@@ -3,7 +3,8 @@ package com.shape.shape_api.square.v1;
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.shape.ShapeRepository;
-import com.shape.shape_api.square.v1.dto.SquareDTOv1;
+import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, SquareDTOv1> {
+public class SquareHandlerV1 implements ShapeHandler<SquareDtoInV1, SquareDtoOutV1> {
 
     private final ShapeRepository shapeRepository;
     private final SquareV1Mapper squareV1Mapper;
@@ -27,7 +28,7 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, SquareDTOv1> {
     }
 
     @Override
-    public List<SquareDTOv1> getAllShapes() {
+    public List<SquareDtoOutV1> getAllShapes() {
         return shapeRepository.findAllByShapeType(Square.class).stream()
                 .map(shape -> (Square) shape)
                 .map(squareV1Mapper::mapToDTO)
@@ -35,9 +36,9 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDTOv1, SquareDTOv1> {
     }
 
     @Override
-    public SquareDTOv1 createShape(SquareDTOv1 squareDTOv1) {
-        Square square = squareV1Mapper.mapToEntity(squareDTOv1);
-        Square savedSquare = shapeRepository.save(square);
-        return squareV1Mapper.mapToDTO(savedSquare);
+    public SquareDtoOutV1 createShape(SquareDtoInV1 dto) {
+        Square square = squareV1Mapper.mapToEntity(dto);
+        Square saved = shapeRepository.save(square);
+        return squareV1Mapper.mapToDTO(saved);
     }
 }

@@ -3,13 +3,10 @@ package com.shape.shape_api.rectangle.v1.dto;
 import com.shape.shape_api.shape.ShapeDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
-public class RectangleDTOv1 extends ShapeDTO {
-
+public class RectangleDtoInV1 extends ShapeDTO {
     @NotNull(message = "'height' must not be null")
     @Min(value = 1, message = "'height' must be greater than 0")
     private BigDecimal height;
@@ -18,7 +15,7 @@ public class RectangleDTOv1 extends ShapeDTO {
     @Min(value = 1, message = "'width' must be greater than 0")
     private BigDecimal width;
 
-    public RectangleDTOv1(@NotNull(message = "'height' must not be null") @Min(value = 1, message = "'height' must be greater than 0") BigDecimal height, @NotNull(message = "'width' must not be null") @Min(value = 1, message = "'width' must be greater than 0") BigDecimal width) {
+    public RectangleDtoInV1(@NotNull(message = "'height' must not be null") @Min(value = 1, message = "'height' must be greater than 0") BigDecimal height, @NotNull(message = "'width' must not be null") @Min(value = 1, message = "'width' must be greater than 0") BigDecimal width) {
         this.height = height;
         this.width = width;
     }

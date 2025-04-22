@@ -2,13 +2,15 @@ package com.shape.shape_api.square.v2;
 
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeMapper;
-import com.shape.shape_api.square.v2.dto.SquareDTOv2;
+import com.shape.shape_api.square.v2.dto.SquareDtoInV2;
+import com.shape.shape_api.square.v2.dto.SquareDtoOutV2;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
-public class SquareV2Mapper implements ShapeMapper<SquareDTOv2, Square> {
+public class SquareV2Mapper implements ShapeMapper<SquareDtoInV2, SquareDtoOutV2, Square> {
 
     @Override
     public String getKey() {
@@ -16,24 +18,27 @@ public class SquareV2Mapper implements ShapeMapper<SquareDTOv2, Square> {
     }
 
     @Override
-    public Square mapToEntity(SquareDTOv2 dto) {
-        Square square = new Square();
-        square.setA(dto.getA());
-        return square;
+    public Square mapToEntity(SquareDtoInV2 dto) {
+        BigDecimal side = dto.getSide();
+        return new Square(side);
     }
 
     @Override
-    public SquareDTOv2 mapToDTO(Square entity) {
-        return new SquareDTOv2(entity.getA());
+    public SquareDtoOutV2 mapToDTO(Square square) {
+        SquareDtoOutV2 squareDtoOutV2 = new SquareDtoOutV2();
+        squareDtoOutV2.setSide(square.getA());
+        return squareDtoOutV2;
     }
 
     @Override
-    public SquareDTOv2 map(Map<String, Long> parameters) {
-        Long a = parameters.get("a");
+    public SquareDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
+        BigDecimal a = parameters.get("a");
         if (a == null) {
             throw new IllegalArgumentException("Parameter 'a' (side length) is required for square.");
         }
-        return new SquareDTOv2(a);
+        SquareDtoInV2 squareDtoInV2 = new SquareDtoInV2();
+        squareDtoInV2.setSide(a);
+        return squareDtoInV2;
     }
 }
 

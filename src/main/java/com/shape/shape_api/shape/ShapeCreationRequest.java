@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
@@ -18,12 +19,12 @@ public class ShapeCreationRequest {
     @NotNull(message = SHAPE_PARAMETERS_NOT_NULL)
     @Schema(description = SHAPE_PARAMETERS_DESCRIPTION,
             example = SHAPE_PARAMETERS_EXAMPLE)
-    private Map<String, Long> parameters;
+    private Map<String, BigDecimal> parameters;
 
     public ShapeCreationRequest() {
     }
 
-    public ShapeCreationRequest(String type, Map<String, Long> parameters) {
+    public ShapeCreationRequest(String type, Map<String, BigDecimal> parameters) {
         this.type = type;
         this.parameters = parameters;
     }
@@ -36,11 +37,11 @@ public class ShapeCreationRequest {
         this.type = type;
     }
 
-    public Map<String, Long> getParameters() {
+    public Map<String, BigDecimal> getParameters() {
         return parameters;
     }
 
-    public void setParameters(Map<String, Long> parameters) {
+    public void setParameters(Map<String, BigDecimal> parameters) {
         this.parameters = parameters;
     }
 }

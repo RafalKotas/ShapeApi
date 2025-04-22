@@ -1,21 +1,25 @@
 package com.shape.shape_api.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import java.math.BigDecimal;
+
 @Entity
+@DiscriminatorValue("rectangle")
 public class Rectangle extends Shape {
 
-    private Long height;
-    private Long width;
+    private BigDecimal height;
+    private BigDecimal width;
 
 
-    public Rectangle(Long id, Long height,  Long width) {
+    public Rectangle(Long id, BigDecimal height, BigDecimal width) {
         super();
         this.height = height;
         this.width = width;
     }
 
-    public Rectangle(Long height, Long width) {
+    public Rectangle(BigDecimal height, BigDecimal width) {
         this.height = height;
         this.width = width;
     }
@@ -23,19 +27,19 @@ public class Rectangle extends Shape {
     public Rectangle() {
     }
 
-    public Long getWidth() {
+    public BigDecimal getWidth() {
         return this.width;
     }
 
-    public Long getHeight() {
+    public BigDecimal getHeight() {
         return this.height;
     }
 
-    public void setWidth(Long width) {
+    public void setWidth(BigDecimal width) {
         this.width = width;
     }
 
-    public void setHeight(Long height) {
+    public void setHeight(BigDecimal height) {
         this.height = height;
     }
 }

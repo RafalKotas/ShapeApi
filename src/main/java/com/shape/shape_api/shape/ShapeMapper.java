@@ -1,12 +1,11 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Shape;
-
+import java.math.BigDecimal;
 import java.util.Map;
 
-public interface ShapeMapper<D, E extends Shape> {
+public interface ShapeMapper<IN_DTO, OUT_DTO, ENTITY> {
     String getKey();
-    D map(Map<String, Long> parameters);
-    E mapToEntity(D dto);
-    D mapToDTO(E entity);
+    IN_DTO mapFromParams(Map<String, BigDecimal> parameters);
+    ENTITY mapToEntity(IN_DTO dto);
+    OUT_DTO mapToDTO(ENTITY entity);
 }

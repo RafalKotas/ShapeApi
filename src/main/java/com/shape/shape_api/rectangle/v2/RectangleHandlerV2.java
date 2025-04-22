@@ -1,7 +1,8 @@
 package com.shape.shape_api.rectangle.v2;
 
 import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
+import com.shape.shape_api.rectangle.v2.dto.RectangleDtoInV2;
+import com.shape.shape_api.rectangle.v2.dto.RectangleDtoOutV2;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.shape.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, RectangleDTOv2> {
+public class RectangleHandlerV2 implements ShapeHandler<RectangleDtoInV2, RectangleDtoOutV2> {
 
     private final ShapeRepository shapeRepository;
     private final RectangleV2Mapper rectangleV2Mapper;
@@ -27,7 +28,7 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangl
     }
 
     @Override
-    public List<RectangleDTOv2> getAllShapes() {
+    public List<RectangleDtoOutV2> getAllShapes() {
         return shapeRepository.findAllByShapeType(Rectangle.class).stream()
                 .map(shape -> (Rectangle) shape)
                 .map(rectangleV2Mapper::mapToDTO)
@@ -35,9 +36,9 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDTOv2, Rectangl
     }
 
     @Override
-    public RectangleDTOv2 createShape(RectangleDTOv2 rectangleDTOv2) {
-        Rectangle rectangle = rectangleV2Mapper.mapToEntity(rectangleDTOv2);
-        Rectangle savedRectangle = shapeRepository.save(rectangle);
-        return rectangleV2Mapper.mapToDTO(savedRectangle);
+    public RectangleDtoOutV2 createShape(RectangleDtoInV2 dto) {
+        Rectangle entity = rectangleV2Mapper.mapToEntity(dto);
+        Rectangle saved = shapeRepository.save(entity);
+        return rectangleV2Mapper.mapToDTO(saved);
     }
 }

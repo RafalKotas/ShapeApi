@@ -1,14 +1,16 @@
 package com.shape.shape_api.rectangle.v1;
 
 import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.rectangle.v1.dto.RectangleDTOv1;
+import com.shape.shape_api.rectangle.v1.dto.RectangleDtoInV1;
+import com.shape.shape_api.rectangle.v1.dto.RectangleDtoOutV1;
 import com.shape.shape_api.shape.ShapeMapper;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
-public class RectangleV1Mapper implements ShapeMapper<RectangleDTOv1, Rectangle> {
+public class RectangleV1Mapper implements ShapeMapper<RectangleDtoInV1, RectangleDtoOutV1, Rectangle> {
 
     @Override
     public String getKey() {
@@ -16,27 +18,27 @@ public class RectangleV1Mapper implements ShapeMapper<RectangleDTOv1, Rectangle>
     }
 
     @Override
-    public Rectangle mapToEntity(RectangleDTOv1 dto) {
-        Rectangle rectangle = new Rectangle();
-        rectangle.setHeight(dto.getHeight());
-        rectangle.setWidth(dto.getWidth());
-        return rectangle;
-    }
-
-    @Override
-    public RectangleDTOv1 mapToDTO(Rectangle entity) {
-        return new RectangleDTOv1(entity.getHeight(), entity.getWidth());
-    }
-
-    @Override
-    public RectangleDTOv1 map(Map<String, Long> parameters) {
-        Long height = parameters.get("height");
-        Long width = parameters.get("width");
+    public RectangleDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
+        BigDecimal height = parameters.get("height");
+        BigDecimal width = parameters.get("width");
 
         if (height == null || width == null) {
             throw new IllegalArgumentException("Missing required parameters: 'height' and/or 'width'.");
         }
 
-        return new RectangleDTOv1(height, width);
+        return new RectangleDtoInV1(height, width);
+    }
+
+    @Override
+    public Rectangle mapToEntity(RectangleDtoInV1 dto) {
+        return new Rectangle(dto.getHeight(), dto.getWidth());
+    }
+
+    @Override
+    public RectangleDtoOutV1 mapToDTO(Rectangle entity) {
+        RectangleDtoOutV1 dto = new RectangleDtoOutV1();
+        dto.setHeight(entity.getHeight());
+        dto.setWidth(entity.getWidth());
+        return dto;
     }
 }

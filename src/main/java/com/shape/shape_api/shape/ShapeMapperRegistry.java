@@ -1,9 +1,9 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Shape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,27 +11,27 @@ import java.util.Map;
 @Service
 public class ShapeMapperRegistry {
 
-    private final Map<String, ShapeMapper<?, ? extends Shape>> mappers = new HashMap<>();
+    private final Map<String, ShapeMapper<?, ?, ?>> mappers = new HashMap<>();
 
     @Autowired
-    public ShapeMapperRegistry(List<ShapeMapper<?, ? extends Shape>> mapperList) {
-        for (ShapeMapper<?, ? extends Shape> mapper : mapperList) {
+    public ShapeMapperRegistry(List<ShapeMapper<?, ?, ?>> mapperList) {
+        for (ShapeMapper<?, ?, ?> mapper : mapperList) {
             mappers.put(mapper.getKey(), mapper);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <D> D mapParametersToDto(String key, Map<String, Long> parameters) {
-        ShapeMapper<D, ?> mapper = (ShapeMapper<D, ?>) mappers.get(key);
+    public <IN_DTO> IN_DTO mapParametersToDto(String key, Map<String, BigDecimal> parameters) {
+        ShapeMapper<IN_DTO, ?, ?> mapper = (ShapeMapper<IN_DTO, ?, ?>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
-        return mapper.map(parameters);
+        return mapper.mapFromParams(parameters);
     }
 
     @SuppressWarnings("unchecked")
-    public <D, E extends Shape> D mapEntityToDto(String key, E shape) {
-        ShapeMapper<D, E> mapper = (ShapeMapper<D, E>) mappers.get(key);
+    public <OUT_DTO, ENTITY> OUT_DTO mapEntityToDto(String key, ENTITY shape) {
+        ShapeMapper<?, OUT_DTO, ENTITY> mapper = (ShapeMapper<?, OUT_DTO, ENTITY>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
@@ -39,13 +39,14 @@ public class ShapeMapperRegistry {
     }
 
 
+
     @SuppressWarnings("unchecked")
-    public <D, E extends Shape> E mapParametersToEntity(String key, Map<String, Long> parameters) {
-        ShapeMapper<D, E> mapper = (ShapeMapper<D, E>) mappers.get(key);
+    public <IN_DTO, ENTITY> ENTITY mapParametersToEntity(String key, Map<String, BigDecimal> parameters) {
+        ShapeMapper<IN_DTO, ?, ENTITY> mapper = (ShapeMapper<IN_DTO, ?, ENTITY>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
-        D dto = mapper.map(parameters);
+        IN_DTO dto = mapper.mapFromParams(parameters);
         return mapper.mapToEntity(dto);
     }
 }

@@ -68,9 +68,13 @@ class ShapeHandlerTest {
         List<SquareDtoOutV1> shapes = handler.getAllShapes();
 
         // then
+        BigDecimal expectedFirstA = BigDecimal.valueOf(10L);
+        BigDecimal expectedSecondA = BigDecimal.valueOf(20L);
         assertEquals(2, shapes.size());
-        assertEquals(10L, shapes.get(0).getSideA());
-        assertEquals(20L, shapes.get(1).getSideA());
+        assertEquals(0, expectedFirstA.compareTo(shapes.get(0).getSideA()),
+                "The result first A should match the expectedFirstA");
+        assertEquals(0, expectedSecondA.compareTo(shapes.get(1).getSideA()),
+                "The result second A should match the expectedSecondA");
     }
 
     @Test

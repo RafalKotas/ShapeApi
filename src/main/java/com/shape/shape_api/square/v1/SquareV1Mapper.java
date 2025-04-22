@@ -19,14 +19,14 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
 
     @Override
     public Square mapToEntity(SquareDtoInV1 squareDtoInV1) {
-        return new Square(squareDtoInV1.getA());
+        BigDecimal a = squareDtoInV1.getA();
+        return new Square(a);
     }
 
     @Override
     public SquareDtoOutV1 mapToDTO(Square entity) {
         SquareDtoOutV1 dto = new SquareDtoOutV1();
         dto.setSideA(entity.getA());
-        dto.setType("square");
         return dto;
     }
 

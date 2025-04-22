@@ -2,7 +2,6 @@ package com.shape.shape_api.rectangle.v2;
 
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.model.Shape;
-import com.shape.shape_api.rectangle.v2.dto.RectangleDTOv2;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDtoOutV2;
 import com.shape.shape_api.shape.ShapeRepository;
@@ -41,15 +40,17 @@ class RectangleHandlerV2Test {
     @Test
     void shouldReturnAllRectangles() {
         // given
+        Rectangle rectangleEntity1 = new Rectangle(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        Rectangle rectangleEntity2 = new Rectangle(BigDecimal.valueOf(5L), BigDecimal.valueOf(6L));
         List<Shape> rectangles = List.of(
-                new Rectangle(1L, BigDecimal.valueOf(3L), BigDecimal.valueOf(4L)),
-                new Rectangle(2L, BigDecimal.valueOf(5L), BigDecimal.valueOf(6L))
+                rectangleEntity1,
+                rectangleEntity2
         );
         when(shapeRepository.findAllByShapeType(Rectangle.class)).thenReturn(rectangles);
         when(rectangleV2Mapper.mapToDTO(any(Rectangle.class)))
                 .thenAnswer(invocation -> {
                     Rectangle rect = invocation.getArgument(0);
-                    return new RectangleDTOv2(rect.getHeight(), rect.getWidth());
+                    return new RectangleDtoOutV2(rect.getHeight(), rect.getWidth());
                 });
 
         // when

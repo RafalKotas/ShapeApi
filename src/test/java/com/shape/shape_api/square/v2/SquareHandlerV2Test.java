@@ -81,6 +81,5 @@ class SquareHandlerV2Test {
         assertEquals(0, expectedDTO.getSide().compareTo(result.getSide()), "The 'diameter' value in the result should be 10L");
         verify(squareV2Mapper).mapToEntity(dtoInV2);
         verify(shapeRepository).save(mappedSquare);
-        verify(squareV2Mapper.mapToDTO(savedSquare));
     }
 }

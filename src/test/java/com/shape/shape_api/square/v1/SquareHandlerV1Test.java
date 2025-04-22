@@ -56,9 +56,12 @@ class SquareHandlerV1Test {
 
         // then
         assertEquals(2, result.size());
-        assertEquals(5L, result.get(0).getSideA());
-        assertEquals(10L, result.get(1).getSideA());
-
+        BigDecimal expectedFirstA = BigDecimal.valueOf(5L);
+        BigDecimal expectedSecondA = BigDecimal.valueOf(10L);
+        assertEquals(0, expectedFirstA.compareTo(result.get(0).getSideA()),
+                "The result square a should match the expected square a(5L)");
+        assertEquals(0, expectedSecondA.compareTo(result.get(1).getSideA()),
+                "The result square a should match the expected square a(10L)");
         verify(shapeRepository).findAllByShapeType(Square.class);
     }
 

@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 public class SquareDtoInV1 extends ShapeDTO {
     private BigDecimal a;
 
-    public SquareDtoInV1(BigDecimal bigDecimal) {
+    public SquareDtoInV1(BigDecimal a) {
+        super();
+        this.a = a;
     }
 
     public SquareDtoInV1() {

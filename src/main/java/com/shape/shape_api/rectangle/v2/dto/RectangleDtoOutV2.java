@@ -17,6 +17,16 @@ public class RectangleDtoOutV2 extends ShapeDTO {
     @Min(value = 1, message = "Side 'w' must be greater than 0")
     private BigDecimal w;
 
+    public RectangleDtoOutV2(BigDecimal height, BigDecimal width) {
+        super();
+        this.h = height;
+        this.w = width;
+    }
+
+    public RectangleDtoOutV2() {
+        super();
+    }
+
     public BigDecimal getH() {
         return this.h;
     }

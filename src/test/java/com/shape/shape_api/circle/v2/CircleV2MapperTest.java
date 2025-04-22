@@ -40,7 +40,7 @@ class CircleV2MapperTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenDiameterIsMissing() {
+    void shouldThrowExceptionWhenDiameterParamIsMissing() {
         // given
         Map<String, BigDecimal> parameters = Map.of();
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CircleV1MapperTest {
 
@@ -16,9 +16,9 @@ class CircleV1MapperTest {
         CircleDtoInV1 circleDTOv1 = new CircleDtoInV1(BigDecimal.valueOf(10L));
 
         // when
-        Circle circle = new CircleV1Mapper().mapToEntity(circleDTOv1);
+        Circle result = new CircleV1Mapper().mapToEntity(circleDTOv1);
 
         // then
-        assertThat(circle.getRadius()).isEqualTo(10L);
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()));
     }
 }

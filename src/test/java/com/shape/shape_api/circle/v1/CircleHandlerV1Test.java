@@ -36,7 +36,9 @@ class CircleHandlerV1Test {
     @Test
     void shouldReturnAllCircles() {
         // given
-        List<Shape> circles = List.of(new Circle(BigDecimal.valueOf(1L)), new Circle(BigDecimal.valueOf(2L)));
+        Circle circleEntity1 = new Circle(BigDecimal.valueOf(1L));
+        Circle circleEntity2 = new Circle(BigDecimal.valueOf(2L));
+        List<Shape> circles = List.of(circleEntity1, circleEntity2);
 
         when(shapeRepository.findAllByShapeType(Circle.class)).thenReturn(circles);
         when(circleV1Mapper.mapToDTO(any(Circle.class)))
@@ -50,7 +52,9 @@ class CircleHandlerV1Test {
 
         // then
         assertEquals(2, result.size());
-        assertEquals(1L, result.get(0).getRadius());
+        BigDecimal expectedRadius = BigDecimal.valueOf(1L);
+        assertEquals(0, expectedRadius.compareTo(result.get(0).getRadius()),
+                "The result first circle radius should match the expected circle radius(1L)");
         verify(shapeRepository).findAllByShapeType(Circle.class);
     }
 

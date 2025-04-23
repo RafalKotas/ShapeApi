@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SquareV1MapperTest {
 
-    SquareV1Mapper subject = new SquareV1Mapper();
+    final SquareV1Mapper subject = new SquareV1Mapper();
 
     @Test
     void shouldMapSquareDTOv1ToSquareEntity() {

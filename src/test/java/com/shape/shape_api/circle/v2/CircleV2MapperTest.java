@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CircleV2MapperTest {
 
-    CircleV2Mapper subject = new CircleV2Mapper();
+    final CircleV2Mapper subject = new CircleV2Mapper();
 
     @Test
     void shouldMapCircleDTOv2ToCircleEntity() {

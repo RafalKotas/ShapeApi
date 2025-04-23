@@ -61,9 +61,7 @@ class ShapeMapperRegistryTest {
         Map<String, BigDecimal> parameters = Map.of("param1", BigDecimal.valueOf(1L));
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            subject.mapParametersToDto(key, parameters);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapParametersToDto(key, parameters));
 
         // then
         assertEquals("No mapper found for shape type: " + key, exception.getMessage());

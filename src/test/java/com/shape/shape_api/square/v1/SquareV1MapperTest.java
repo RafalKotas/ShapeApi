@@ -75,9 +75,7 @@ class SquareV1MapperTest {
         Square square = new Square(null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            subject.mapToDTO(square);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
 
         // then
         assertEquals("Side 'a' must not be null", exception.getMessage());
@@ -89,9 +87,7 @@ class SquareV1MapperTest {
         Square square = null;
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            subject.mapToDTO(square);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
 
         // then
         assertEquals("Side 'a' must not be null", exception.getMessage());

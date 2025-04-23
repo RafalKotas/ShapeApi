@@ -106,9 +106,7 @@ class RectangleV1MapperTest {
         Rectangle rectangle = new Rectangle(null, new BigDecimal("10"));
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            subject.mapToDTO(rectangle);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Height and Width must not be null", exception.getMessage());
@@ -120,9 +118,7 @@ class RectangleV1MapperTest {
         Rectangle rectangle = new Rectangle(new BigDecimal("5"), null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            subject.mapToDTO(rectangle);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Height and Width must not be null", exception.getMessage());
@@ -134,9 +130,7 @@ class RectangleV1MapperTest {
         Rectangle rectangle = new Rectangle(null, null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            subject.mapToDTO(rectangle);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Height and Width must not be null", exception.getMessage());

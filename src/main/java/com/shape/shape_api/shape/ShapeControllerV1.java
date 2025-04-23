@@ -65,7 +65,7 @@ public class ShapeControllerV1 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = MISSING_OR_INVALID_SHAPE_TYPE)
             }
     )
-    public List<?> getShapesByType(
+    public List<ShapeDTO> getShapesByType(
             @RequestParam
             @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION, example = SQUARE)
             @NotBlank(message = NOT_BLANK_VALIDATION_INFO) String type

@@ -2,6 +2,7 @@ package com.shape.shape_api.shape;
 
 import com.shape.shape_api.model.Shape;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Configuration
 public class ShapeHandlerConfig {
 
@@ -22,12 +24,13 @@ public class ShapeHandlerConfig {
 
     @PostConstruct
     public void logShapeHandlers() {
-        System.out.println("Registered ShapeHandlers:");
-        shapeHandlers.forEach((key, handler) -> System.out.println(key + " - " + handler));
+        log.info("Registered ShapeHandlers:");
+        shapeHandlers.forEach((key, handler) -> log.info("{} - {}", key, handler));
     }
 
-    public static Map<String, ShapeHandler<?, ?>> createShapeHandlerMap(
-            ShapeHandler<?, ?>... handlers
+    @SafeVarargs
+    public static <T extends ShapeHandler<?, ?>> Map<String, T> createShapeHandlerMap(
+            T... handlers
     ) {
         return Arrays.stream(handlers)
                 .collect(Collectors.toMap(ShapeHandler::getKey, h -> h));

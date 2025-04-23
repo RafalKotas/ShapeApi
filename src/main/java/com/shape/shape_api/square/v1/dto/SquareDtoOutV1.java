@@ -1,13 +1,9 @@
 package com.shape.shape_api.square.v1.dto;
 
 import com.shape.shape_api.shape.ShapeDTO;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
-@Getter
 public class SquareDtoOutV1 extends ShapeDTO {
 
     private BigDecimal sideA;
@@ -19,5 +15,13 @@ public class SquareDtoOutV1 extends ShapeDTO {
 
     public SquareDtoOutV1() {
         super("v1:square");
+    }
+
+    public BigDecimal getSideA() {
+        return this.sideA;
+    }
+
+    public void setSideA(BigDecimal sideA) {
+        this.sideA = sideA;
     }
 }

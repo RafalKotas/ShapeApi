@@ -129,5 +129,4 @@ class ShapeControllerV2Test {
                 .andExpect(jsonPath("$").isEmpty());
     }
 
-
 }

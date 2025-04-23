@@ -82,4 +82,18 @@ class SquareV1MapperTest {
         // then
         assertEquals("Side 'a' must not be null", exception.getMessage());
     }
+
+    @Test
+    void shouldThrowExceptionWhenEntityIsNull() {
+        // given
+        Square square = null;
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            subject.mapToDTO(square);
+        });
+
+        // then
+        assertEquals("Side 'a' must not be null", exception.getMessage());
+    }
 }

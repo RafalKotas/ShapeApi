@@ -17,10 +17,6 @@ public class SquareDtoOutV1 extends ShapeDTO {
         super("v1:square");
     }
 
-    public BigDecimal sideA() {
-        return sideA;
-    }
-
     public void setSideA(BigDecimal sideA) {
         this.sideA = sideA;
     }

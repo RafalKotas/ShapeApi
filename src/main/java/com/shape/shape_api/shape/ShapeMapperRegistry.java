@@ -36,12 +36,13 @@ public class ShapeMapperRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <O extends ShapeDTO, E extends Shape> O mapEntityToDto(String key, E shape) {
-        ShapeMapper<?, O, E> mapper = (ShapeMapper<?, O, E>) mappers.get(key);
+    public ShapeDTO mapEntityToDto(String key, Shape shape) {
+        ShapeMapper<?, ?, ?> mapper = mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
-        return mapper.mapToDTO(shape);
+
+        return ((ShapeMapper<?, ShapeDTO, Shape>) mapper).mapToDTO(shape);
     }
 
     @SuppressWarnings("unchecked")

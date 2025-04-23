@@ -80,7 +80,7 @@ public class ShapeService {
         log.info("shapes fetched={}", shapes.size());
 
         return shapes.stream()
-                .map(shape -> (ShapeDTO) shapeMapperRegistry.mapEntityToDto(fullType, shape))
+                .map(shape -> shapeMapperRegistry.mapEntityToDto(fullType, shape))
                 .toList();
     }
 }

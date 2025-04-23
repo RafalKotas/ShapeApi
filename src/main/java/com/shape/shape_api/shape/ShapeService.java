@@ -6,10 +6,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,38 +17,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Slf4j
 @Service
 public class ShapeService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShapeService.class);
+    private static final Logger log = LoggerFactory.getLogger(ShapeService.class);
 
     private final Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers;
     private final ShapeMapperRegistry shapeMapperRegistry;
     private final Validator validator;
 
     @Autowired
-    public ShapeService(Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers,
+    public ShapeService(@Qualifier("shapeHandlers") Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers,
                         ShapeMapperRegistry shapeMapperRegistry,
                         Validator validator) {
         this.shapeHandlers = shapeHandlers;
         this.shapeMapperRegistry = shapeMapperRegistry;
         this.validator = validator;
-        System.out.println("Shape Handlers: " + shapeHandlers.keySet());
     }
 
     @PostConstruct
     public void logShapeHandlers() {
-        System.out.println("Registered handlers in shapeService:");
-        shapeHandlers.forEach((key, handler) -> System.out.println(" - " + key));
+        log.info("Registered handlers in shapeService:");
+        shapeHandlers.forEach((key, handler) -> log.info("{} - {}", key, handler));
     }
 
     public ShapeDTO createShape(String version, String type, Map<String, BigDecimal> parameters) {
         String fullType = version + ":" + type;
+        log.info("Creating shape with fullType={}", fullType);
 
-        ShapeHandler<ShapeDTO, Shape> handler = (ShapeHandler<ShapeDTO, Shape>) shapeHandlers.get(fullType);
+        ShapeHandler<? extends ShapeDTO, ? extends Shape> handler = shapeHandlers.get(fullType);
 
         if (handler == null) {
+            log.error("No handler found for type={}", fullType);
             throw new ShapeNotSupportedException(fullType);
         }
 
@@ -59,9 +59,10 @@ public class ShapeService {
             throw new ConstraintViolationException("Validation failed", violations);
         }
 
-        Shape shape = handler.createShape(dto);
+        Shape shape = ((ShapeHandler<ShapeDTO, Shape>) handler).createShape(dto);
         return shapeMapperRegistry.mapEntityToDto(fullType, shape);
     }
+
 
 
     /**
@@ -78,12 +79,12 @@ public class ShapeService {
             throw new ShapeNotSupportedException(fullType);
         }
 
-        logger.info("getShapesByType (for version={} and type={})", version, type);
+        log.info("getShapesByType (for version={} and type={})", version, type);
         List<? extends Shape> shapes = shapeHandler.getAllShapes();
-        logger.info("shapes fetched={}", shapes.size());
+        log.info("shapes fetched={}", shapes.size());
 
         return shapes.stream()
-                .map(shape -> (ShapeDTO) shapeMapperRegistry.mapEntityToDto(fullType, shape))
+                .map(shape -> shapeMapperRegistry.mapEntityToDto(fullType, shape))
                 .toList();
     }
 }

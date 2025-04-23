@@ -31,7 +31,7 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDtoInV2, Rectan
     @Override
     public List<Rectangle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Rectangle.class).stream()
-                .map(shape -> (Rectangle) shape)
+                .map(Rectangle.class::cast)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

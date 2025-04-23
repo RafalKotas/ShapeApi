@@ -29,7 +29,7 @@ public class RectangleHandlerV1 implements ShapeHandler<RectangleDtoInV1, Rectan
     @Override
     public List<Rectangle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Rectangle.class).stream()
-                .map(shape -> (Rectangle) shape)
+                .map(Rectangle.class::cast)
                 .toList();
     }
 

@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Hidden
@@ -30,8 +29,8 @@ public class CircleHandlerV1 implements ShapeHandler<CircleDtoInV1, Circle> {
     @Override
     public List<Circle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Circle.class).stream()
-                .map(shape -> (Circle) shape)
-                .collect(Collectors.toList());
+                .map(Circle.class::cast)
+                .toList();
     }
 
     @Override

@@ -23,11 +23,9 @@ import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.OK_200;
 public class ShapeControllerV2 {
 
     private final ShapeService shapeService;
-    private final ShapeMapperRegistry shapeMapperRegistry;
 
-    public ShapeControllerV2(ShapeService shapeService, ShapeMapperRegistry shapeMapperRegistry) {
+    public ShapeControllerV2(ShapeService shapeService) {
         this.shapeService = shapeService;
-        this.shapeMapperRegistry = shapeMapperRegistry;
     }
 
     @PostMapping

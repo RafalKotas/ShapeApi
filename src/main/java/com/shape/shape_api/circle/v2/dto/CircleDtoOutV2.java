@@ -5,17 +5,17 @@ import com.shape.shape_api.shape.ShapeDTO;
 import java.math.BigDecimal;
 
 public class CircleDtoOutV2 extends ShapeDTO {
-    private final String type = "v2:circle";
+    private static final String V2_CIRCLE_TYPE = "v2:circle";
 
     private BigDecimal diameter;
 
     public CircleDtoOutV2(BigDecimal diameter) {
-        super("v2:circle");
+        super(V2_CIRCLE_TYPE);
         this.diameter = diameter;
     }
 
     public CircleDtoOutV2() {
-        super("v2:circle");
+        super(V2_CIRCLE_TYPE);
     }
 
     public BigDecimal getDiameter() {

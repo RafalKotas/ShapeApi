@@ -29,7 +29,7 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDtoInV1, Square> {
     @Override
     public List<Square> getAllShapes() {
         return shapeRepository.findAllByShapeType(Square.class).stream()
-                .map(shape -> (Square) shape)
+                .map(Square.class::cast)
                 .toList();
     }
 

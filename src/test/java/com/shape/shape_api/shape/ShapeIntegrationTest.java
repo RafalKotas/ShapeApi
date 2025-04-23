@@ -45,7 +45,7 @@ class ShapeIntegrationTest {
     }
 
     @Test
-    void shouldCreateRectangleAndFetchIt() throws Exception {
+    void shouldCreateRectangleAndFetchIt() {
         // given
         Map<String, Object> requestBody = Map.of(
                 "type", "rectangle",
@@ -87,7 +87,7 @@ class ShapeIntegrationTest {
     }
 
     @Test
-    void shouldReturnValidationErrorForInvalidRectangle() throws Exception {
+    void shouldReturnValidationErrorForInvalidRectangle() {
         // given
         String invalidRectangleJson = """
         {
@@ -247,7 +247,7 @@ class ShapeIntegrationTest {
                 new ParameterizedTypeReference<>() {}
         );
 
-        // then
+        // then - sprawdzić POST postmanem
         assertEquals(HttpStatus.OK, createResponse.getStatusCode());
         Map<?, ?> createBody = createResponse.getBody();
         assertThat(createBody).isNotNull();

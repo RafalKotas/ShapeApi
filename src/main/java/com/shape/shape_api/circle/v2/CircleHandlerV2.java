@@ -29,7 +29,7 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, Circle> {
     @Override
     public List<Circle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Circle.class).stream()
-                .map(shape -> (Circle) shape)
+                .map(Circle.class::cast)
                 .toList();
     }
 

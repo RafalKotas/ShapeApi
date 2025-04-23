@@ -34,7 +34,7 @@ public class ShapeService {
         this.shapeHandlers = shapeHandlers;
         this.shapeMapperRegistry = shapeMapperRegistry;
         this.validator = validator;
-        System.out.println("Shape Handlers: " + shapeHandlers.keySet());
+        log.info("Shape Handlers: {}", shapeHandlers.keySet());
     }
 
     @PostConstruct

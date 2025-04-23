@@ -73,20 +73,22 @@ class SquareHandlerV1Test {
         squareDtoInV1.setA(BigDecimal.valueOf(5L));
         Square mappedSquareEntity = new Square(BigDecimal.valueOf(5L));
         Square savedSquareEntity = new Square(BigDecimal.valueOf(5L));
-
-        Square expectedSquare = new Square(BigDecimal.valueOf(5L));
+        SquareDtoOutV1 expectedDto = new SquareDtoOutV1(BigDecimal.valueOf(5L));
 
         when(squareV1Mapper.mapToEntity(squareDtoInV1)).thenReturn(mappedSquareEntity);
         when(shapeRepository.save(mappedSquareEntity)).thenReturn(savedSquareEntity);
+        when(squareV1Mapper.mapToDTO(savedSquareEntity)).thenReturn(expectedDto);
 
         // when
         SquareDtoOutV1 result = squareHandlerV1.createShape(squareDtoInV1);
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(0, expectedSquare.getA().compareTo(result.getSideA()), "The 'a' value in the result should be 5");
+        assertEquals(0, BigDecimal.valueOf(5L).compareTo(result.getSideA()), "The 'a' value in the result should be 5");
+
         verify(squareV1Mapper).mapToEntity(squareDtoInV1);
         verify(shapeRepository).save(mappedSquareEntity);
+        verify(squareV1Mapper).mapToDTO(savedSquareEntity);
     }
 
 }

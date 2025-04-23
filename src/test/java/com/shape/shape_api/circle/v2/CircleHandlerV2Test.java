@@ -51,8 +51,12 @@ class CircleHandlerV2Test {
         List<CircleDtoOutV2> result = circleHandlerV2.getAllShapes();
 
         // then
-        assertEquals(4L, result.get(0).getDiameter());
-        assertEquals(8L, result.get(1).getDiameter());
+        BigDecimal expectedFirstDiameter = BigDecimal.valueOf(4L);
+        BigDecimal expectedSecondDiameter = BigDecimal.valueOf(8L);
+        assertEquals(0, expectedFirstDiameter.compareTo(result.get(0).getDiameter()),
+                "The result first diameter should match the expectedFirstDiameter(4L)");
+        assertEquals(0, expectedSecondDiameter.compareTo(result.get(1).getDiameter()),
+                "The result second diameter should match the expectedSecondDiameter(8L)");
         verify(shapeRepository).findAllByShapeType(Circle.class);
     }
 
@@ -71,7 +75,8 @@ class CircleHandlerV2Test {
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(0, expectedDTO.getDiameter().compareTo(result.getDiameter()), "The 'diameter' value in the result should be 10L");
+        assertEquals(0, expectedDTO.getDiameter().compareTo(result.getDiameter()),
+                "The result diameter should match the expectedSecondDiameter(10L)");
         verify(circleV2Mapper).mapToEntity(dtoInV2);
         verify(shapeRepository).save(mappedCircle);
         verify(circleV2Mapper).mapToDTO(savedCircle);

@@ -64,22 +64,26 @@ class CircleHandlerV1Test {
         // given
         CircleDtoInV1 circleDtoInV1 = new CircleDtoInV1();
         circleDtoInV1.setRadius(BigDecimal.valueOf(10L));
+
         Circle mappedCircleEntity = new Circle(BigDecimal.valueOf(10L));
         Circle savedCircleEntity = new Circle(BigDecimal.valueOf(10L));
+        CircleDtoOutV1 expectedDto = new CircleDtoOutV1(BigDecimal.valueOf(10L));
 
-        Circle expectedCircle = new Circle(BigDecimal.valueOf(10L));
-
-        when(circleV1Mapper.mapToEntity(circleDtoInV1)).thenReturn(mappedCircleEntity);   // Mapping DTO to Entity
-        when(shapeRepository.save(mappedCircleEntity)).thenReturn(savedCircleEntity);  // Saving Entity
+        when(circleV1Mapper.mapToEntity(circleDtoInV1)).thenReturn(mappedCircleEntity);
+        when(shapeRepository.save(mappedCircleEntity)).thenReturn(savedCircleEntity);
+        when(circleV1Mapper.mapToDTO(savedCircleEntity)).thenReturn(expectedDto);
 
         // when
         CircleDtoOutV1 result = circleHandler.createShape(circleDtoInV1);
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(0, expectedCircle.getRadius().compareTo(result.getRadius()), "The result circle radius should match the expected circle radius");
-        verify(circleV1Mapper).mapToEntity(circleDtoInV1);  // Verify that the DTO was mapped to an entity
-        verify(shapeRepository).save(mappedCircleEntity); // Verify that the entity was saved
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()), "The result circle radius should be 10");
+
+        verify(circleV1Mapper).mapToEntity(circleDtoInV1);
+        verify(shapeRepository).save(mappedCircleEntity);
+        verify(circleV1Mapper).mapToDTO(savedCircleEntity);
     }
+
 
 }

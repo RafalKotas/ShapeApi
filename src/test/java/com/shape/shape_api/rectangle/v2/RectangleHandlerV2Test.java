@@ -74,21 +74,26 @@ class RectangleHandlerV2Test {
         RectangleDtoInV2 inDTO = new RectangleDtoInV2(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
         Rectangle mappedRectangle = new Rectangle(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
         Rectangle savedRectangle = new Rectangle(1L, BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
-        Rectangle expectedRect = new Rectangle(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
+        RectangleDtoOutV2 expectedDto = new RectangleDtoOutV2(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
 
         when(rectangleV2Mapper.mapToEntity(inDTO)).thenReturn(mappedRectangle);
         when(shapeRepository.save(mappedRectangle)).thenReturn(savedRectangle);
+        when(rectangleV2Mapper.mapToDTO(savedRectangle)).thenReturn(expectedDto);
 
         // when
         RectangleDtoOutV2 result = rectangleHandler.createShape(inDTO);
 
         // then
         assertNotNull(result);
-        assertEquals(0, expectedRect.getHeight().compareTo(result.getH()),
-                "The result H should match the expected rect height");
-        assertEquals(0, expectedRect.getWidth().compareTo(result.getW()),
-                "The result W should match the expected rect height");
+        BigDecimal expectedH = BigDecimal.valueOf(10L);
+        BigDecimal expectedW = BigDecimal.valueOf(20L);
+        assertEquals(0, expectedH.compareTo(result.getH()),
+                "The result H should match the expected H(10)");
+        assertEquals(0, expectedW.compareTo(result.getW()),
+                "The result W should match the expected W(20)");
+
         verify(rectangleV2Mapper).mapToEntity(inDTO);
         verify(shapeRepository).save(mappedRectangle);
+        verify(rectangleV2Mapper).mapToDTO(savedRectangle);
     }
 }

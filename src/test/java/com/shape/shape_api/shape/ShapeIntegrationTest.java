@@ -56,18 +56,20 @@ class ShapeIntegrationTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        // when - create rectangle
+        // when
         ResponseEntity<Map> postResponse = restTemplate.postForEntity(baseUrl, requestEntity, Map.class);
 
-        // then - check creation status and values
+        // then
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
         BigDecimal postW = new BigDecimal(postResponse.getBody().get("w").toString());
         BigDecimal postH = new BigDecimal(postResponse.getBody().get("h").toString());
         assertEquals(0, BigDecimal.valueOf(15L).compareTo(postW));
         assertEquals(0, BigDecimal.valueOf(30L).compareTo(postH));
 
-        // when - fetch rectangle
+        // when
         ResponseEntity<List> getResponse = restTemplate.getForEntity(baseUrl + "?type=rectangle", List.class);
+
+        // then
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
         assertThat(getResponse.getBody()).isNotEmpty();
 
@@ -77,11 +79,10 @@ class ShapeIntegrationTest {
         assertEquals(0, BigDecimal.valueOf(15L).compareTo(getW));
         assertEquals(0, BigDecimal.valueOf(30L).compareTo(getH));
 
-        // Assert that the shape is stored in the repository
+
         assertThat(shapeRepository.findAll()).hasSize(1);
         Rectangle saved = (Rectangle) shapeRepository.findAll().get(0);
 
-        // Use BigDecimal for precise comparison
         assertEquals(0, BigDecimal.valueOf(15L).compareTo(saved.getWidth()));
         assertEquals(0, BigDecimal.valueOf(30L).compareTo(saved.getHeight()));
     }

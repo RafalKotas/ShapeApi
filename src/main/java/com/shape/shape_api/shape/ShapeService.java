@@ -85,14 +85,5 @@ public class ShapeService {
         return shapes.stream()
                 .map(shape -> (ShapeDTO) shapeMapperRegistry.mapEntityToDto(fullType, shape))
                 .toList();
-//        return shapes.stream()
-//                .map(shape -> {
-//                    ShapeDTO dto = shapeMapperRegistry.mapEntityToDto(fullType, shape);
-//                    if (dto == null) {
-//                        throw new IllegalStateException("Nie udało się zamapować encji na DTO: " + shape.getClass());
-//                    }
-//                    return dto;
-//                })
-//                .collect(Collectors.toList());
     }
 }

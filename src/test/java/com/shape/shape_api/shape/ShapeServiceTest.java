@@ -78,9 +78,7 @@ class ShapeServiceTest {
         String type = "triangle";
 
         // when & then
-        ShapeNotSupportedException exception = assertThrows(ShapeNotSupportedException.class, () -> {
-            shapeService.getShapesByType(version, type);
-        });
+        ShapeNotSupportedException exception = assertThrows(ShapeNotSupportedException.class, () -> shapeService.getShapesByType(version, type));
 
         // then
         assertEquals("Unknown shape type: v1:triangle", exception.getMessage());

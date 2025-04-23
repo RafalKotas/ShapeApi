@@ -6,7 +6,6 @@ public class SwaggerDescriptions {
 
     }
 
-    // ======= ShapeCreationRequest =======
     public static final String SHAPE_CREATION_REQUEST_DESCRIPTION = "Request to create a shape";
 
     public static final String SHAPE_TYPE_DESCRIPTION = "Type of the shape";

@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.model.Shape;
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v1.SquareV1Mapper;
 import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
@@ -23,13 +24,13 @@ class ShapeMapperRegistryTest {
     @Mock
     private SquareV1Mapper squareV1Mapper;
 
-    private ShapeMapperRegistry shapeMapperRegistry;
+    private ShapeMapperRegistry subject;
 
 
     @BeforeEach
     void setUp() {
         when(squareV1Mapper.getKey()).thenReturn("v1:square");
-        shapeMapperRegistry = new ShapeMapperRegistry(List.of(squareV1Mapper));
+        subject = new ShapeMapperRegistry(List.of(squareV1Mapper));
     }
 
 
@@ -45,7 +46,7 @@ class ShapeMapperRegistryTest {
         when(squareV1Mapper.mapToEntity(dto)).thenReturn(expectedSquare);
 
         // when
-        Square square = shapeMapperRegistry.mapParametersToEntity(fullType, parameters);
+        Square square = subject.mapParametersToEntity(fullType, parameters);
 
         // then
         assertNotNull(square);
@@ -55,17 +56,47 @@ class ShapeMapperRegistryTest {
     @Test
     void shouldThrowExceptionWhenMapperIsNull() {
         // given
-        shapeMapperRegistry = new ShapeMapperRegistry(Collections.emptyList());
+        subject = new ShapeMapperRegistry(Collections.emptyList());
         String key = "nonExistingShape";
         Map<String, BigDecimal> parameters = Map.of("param1", BigDecimal.valueOf(1L));
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            shapeMapperRegistry.mapParametersToDto(key, parameters);
+            subject.mapParametersToDto(key, parameters);
         });
 
         // then
         assertEquals("No mapper found for shape type: " + key, exception.getMessage());
     }
 
+
+    @Test
+    void testMapEntityToDtoThrowsWhenMapperNotFound() {
+        // given
+        Shape shape = new Shape() {};
+
+        // when
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.mapEntityToDto("nonexistent:key", shape)
+        );
+
+        // then
+        assertEquals("No mapper found for shape type: nonexistent:key", exception.getMessage());
+    }
+
+    @Test
+    void testMapParametersToEntityThrowsWhenMapperNotFound() {
+        // given
+        Map<String, BigDecimal> params = Map.of("a", BigDecimal.TEN);
+
+        // when
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.mapParametersToEntity("nonexistent:key", params)
+        );
+
+        // then
+        assertEquals("No mapper found for shape type: nonexistent:key", exception.getMessage());
+    }
 }

@@ -60,4 +60,40 @@ class RectangleV2MapperTest {
         // then
         assertThrows(IllegalArgumentException.class, action);
     }
+
+    @Test
+    void testMapFromParamsThrowsWhenHIsMissing() {
+        Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.mapFromParams(params)
+        );
+
+        assertEquals("Missing required parameters: 'h' and/or 'w'.", exception.getMessage());
+    }
+
+    @Test
+    void testMapFromParamsThrowsWhenWIsMissing() {
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.mapFromParams(params)
+        );
+
+        assertEquals("Missing required parameters: 'h' and/or 'w'.", exception.getMessage());
+    }
+
+    @Test
+    void testMapFromParamsThrowsWhenBothAreMissing() {
+        Map<String, BigDecimal> params = Map.of();
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.mapFromParams(params)
+        );
+
+        assertEquals("Missing required parameters: 'h' and/or 'w'.", exception.getMessage());
+    }
 }

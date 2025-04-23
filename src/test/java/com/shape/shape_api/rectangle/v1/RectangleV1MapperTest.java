@@ -2,6 +2,7 @@ package com.shape.shape_api.rectangle.v1;
 
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v1.dto.RectangleDtoInV1;
+import com.shape.shape_api.rectangle.v1.dto.RectangleDtoOutV1;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -84,5 +85,60 @@ class RectangleV1MapperTest {
 
         // then
         assertThrows(IllegalArgumentException.class, action, "Empty parameters should throw IllegalArgumentException");
+    }
+
+    @Test
+    void shouldMapRectangleToRectangleDtoOutV1() {
+        // given
+        Rectangle rectangle = new Rectangle(new BigDecimal("5"), new BigDecimal("10"));
+
+        // when
+        RectangleDtoOutV1 dto = subject.mapToDTO(rectangle);
+
+        // then
+        assertEquals(new BigDecimal("5"), dto.getHeight());
+        assertEquals(new BigDecimal("10"), dto.getWidth());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleHasNullHeight() {
+        // given
+        Rectangle rectangle = new Rectangle(null, new BigDecimal("10"));
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            subject.mapToDTO(rectangle);
+        });
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleHasNullWidth() {
+        // given
+        Rectangle rectangle = new Rectangle(new BigDecimal("5"), null);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            subject.mapToDTO(rectangle);
+        });
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleHasNullHeightAndWidth() {
+        // given
+        Rectangle rectangle = new Rectangle(null, null);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            subject.mapToDTO(rectangle);
+        });
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
     }
 }

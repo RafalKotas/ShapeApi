@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class RectangleDtoOutV1 extends ShapeDTO {
+
     @NotNull(message = "'height' must not be null")
     @Min(value = 1, message = "'height' must be greater than 0")
     private BigDecimal height;
@@ -16,13 +17,13 @@ public class RectangleDtoOutV1 extends ShapeDTO {
     private BigDecimal width;
 
     public RectangleDtoOutV1(BigDecimal height, BigDecimal width) {
-        super();
+        super("v1:rectangle");
         this.height = height;
         this.width = width;
     }
 
     public RectangleDtoOutV1() {
-        super();
+        super("v1:rectangle");
     }
 
     public @NotNull(message = "'height' must not be null") @Min(value = 1, message = "'height' must be greater than 0") BigDecimal getHeight() {

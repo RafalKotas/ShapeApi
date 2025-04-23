@@ -5,15 +5,16 @@ import com.shape.shape_api.shape.ShapeDTO;
 import java.math.BigDecimal;
 
 public class SquareDtoOutV1 extends ShapeDTO {
+
     private BigDecimal sideA;
 
     public SquareDtoOutV1(BigDecimal a) {
-        super();
+        super("v1:square");
         this.sideA = a;
     }
 
     public SquareDtoOutV1() {
-
+        super("v1:square");
     }
 
     public BigDecimal sideA() {

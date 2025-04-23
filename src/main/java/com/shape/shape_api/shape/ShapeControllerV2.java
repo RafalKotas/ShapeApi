@@ -68,7 +68,7 @@ public class ShapeControllerV2 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = MISSING_OR_INVALID_SHAPE_TYPE)
             }
     )
-    public List<ShapeResponseDto> getShapesByType(
+    public List<ShapeDTO> getShapesByType(
             @RequestParam
             @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION_SHORT, example = CIRCLE) String type) {
 
@@ -76,7 +76,7 @@ public class ShapeControllerV2 {
         String key = VERSION_2 + ":" + type;
 
         return entities.stream()
-                .map(entity -> (ShapeResponseDto) shapeMapperRegistry.mapEntityToDto(key, entity))
+                .map(entity -> (ShapeDTO) shapeMapperRegistry.mapEntityToDto(key, entity))
                 .collect(Collectors.toList());
     }
 }

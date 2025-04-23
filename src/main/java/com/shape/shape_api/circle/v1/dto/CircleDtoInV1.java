@@ -8,12 +8,12 @@ public class CircleDtoInV1 extends ShapeDTO {
     private BigDecimal radius;
 
     public CircleDtoInV1(BigDecimal radius) {
-        super();
+        super("v1:circle");
         this.radius = radius;
     }
 
     public CircleDtoInV1() {
-
+        super("v1:circle");
     }
 
     public BigDecimal getRadius() {

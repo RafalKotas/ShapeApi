@@ -8,12 +8,12 @@ public class SquareDtoInV1 extends ShapeDTO {
     private BigDecimal a;
 
     public SquareDtoInV1(BigDecimal a) {
-        super();
+        super("v1:square");
         this.a = a;
     }
 
     public SquareDtoInV1() {
-
+        super("v1:square");
     }
 
     public BigDecimal getA() {

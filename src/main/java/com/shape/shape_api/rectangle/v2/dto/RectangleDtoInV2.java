@@ -18,13 +18,13 @@ public class RectangleDtoInV2 extends ShapeDTO {
     private BigDecimal w;
 
     public RectangleDtoInV2(BigDecimal h, BigDecimal w) {
-        super();
+        super("v2:rectangle");
         this.h = h;
         this.w = w;
     }
 
     public RectangleDtoInV2() {
-
+        super("v2:rectangle");
     }
 
     public BigDecimal getH() {

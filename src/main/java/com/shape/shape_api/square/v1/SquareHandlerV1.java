@@ -4,7 +4,6 @@ import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.shape.ShapeRepository;
 import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
-import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class SquareHandlerV1 implements ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> {
+public class SquareHandlerV1 implements ShapeHandler<SquareDtoInV1, Square> {
 
     private final ShapeRepository shapeRepository;
     private final SquareV1Mapper squareV1Mapper;
@@ -28,10 +27,9 @@ public class SquareHandlerV1 implements ShapeHandler<SquareDtoInV1, SquareDtoOut
     }
 
     @Override
-    public List<SquareDtoOutV1> getAllShapes() {
+    public List<Square> getAllShapes() {
         return shapeRepository.findAllByShapeType(Square.class).stream()
                 .map(shape -> (Square) shape)
-                .map(squareV1Mapper::mapToDTO)
                 .toList();
     }
 

@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.model.Shape;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,43 +13,42 @@ import java.util.stream.Collectors;
 @Configuration
 public class ShapeHandlerConfig {
 
-    private final Map<String, ShapeHandler<?, ?, ?>> shapeHandlers;
+    private final Map<String, ShapeHandler<?, ?>> shapeHandlers;
 
     @Autowired
-    public ShapeHandlerConfig(Map<String, ShapeHandler<?, ?, ?>> shapeHandlers) {
+    public ShapeHandlerConfig(Map<String, ShapeHandler<?, ?>> shapeHandlers) {
         this.shapeHandlers = shapeHandlers;
     }
 
     @PostConstruct
     public void logShapeHandlers() {
         System.out.println("Registered ShapeHandlers:");
-        shapeHandlers.forEach((key, handler) -> System.out.println(" - " + key));
+        shapeHandlers.forEach((key, handler) -> System.out.println(key + " - " + handler));
     }
 
-    // Do testów jednostkowych
-    public static Map<String, ShapeHandler<?, ?, ?>> createShapeHandlerMap(
-            ShapeHandler<?, ?, ?>... handlers
+    public static Map<String, ShapeHandler<?, ?>> createShapeHandlerMap(
+            ShapeHandler<?, ?>... handlers
     ) {
         return Arrays.stream(handlers)
                 .collect(Collectors.toMap(ShapeHandler::getKey, h -> h));
     }
 
     @Bean
-    public Map<String, ShapeHandler<?, ?, ?>> shapeHandlers(
-            ShapeHandler<?, ?, ?> circleHandlerV1,
-            ShapeHandler<?, ?, ?> squareHandlerV1,
-            ShapeHandler<?, ?, ?> rectangleHandlerV1,
-            ShapeHandler<?, ?, ?> circleHandlerV2,
-            ShapeHandler<?, ?, ?> squareHandlerV2,
-            ShapeHandler<?, ?, ?> rectangleHandlerV2
+    public Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers(
+            ShapeHandler<? extends ShapeDTO, ? extends Shape> circleHandlerV1,
+            ShapeHandler<? extends ShapeDTO, ? extends Shape> squareHandlerV1,
+            ShapeHandler<? extends ShapeDTO, ? extends Shape> rectangleHandlerV1,
+            ShapeHandler<? extends ShapeDTO, ? extends Shape> circleHandlerV2,
+            ShapeHandler<? extends ShapeDTO, ? extends Shape> squareHandlerV2,
+            ShapeHandler<? extends ShapeDTO, ? extends Shape> rectangleHandlerV2
     ) {
         return Map.of(
-                circleHandlerV1.getKey(), circleHandlerV1,
-                squareHandlerV1.getKey(), squareHandlerV1,
-                rectangleHandlerV1.getKey(), rectangleHandlerV1,
-                circleHandlerV2.getKey(), circleHandlerV2,
-                squareHandlerV2.getKey(), squareHandlerV2,
-                rectangleHandlerV2.getKey(), rectangleHandlerV2
+                "v1:circle", circleHandlerV1,
+                "v1:square", squareHandlerV1,
+                "v1:rectangle", rectangleHandlerV1,
+                "v2:circle", circleHandlerV2,
+                "v2:square", squareHandlerV2,
+                "v2:rectangle", rectangleHandlerV2
         );
     }
 }

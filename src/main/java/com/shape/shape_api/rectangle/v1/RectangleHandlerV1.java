@@ -2,7 +2,6 @@ package com.shape.shape_api.rectangle.v1;
 
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v1.dto.RectangleDtoInV1;
-import com.shape.shape_api.rectangle.v1.dto.RectangleDtoOutV1;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.shape.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class RectangleHandlerV1 implements ShapeHandler<RectangleDtoInV1, RectangleDtoOutV1, Rectangle> {
+public class RectangleHandlerV1 implements ShapeHandler<RectangleDtoInV1, Rectangle> {
 
     private final ShapeRepository shapeRepository;
     private final RectangleV1Mapper rectangleV1Mapper;
@@ -28,10 +27,9 @@ public class RectangleHandlerV1 implements ShapeHandler<RectangleDtoInV1, Rectan
     }
 
     @Override
-    public List<RectangleDtoOutV1> getAllShapes() {
+    public List<Rectangle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Rectangle.class).stream()
                 .map(shape -> (Rectangle) shape)
-                .map(rectangleV1Mapper::mapToDTO)
                 .toList();
     }
 

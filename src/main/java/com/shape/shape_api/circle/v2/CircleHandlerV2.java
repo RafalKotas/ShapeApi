@@ -1,7 +1,6 @@
 package com.shape.shape_api.circle.v2;
 
 import com.shape.shape_api.circle.v2.dto.CircleDtoInV2;
-import com.shape.shape_api.circle.v2.dto.CircleDtoOutV2;
 import com.shape.shape_api.model.Circle;
 import com.shape.shape_api.shape.ShapeHandler;
 import com.shape.shape_api.shape.ShapeRepository;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, CircleDtoOutV2, Circle> {
+public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, Circle> {
 
     private final ShapeRepository shapeRepository;
     private final CircleV2Mapper circleV2Mapper;
@@ -28,9 +27,9 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, CircleDtoOut
     }
 
     @Override
-    public List<CircleDtoOutV2> getAllShapes() {
+    public List<Circle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Circle.class).stream()
-                .map(circle -> circleV2Mapper.mapToDTO((Circle) circle))
+                .map(shape -> (Circle) shape)
                 .toList();
     }
 

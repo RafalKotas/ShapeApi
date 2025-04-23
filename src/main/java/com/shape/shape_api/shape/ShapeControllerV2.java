@@ -39,7 +39,7 @@ public class ShapeControllerV2 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = BAD_REQUEST_RESPONSE)
             }
     )
-    public ResponseEntity<ShapeResponseDto> createShape(
+    public ResponseEntity<ShapeDTO> createShape(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = SHAPE_REQUEST_BODY_DESCRIPTION,
                     required = true,
@@ -54,9 +54,8 @@ public class ShapeControllerV2 {
             )
             @RequestBody @Valid ShapeCreationRequest request
     ) {
-        ShapeDTO shape = shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
-        ShapeResponseDto responseDto = shapeMapperRegistry.mapEntityToDto(VERSION_2 + ":" + request.getType(), shape);
-        return ResponseEntity.ok(responseDto);
+        ShapeDTO shapeDTO = shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
+        return ResponseEntity.ok(shapeDTO);
     }
 
     @GetMapping

@@ -17,17 +17,18 @@ import java.util.Set;
 @Service
 public class ShapeService {
 
-    private final Map<String, ShapeHandler<?, ? extends ShapeDTO, ? extends Shape>> shapeHandlers;
+    private final Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers;
     private final ShapeMapperRegistry shapeMapperRegistry;
     private final Validator validator;
 
     @Autowired
-    public ShapeService(Map<String, ShapeHandler<?, ? extends ShapeDTO, ? extends Shape>> shapeHandlers,
+    public ShapeService(Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers,
                         ShapeMapperRegistry shapeMapperRegistry,
                         Validator validator) {
         this.shapeHandlers = shapeHandlers;
         this.shapeMapperRegistry = shapeMapperRegistry;
         this.validator = validator;
+        System.out.println("Shape Handlers: " + shapeHandlers.keySet());
     }
 
     @PostConstruct
@@ -39,7 +40,7 @@ public class ShapeService {
     public ShapeDTO createShape(String version, String type, Map<String, BigDecimal> parameters) {
         String fullType = version + ":" + type;
 
-        ShapeHandler<Object, ShapeDTO, Shape> handler = (ShapeHandler<Object, ShapeDTO, Shape>) shapeHandlers.get(fullType);
+        ShapeHandler<ShapeDTO, Shape> handler = (ShapeHandler<ShapeDTO, Shape>) shapeHandlers.get(fullType);
 
         if (handler == null) {
             throw new ShapeNotSupportedException(fullType);
@@ -66,10 +67,15 @@ public class ShapeService {
      */
     public List<ShapeDTO> getShapesByType(String version, String type) {
         String fullType = version + ":" + type;
-        ShapeHandler<?, ? extends ShapeDTO, ?> shapeHandler = (ShapeHandler<?, ? extends ShapeDTO, ?>) shapeHandlers.get(fullType);
+        ShapeHandler<? extends ShapeDTO, ? extends Shape> shapeHandler = shapeHandlers.get(fullType);
         if (shapeHandler == null) {
             throw new ShapeNotSupportedException(fullType);
         }
-        return (List<ShapeDTO>) shapeHandler.getAllShapes();
+
+        List<? extends Shape> shapes = shapeHandler.getAllShapes();
+
+        return shapes.stream()
+                .map(shape -> (ShapeDTO) shapeMapperRegistry.mapEntityToDto(fullType, shape))
+                .toList();
     }
 }

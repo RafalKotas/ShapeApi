@@ -1,6 +1,7 @@
 package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shape.shape_api.model.Rectangle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,14 +63,17 @@ class ShapeIntegrationTest {
         // then
         mockMvc.perform(get("/api/v2/shapes?type=rectangle"))
                 .andExpect(status().isOk())
-                .andDo(print());
-//                .andExpect(jsonPath("$[0].width").value(15))
-//                .andExpect(jsonPath("$[0].height").value(30));
-//
-//        assertThat(shapeRepository.findAll()).hasSize(1);
-//        Rectangle saved = (Rectangle) shapeRepository.findAll().get(0);
-//        assertThat(saved.getWidth()).isEqualTo(15);
-//        assertThat(saved.getHeight()).isEqualTo(30);
+                .andExpect(jsonPath("$[0].w").value(15))
+                .andExpect(jsonPath("$[0].h").value(30));
+
+        assertThat(shapeRepository.findAll()).hasSize(1);
+        Rectangle saved = (Rectangle) shapeRepository.findAll().get(0);
+        BigDecimal expectedWidth = BigDecimal.valueOf(15L);
+        BigDecimal expectedHeight = BigDecimal.valueOf(30L);
+        assertEquals(0, expectedWidth.compareTo(saved.getWidth()),
+                "The result width a should match the expected width(15L)");
+        assertEquals(0, expectedHeight.compareTo(saved.getHeight()),
+                "The result height a should match the expected height(30L)");
     }
 
     @Test
@@ -130,7 +136,7 @@ class ShapeIntegrationTest {
 
     @Test
     void shouldReturnErrorForUnknownShapeType() throws Exception {
-        mockMvc.perform(post("/api/v2/shapes")  // Zmieniona ścieżka na v2
+        mockMvc.perform(post("/api/v2/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                 {

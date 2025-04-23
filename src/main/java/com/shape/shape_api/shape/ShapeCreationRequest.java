@@ -21,9 +21,6 @@ public class ShapeCreationRequest {
             example = SHAPE_PARAMETERS_EXAMPLE)
     private Map<String, BigDecimal> parameters;
 
-    public ShapeCreationRequest() {
-    }
-
     public ShapeCreationRequest(String type, Map<String, BigDecimal> parameters) {
         this.type = type;
         this.parameters = parameters;

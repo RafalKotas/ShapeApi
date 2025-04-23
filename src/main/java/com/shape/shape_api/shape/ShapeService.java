@@ -39,8 +39,8 @@ public class ShapeService {
 
     @PostConstruct
     public void logShapeHandlers() {
-        System.out.println("Registered handlers in shapeService:");
-        shapeHandlers.forEach((key, handler) -> System.out.println(" - " + key));
+        log.info("Registered handlers in shapeService:");
+        shapeHandlers.forEach((key, handler) -> log.info("{} - {}", key, handler));
     }
 
     public ShapeDTO createShape(String version, String type, Map<String, BigDecimal> parameters) {

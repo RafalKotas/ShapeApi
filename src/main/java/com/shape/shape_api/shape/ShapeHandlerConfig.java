@@ -47,7 +47,7 @@ public class ShapeHandlerConfig {
                 .collect(Collectors.toMap(ShapeHandler::getKey, h -> h));
     }
 
-    // TODO - not ignore issue for not wanted wildcard
+    // TODO - not ignore issue for not wanted wildcard // NOSONAR
     @SuppressWarnings("java:S1452")
     @Bean
     public Map<String, ShapeHandler<?, ?>> shapeHandlers(

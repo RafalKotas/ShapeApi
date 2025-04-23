@@ -2,6 +2,7 @@ package com.shape.shape_api.square.v1;
 
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -53,5 +54,42 @@ class SquareV1MapperTest {
 
         // then
         assertThrows(IllegalArgumentException.class, action, "Empty parameters should throw IllegalArgumentException");
+    }
+
+
+    @Test
+    void shouldMapSquareToSquareDtoOutV1() {
+        // given
+        Square square = new Square(new BigDecimal("10"));
+
+        // when
+        SquareDtoOutV1 dto = subject.mapToDTO(square);
+
+        // then
+        assertEquals(new BigDecimal("10"), dto.getSideA());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenSideAIsNull() {
+        // given
+        Square square = new Square(null);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
+
+        // then
+        assertEquals("Side 'a' must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEntityIsNull() {
+        // given
+        Square square = null;
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
+
+        // then
+        assertEquals("Side 'a' must not be null", exception.getMessage());
     }
 }

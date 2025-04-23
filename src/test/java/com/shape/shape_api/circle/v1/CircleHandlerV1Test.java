@@ -67,7 +67,6 @@ class CircleHandlerV1Test {
 
         Circle mappedCircleEntity = new Circle(BigDecimal.valueOf(10L));
         Circle savedCircleEntity = new Circle(BigDecimal.valueOf(10L));
-        CircleDtoOutV1 expectedDto = new CircleDtoOutV1(BigDecimal.valueOf(10L));
 
         when(circleV1Mapper.mapToEntity(circleDtoInV1)).thenReturn(mappedCircleEntity);
         when(shapeRepository.save(mappedCircleEntity)).thenReturn(savedCircleEntity);

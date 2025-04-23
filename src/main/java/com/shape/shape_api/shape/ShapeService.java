@@ -9,6 +9,7 @@ import jakarta.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ public class ShapeService {
     private final Validator validator;
 
     @Autowired
-    public ShapeService(Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers,
+    public ShapeService(@Qualifier("shapeHandlers") Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers,
                         ShapeMapperRegistry shapeMapperRegistry,
                         Validator validator) {
         this.shapeHandlers = shapeHandlers;
@@ -42,10 +43,12 @@ public class ShapeService {
 
     public ShapeDTO createShape(String version, String type, Map<String, BigDecimal> parameters) {
         String fullType = version + ":" + type;
+        log.info("Creating shape with fullType={}", fullType);
 
-        ShapeHandler<ShapeDTO, Shape> handler = (ShapeHandler<ShapeDTO, Shape>) shapeHandlers.get(fullType);
+        ShapeHandler<? extends ShapeDTO, ? extends Shape> handler = shapeHandlers.get(fullType);
 
         if (handler == null) {
+            log.error("No handler found for type={}", fullType);
             throw new ShapeNotSupportedException(fullType);
         }
 
@@ -56,9 +59,10 @@ public class ShapeService {
             throw new ConstraintViolationException("Validation failed", violations);
         }
 
-        Shape shape = handler.createShape(dto);
+        Shape shape = ((ShapeHandler<ShapeDTO, Shape>) handler).createShape(dto);
         return shapeMapperRegistry.mapEntityToDto(fullType, shape);
     }
+
 
 
     /**

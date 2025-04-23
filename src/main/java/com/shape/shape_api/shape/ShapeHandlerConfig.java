@@ -1,6 +1,15 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.circle.v1.dto.CircleDtoInV1;
+import com.shape.shape_api.circle.v2.dto.CircleDtoInV2;
+import com.shape.shape_api.model.Circle;
+import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.model.Shape;
+import com.shape.shape_api.model.Square;
+import com.shape.shape_api.rectangle.v1.dto.RectangleDtoInV1;
+import com.shape.shape_api.rectangle.v2.dto.RectangleDtoInV2;
+import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.square.v2.dto.SquareDtoInV2;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +26,7 @@ public class ShapeHandlerConfig {
 
     private static final Logger log = LoggerFactory.getLogger(ShapeHandlerConfig.class);
 
-    private final Map<String, ShapeHandler<?, ?>> shapeHandlers;
+    private final Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers;
 
     @Autowired
     public ShapeHandlerConfig(Map<String, ShapeHandler<?, ?>> shapeHandlers) {
@@ -38,14 +47,16 @@ public class ShapeHandlerConfig {
                 .collect(Collectors.toMap(ShapeHandler::getKey, h -> h));
     }
 
+    // TODO - not ignore issue for not wanted wildcard
+    @SuppressWarnings("java:S1452")
     @Bean
-    public Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers(
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> circleHandlerV1,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> squareHandlerV1,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> rectangleHandlerV1,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> circleHandlerV2,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> squareHandlerV2,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> rectangleHandlerV2
+    public Map<String, ShapeHandler<?, ?>> shapeHandlers(
+            ShapeHandler<CircleDtoInV1, Circle> circleHandlerV1,
+            ShapeHandler<SquareDtoInV1, Square> squareHandlerV1,
+            ShapeHandler<RectangleDtoInV1, Rectangle> rectangleHandlerV1,
+            ShapeHandler<CircleDtoInV2, Circle> circleHandlerV2,
+            ShapeHandler<SquareDtoInV2, Square> squareHandlerV2,
+            ShapeHandler<RectangleDtoInV2, Rectangle> rectangleHandlerV2
     ) {
         return Map.of(
                 "v1:circle", circleHandlerV1,

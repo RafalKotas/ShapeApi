@@ -247,7 +247,7 @@ class ShapeIntegrationTest {
                 new ParameterizedTypeReference<>() {}
         );
 
-        // then
+        // then - sprawdzić POST postmanem
         assertEquals(HttpStatus.OK, createResponse.getStatusCode());
         Map<?, ?> createBody = createResponse.getBody();
         assertThat(createBody).isNotNull();

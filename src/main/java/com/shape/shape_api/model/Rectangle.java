@@ -1,46 +1,45 @@
 package com.shape.shape_api.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
-@Setter
-public class Rectangle {
+@DiscriminatorValue("rectangle")
+public class Rectangle extends Shape {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private BigDecimal height;
+    private BigDecimal width;
 
-    private Long width;
-    private Long height;
 
-    public Rectangle(Long width, Long height) {
-        this.width = width;
+    public Rectangle(Long id, BigDecimal height, BigDecimal width) {
+        super();
         this.height = height;
+        this.width = width;
     }
 
-    public Rectangle(Long id, Long width, Long height) {
-        this.id = id;
-        this.width = width;
+    public Rectangle(BigDecimal height, BigDecimal width) {
         this.height = height;
+        this.width = width;
     }
 
     public Rectangle() {
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public Long getWidth() {
+    public BigDecimal getWidth() {
         return this.width;
     }
 
-    public Long getHeight() {
+    public BigDecimal getHeight() {
         return this.height;
     }
-}
 
+    public void setWidth(BigDecimal width) {
+        this.width = width;
+    }
+
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+}

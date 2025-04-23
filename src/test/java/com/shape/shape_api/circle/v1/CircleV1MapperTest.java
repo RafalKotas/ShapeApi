@@ -1,22 +1,24 @@
 package com.shape.shape_api.circle.v1;
 
-import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
+import com.shape.shape_api.circle.v1.dto.CircleDtoInV1;
 import com.shape.shape_api.model.Circle;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CircleV1MapperTest {
 
     @Test
     void shouldMapCircleDTOv1ToCircleEntity() {
         // given
-        CircleDTOv1 circleDTOv1 = new CircleDTOv1(10L);
+        CircleDtoInV1 circleDTOv1 = new CircleDtoInV1(BigDecimal.valueOf(10L));
 
         // when
-        Circle circle = new CircleV1Mapper().mapToEntity(circleDTOv1);
+        Circle result = new CircleV1Mapper().mapToEntity(circleDTOv1);
 
         // then
-        assertThat(circle.getRadius()).isEqualTo(10L);
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()));
     }
 }

@@ -1,24 +1,24 @@
 package com.shape.shape_api.circle.v1;
 
-import com.shape.shape_api.circle.CircleRepository;
-import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
+import com.shape.shape_api.circle.v1.dto.CircleDtoInV1;
 import com.shape.shape_api.model.Circle;
 import com.shape.shape_api.shape.ShapeHandler;
+import com.shape.shape_api.shape.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Hidden
 @Component
-public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, CircleDTOv1> {
+@Hidden
+public class CircleHandlerV1 implements ShapeHandler<CircleDtoInV1, Circle> {
 
-    private final CircleRepository circleRepository;
+    private final ShapeRepository shapeRepository;
     private final CircleV1Mapper circleV1Mapper;
 
-    public CircleHandlerV1(CircleRepository circleRepository, CircleV1Mapper circleV1Mapper) {
-        this.circleRepository = circleRepository;
+    public CircleHandlerV1(ShapeRepository shapeRepository, CircleV1Mapper circleV1Mapper) {
+        this.shapeRepository = shapeRepository;
         this.circleV1Mapper = circleV1Mapper;
     }
 
@@ -28,16 +28,15 @@ public class CircleHandlerV1 implements ShapeHandler<CircleDTOv1, CircleDTOv1> {
     }
 
     @Override
-    public List<CircleDTOv1> getAllShapes() {
-        return circleRepository.findAll().stream()
-                .map(circleV1Mapper::mapToDto)
+    public List<Circle> getAllShapes() {
+        return shapeRepository.findAllByShapeType(Circle.class).stream()
+                .map(shape -> (Circle) shape)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CircleDTOv1 createShape(CircleDTOv1 circleDTOv1) {
-        Circle circle = circleV1Mapper.mapToEntity(circleDTOv1);
-        Circle savedCircle = circleRepository.save(circle);
-        return circleV1Mapper.mapToDto(savedCircle);
+    public Circle createShape(CircleDtoInV1 dto) {
+        Circle entity = circleV1Mapper.mapToEntity(dto);
+        return shapeRepository.save(entity);
     }
 }

@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
@@ -21,9 +23,11 @@ import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.OK_200;
 public class ShapeControllerV2 {
 
     private final ShapeService shapeService;
+    private final ShapeMapperRegistry shapeMapperRegistry;
 
-    public ShapeControllerV2(ShapeService shapeService) {
+    public ShapeControllerV2(ShapeService shapeService, ShapeMapperRegistry shapeMapperRegistry) {
         this.shapeService = shapeService;
+        this.shapeMapperRegistry = shapeMapperRegistry;
     }
 
     @PostMapping
@@ -35,7 +39,7 @@ public class ShapeControllerV2 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = BAD_REQUEST_RESPONSE)
             }
     )
-    public Object createShape(
+    public ResponseEntity<ShapeDTO> createShape(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = SHAPE_REQUEST_BODY_DESCRIPTION,
                     required = true,
@@ -50,7 +54,8 @@ public class ShapeControllerV2 {
             )
             @RequestBody @Valid ShapeCreationRequest request
     ) {
-        return shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
+        ShapeDTO shapeDTO = shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
+        return ResponseEntity.ok(shapeDTO);
     }
 
     @GetMapping
@@ -62,10 +67,13 @@ public class ShapeControllerV2 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = MISSING_OR_INVALID_SHAPE_TYPE)
             }
     )
-    public List<?> getShapesByType(
+    public List<ShapeDTO> getShapesByType(
             @RequestParam
             @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION_SHORT, example = CIRCLE) String type) {
-        return shapeService.getShapesByType(VERSION_2, type);
+
+        List<ShapeDTO> shapeDTOS = shapeService.getShapesByType(VERSION_2, type);
+
+        return new ArrayList<>(shapeDTOS);
     }
 }
 

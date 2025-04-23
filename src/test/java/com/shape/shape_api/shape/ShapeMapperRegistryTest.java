@@ -1,12 +1,17 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.square.v1.dto.SquareDTOv1;
+import com.shape.shape_api.model.Square;
+import com.shape.shape_api.square.v1.SquareV1Mapper;
+import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,22 +21,35 @@ import static org.mockito.Mockito.when;
 class ShapeMapperRegistryTest {
 
     @Mock
+    private SquareV1Mapper squareV1Mapper;
+
     private ShapeMapperRegistry shapeMapperRegistry;
 
+
+    @BeforeEach
+    void setUp() {
+        when(squareV1Mapper.getKey()).thenReturn("v1:square");
+        shapeMapperRegistry = new ShapeMapperRegistry(List.of(squareV1Mapper));
+    }
+
+
     @Test
-    void shouldMapParametersToDto() {
+    void shouldMapParametersToEntity() {
         // given
         String fullType = "v1:square";
-        Map<String, Long> parameters = Map.of("a", 10L);
-        SquareDTOv1 expectedDto = new SquareDTOv1(10L);
-        when(shapeMapperRegistry.mapParametersToDto(fullType, parameters)).thenReturn(expectedDto);
+        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(10L));
+        SquareDtoInV1 dto = new SquareDtoInV1(BigDecimal.valueOf(10L));
+        Square expectedSquare = new Square(BigDecimal.valueOf(10L));
+
+        when(squareV1Mapper.mapFromParams(parameters)).thenReturn(dto);
+        when(squareV1Mapper.mapToEntity(dto)).thenReturn(expectedSquare);
 
         // when
-        SquareDTOv1 dto = (SquareDTOv1) shapeMapperRegistry.mapParametersToDto(fullType, parameters);
+        Square square = shapeMapperRegistry.mapParametersToEntity(fullType, parameters);
 
         // then
-        assertNotNull(dto);
-        assertEquals(10L, dto.getA());
+        assertNotNull(square);
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(square.getA()));
     }
 
     @Test
@@ -39,7 +57,7 @@ class ShapeMapperRegistryTest {
         // given
         shapeMapperRegistry = new ShapeMapperRegistry(Collections.emptyList());
         String key = "nonExistingShape";
-        Map<String, Long> parameters = Map.of("param1", 1L);
+        Map<String, BigDecimal> parameters = Map.of("param1", BigDecimal.valueOf(1L));
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {

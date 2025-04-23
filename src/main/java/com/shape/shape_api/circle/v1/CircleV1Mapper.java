@@ -1,14 +1,16 @@
 package com.shape.shape_api.circle.v1;
 
-import com.shape.shape_api.circle.v1.dto.CircleDTOv1;
+import com.shape.shape_api.circle.v1.dto.CircleDtoInV1;
+import com.shape.shape_api.circle.v1.dto.CircleDtoOutV1;
 import com.shape.shape_api.model.Circle;
-import com.shape.shape_api.shape.ShapeParameterMapper;
+import com.shape.shape_api.shape.ShapeMapper;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
-public class CircleV1Mapper implements ShapeParameterMapper<CircleDTOv1> {
+public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1, Circle> {
 
     @Override
     public String getKey() {
@@ -16,16 +18,25 @@ public class CircleV1Mapper implements ShapeParameterMapper<CircleDTOv1> {
     }
 
     @Override
-    public CircleDTOv1 map(Map<String, Long> parameters) {
-        return new CircleDTOv1(parameters.get("radius"));
+    public CircleDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
+        BigDecimal radius = parameters.get("radius");
+        if (radius == null) {
+            throw new IllegalArgumentException("Parameter 'radius' is required for circle.");
+        }
+        CircleDtoInV1 dtoInV1 = new CircleDtoInV1();
+        dtoInV1.setRadius(radius);
+        return dtoInV1;
     }
 
-    public Circle mapToEntity(CircleDTOv1 circleDTOv1) {
-        return new Circle(circleDTOv1.getRadius());
+    @Override
+    public Circle mapToEntity(CircleDtoInV1 dto) {
+        return new Circle(dto.getRadius());
     }
 
-    public CircleDTOv1 mapToDto(Circle circle) {
-        return new CircleDTOv1(circle.getRadius());
+    @Override
+    public CircleDtoOutV1 mapToDTO(Circle entity) {
+        CircleDtoOutV1 dto = new CircleDtoOutV1();
+        dto.setRadius(entity.getRadius());
+        return dto;
     }
 }
-

@@ -1,14 +1,16 @@
 package com.shape.shape_api.square.v1;
 
 import com.shape.shape_api.model.Square;
-import com.shape.shape_api.shape.ShapeParameterMapper;
-import com.shape.shape_api.square.v1.dto.SquareDTOv1;
+import com.shape.shape_api.shape.ShapeMapper;
+import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
-public class SquareV1Mapper implements ShapeParameterMapper<SquareDTOv1> {
+public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1, Square> {
 
     @Override
     public String getKey() {
@@ -16,15 +18,26 @@ public class SquareV1Mapper implements ShapeParameterMapper<SquareDTOv1> {
     }
 
     @Override
-    public SquareDTOv1 map(Map<String, Long> parameters) {
-        return new SquareDTOv1(parameters.get("a"));
+    public Square mapToEntity(SquareDtoInV1 squareDtoInV1) {
+        BigDecimal a = squareDtoInV1.getA();
+        return new Square(a);
     }
 
-    public Square mapToEntity(SquareDTOv1 squareDTOv1) {
-        return new Square(squareDTOv1.getA());
+    @Override
+    public SquareDtoOutV1 mapToDTO(Square entity) {
+        SquareDtoOutV1 dto = new SquareDtoOutV1();
+        dto.setSideA(entity.getA());
+        return dto;
     }
 
-    public SquareDTOv1 mapToDto(Square square) {
-        return new SquareDTOv1(square.getA());
+    @Override
+    public SquareDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
+        BigDecimal a = parameters.get("a");
+        if (a == null) {
+            throw new IllegalArgumentException("Missing parameter 'a' for square");
+        }
+        SquareDtoInV1 dtoInV1 = new SquareDtoInV1();
+        dtoInV1.setA(a);
+        return dtoInV1;
     }
 }

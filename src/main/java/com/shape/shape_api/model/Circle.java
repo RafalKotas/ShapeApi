@@ -1,35 +1,29 @@
 package com.shape.shape_api.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
-@Setter
-@AllArgsConstructor
-public class Circle {
+@DiscriminatorValue("circle")
+public class Circle extends Shape {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private BigDecimal radius;
 
-    private Long radius;
+    public Circle(BigDecimal radius) {
+        super();
+        this.radius = radius;
+    }
 
     public Circle() {
     }
 
-    public Circle(Long radius) {
+    public BigDecimal getRadius() {
+        return radius;
+    }
+
+    public void setRadius(BigDecimal radius) {
         this.radius = radius;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public Long getRadius() {
-        return this.radius;
     }
 }

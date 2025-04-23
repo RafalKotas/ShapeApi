@@ -1,38 +1,34 @@
 package com.shape.shape_api.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
-@Setter
-public class Square {
+@DiscriminatorValue("square")
+public class Square extends Shape {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private BigDecimal a;
 
-    private Long a;
-
-    public Square(Long a) {
+    public Square(Long id, BigDecimal a) {
+        super();
         this.a = a;
     }
 
-    public Square(Long id, Long a) {
-        this.id = id;
+    public Square(BigDecimal a) {
+        super();
         this.a = a;
     }
 
     public Square() {
     }
 
-    public Long getId() {
-        return this.id;
+    public BigDecimal getA() {
+        return this.a;
     }
 
-    public Long getA() {
-        return this.a;
+    public void setA(BigDecimal a) {
+        this.a = a;
     }
 }

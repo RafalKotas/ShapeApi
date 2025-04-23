@@ -1,11 +1,14 @@
 package com.shape.shape_api.square.v2;
 
+import com.shape.shape_api.model.Shape;
 import com.shape.shape_api.model.Square;
-import com.shape.shape_api.square.SquareRepository;
-import com.shape.shape_api.square.v2.dto.SquareDTOv2;
+import com.shape.shape_api.shape.ShapeRepository;
+import com.shape.shape_api.square.v2.dto.SquareDtoInV2;
+import com.shape.shape_api.square.v2.dto.SquareDtoOutV2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,15 +17,15 @@ import static org.mockito.Mockito.*;
 
 class SquareHandlerV2Test {
 
-    private SquareRepository squareRepository;
+    private ShapeRepository shapeRepository;
     private SquareV2Mapper squareV2Mapper;
     private SquareHandlerV2 squareHandlerV2;
 
     @BeforeEach
     void setUp() {
-        squareRepository = mock(SquareRepository.class);
+        shapeRepository = mock(ShapeRepository.class);
         squareV2Mapper = mock(SquareV2Mapper.class);
-        squareHandlerV2 = new SquareHandlerV2(squareRepository, squareV2Mapper);
+        squareHandlerV2 = new SquareHandlerV2(shapeRepository, squareV2Mapper);
     }
 
     @Test
@@ -35,41 +38,51 @@ class SquareHandlerV2Test {
     }
 
     @Test
-    void shouldReturnAllShapes() {
+    void shouldReturnAllSquares() {
         // given
-        Square square1 = new Square(1L, 5L);
-        Square square2 = new Square(2L, 10L);
-        List<Square> expectedShapes = List.of(square1, square2);
-        when(squareRepository.findAll()).thenReturn(expectedShapes);
+        Square square1 = new Square(BigDecimal.valueOf(5L));
+        Square square2 = new Square(BigDecimal.valueOf(10L));
+        List<Shape> squares = List.of(square1, square2);
+
+        when(shapeRepository.findAllByShapeType(Square.class)).thenReturn(squares);
+        when(squareV2Mapper.mapToDTO(any(Square.class)))
+                .thenAnswer(invocation -> {
+                    Square square = invocation.getArgument(0);
+                    return new SquareDtoOutV2(square.getA());
+                });
 
         // when
         List<Square> result = squareHandlerV2.getAllShapes();
 
         // then
+        BigDecimal firstExpectedSide = BigDecimal.valueOf(5L);
+        BigDecimal secondExpectedSide = BigDecimal.valueOf(10L);
+
         assertEquals(2, result.size());
-        assertEquals(5L, result.get(0).getA());
-        assertEquals(10L, result.get(1).getA());
-        verify(squareRepository).findAll();
+        assertEquals(0, firstExpectedSide.compareTo(result.get(0).getA()), "The first result square a should match the firstExpectedSide(5L)");
+        assertEquals(0, secondExpectedSide.compareTo(result.get(1).getA()), "The second result square a should match the secondExpectedSide(10L)");
+        verify(shapeRepository).findAllByShapeType(Square.class);
     }
 
     @Test
-    void shouldCreateShape() {
+    void shouldCreateSquareV2() {
         // given
-        SquareDTOv2 dto = new SquareDTOv2(5L);
-        Square mappedSquare = new Square(null, 5L);
-        Square savedSquare = new Square(1L, 5L);
+        SquareDtoInV2 dtoInV2 = new SquareDtoInV2(BigDecimal.valueOf(5L));
+        Square mappedSquare = new Square(BigDecimal.valueOf(5L));
+        Square savedSquare = new Square( BigDecimal.valueOf(5L));
+        SquareDtoOutV2 expectedDTO = new SquareDtoOutV2(BigDecimal.valueOf(5L));
 
-        when(squareV2Mapper.mapToEntity(dto)).thenReturn(mappedSquare);
-        when(squareRepository.save(mappedSquare)).thenReturn(savedSquare);
+        when(squareV2Mapper.mapToEntity(dtoInV2)).thenReturn(mappedSquare);
+        when(shapeRepository.save(mappedSquare)).thenReturn(savedSquare);
+        when(squareV2Mapper.mapToDTO(savedSquare)).thenReturn(expectedDTO);
 
         // when
-        Square result = squareHandlerV2.createShape(dto);
+        Square result = squareHandlerV2.createShape(dtoInV2);
 
         // then
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals(5L, result.getA());
-        verify(squareV2Mapper).mapToEntity(dto);
-        verify(squareRepository).save(mappedSquare);
+        assertNotNull(result, "The result should not be null");
+        assertEquals(0, expectedDTO.getSide().compareTo(result.getA()), "The 'a' value in the result should be 5L");
+        verify(squareV2Mapper).mapToEntity(dtoInV2);
+        verify(shapeRepository).save(mappedSquare);
     }
 }

@@ -2,23 +2,22 @@ package com.shape.shape_api.square.v2;
 
 import com.shape.shape_api.model.Square;
 import com.shape.shape_api.shape.ShapeHandler;
-import com.shape.shape_api.square.SquareRepository;
-import com.shape.shape_api.square.v2.dto.SquareDTOv2;
+import com.shape.shape_api.shape.ShapeRepository;
+import com.shape.shape_api.square.v2.dto.SquareDtoInV2;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Hidden
 @Component
-public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2, SquareDTOv2> {
+public class SquareHandlerV2 implements ShapeHandler<SquareDtoInV2, Square> {
 
-    private final SquareRepository squareRepository;
+    private final ShapeRepository shapeRepository;
     private final SquareV2Mapper squareV2Mapper;
 
-    public SquareHandlerV2(SquareRepository squareRepository, SquareV2Mapper squareV2Mapper) {
-        this.squareRepository = squareRepository;
+    public SquareHandlerV2(ShapeRepository shapeRepository, SquareV2Mapper squareV2Mapper) {
+        this.shapeRepository = shapeRepository;
         this.squareV2Mapper = squareV2Mapper;
     }
 
@@ -28,16 +27,15 @@ public class SquareHandlerV2 implements ShapeHandler<SquareDTOv2, SquareDTOv2> {
     }
 
     @Override
-    public List<SquareDTOv2> getAllShapes() {
-        return squareRepository.findAll().stream()
-                .map(squareV2Mapper::mapToDto)
-                .collect(Collectors.toList());
+    public List<Square> getAllShapes() {
+        return shapeRepository.findAllByShapeType(Square.class).stream()
+                .map(shape -> (Square) shape)
+                .toList();
     }
 
     @Override
-    public SquareDTOv2 createShape(SquareDTOv2 squareDTOv2) {
-        Square square = squareV2Mapper.mapToEntity(squareDTOv2);
-        Square savedSquare = squareRepository.save(square);
-        return squareV2Mapper.mapToDto(savedSquare);
+    public Square createShape(SquareDtoInV2 dto) {
+        Square entity = squareV2Mapper.mapToEntity(dto);
+        return shapeRepository.save(entity);
     }
 }

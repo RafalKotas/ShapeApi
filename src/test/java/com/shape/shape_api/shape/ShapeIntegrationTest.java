@@ -1,50 +1,47 @@
 package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shape.shape_api.circle.CircleRepository;
 import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.rectangle.RectangleRepository;
-import com.shape.shape_api.square.SquareRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ShapeIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private TestRestTemplate restTemplate;
 
     @Autowired
-    private RectangleRepository rectangleRepository;
+    private ShapeMapperRegistry shapeMapperRegistry;
 
     @Autowired
-    private SquareRepository squareRepository;
-
-    @Autowired
-    private CircleRepository circleRepository;
+    private ShapeRepository shapeRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @LocalServerPort
+    private int port;
+
+    private String baseUrl;
+
     @BeforeEach
     void setup() {
-        rectangleRepository.deleteAll();
-        squareRepository.deleteAll();
-        circleRepository.deleteAll();
+        shapeRepository.deleteAll();
+        baseUrl = "http://localhost:" + port + "/api/v2/shapes";
     }
 
     @Test
@@ -52,135 +49,234 @@ class ShapeIntegrationTest {
         // given
         Map<String, Object> requestBody = Map.of(
                 "type", "rectangle",
-                "parameters", Map.of(
-                        "width", 15,
-                        "height", 30
-                )
+                "parameters", Map.of("w", 15, "h", 30)
         );
 
-        // when
-        mockMvc.perform(post("/api/v1/shapes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestBody)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.width").value(15))
-                .andExpect(jsonPath("$.height").value(30));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        // then (GET)
-        mockMvc.perform(get("/api/v1/shapes")
-                        .param("type", "rectangle"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].width").value(15))
-                .andExpect(jsonPath("$[0].height").value(30));
+        // when - create rectangle
+        ResponseEntity<Map> postResponse = restTemplate.postForEntity(baseUrl, requestEntity, Map.class);
 
-        // and also assert repository directly
-        assertThat(rectangleRepository.findAll()).hasSize(1);
-        Rectangle saved = rectangleRepository.findAll().get(0);
-        assertThat(saved.getWidth()).isEqualTo(15);
-        assertThat(saved.getHeight()).isEqualTo(30);
+        // then - check creation status and values
+        assertEquals(HttpStatus.OK, postResponse.getStatusCode());
+        BigDecimal postW = new BigDecimal(postResponse.getBody().get("w").toString());
+        BigDecimal postH = new BigDecimal(postResponse.getBody().get("h").toString());
+        assertEquals(0, BigDecimal.valueOf(15L).compareTo(postW));
+        assertEquals(0, BigDecimal.valueOf(30L).compareTo(postH));
+
+        // when - fetch rectangle
+        ResponseEntity<List> getResponse = restTemplate.getForEntity(baseUrl + "?type=rectangle", List.class);
+        assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+        assertThat(getResponse.getBody()).isNotEmpty();
+
+        Map<String, Object> shapeData = (Map<String, Object>) getResponse.getBody().get(0);
+        BigDecimal getW = new BigDecimal(shapeData.get("w").toString());
+        BigDecimal getH = new BigDecimal(shapeData.get("h").toString());
+        assertEquals(0, BigDecimal.valueOf(15L).compareTo(getW));
+        assertEquals(0, BigDecimal.valueOf(30L).compareTo(getH));
+
+        // Assert that the shape is stored in the repository
+        assertThat(shapeRepository.findAll()).hasSize(1);
+        Rectangle saved = (Rectangle) shapeRepository.findAll().get(0);
+
+        // Use BigDecimal for precise comparison
+        assertEquals(0, BigDecimal.valueOf(15L).compareTo(saved.getWidth()));
+        assertEquals(0, BigDecimal.valueOf(30L).compareTo(saved.getHeight()));
     }
 
     @Test
     void shouldReturnValidationErrorForInvalidRectangle() throws Exception {
-        mockMvc.perform(post("/api/v1/shapes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                        {
-                          "type": "rectangle",
-                          "parameters": {
-                            "width": -10,
-                            "height": 20
-                          }
-                        }
-                        """))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorCode").value("CONSTRAINT_VIOLATION"))
-                .andExpect(jsonPath("$.message").value("'width' must be greater than 0"))
-                .andExpect(jsonPath("$.httpCode").value(400));
-    }
-
-
-    @Test
-    void shouldCreateCircleSuccessfully() throws Exception {
-        mockMvc.perform(post("/api/v1/shapes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                            {
-                              "type": "circle",
-                              "parameters": {
-                                "radius": 12
-                              }
-                            }
-                            """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.radius").value(12))
-                .andExpect(jsonPath("$.id").exists());
-    }
-
-    @Test
-    void shouldGetAllSquaresSuccessfully() throws Exception {
         // given
-        mockMvc.perform(post("/api/v1/shapes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                            {
-                              "type": "square",
-                              "parameters": {
-                                "a": 10
-                              }
-                            }
-                            """))
-                .andExpect(status().isOk());
+        String invalidRectangleJson = """
+        {
+          "type": "rectangle",
+          "parameters": {
+            "w": -10,
+            "h": 20
+          }
+        }
+        """;
 
-        // when & then
-        mockMvc.perform(get("/api/v1/shapes?type=square"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].a").value(10));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(invalidRectangleJson, headers);
+
+        // when
+        ResponseEntity<Map> response = restTemplate.postForEntity(baseUrl, request, Map.class);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Map responseBody = response.getBody();
+        assertEquals("CONSTRAINT_VIOLATION", responseBody.get("errorCode"));
+        assertEquals("Side 'w' must be greater than 0", responseBody.get("message"));
+        assertEquals(400, responseBody.get("httpCode"));
     }
 
     @Test
-    void shouldReturnErrorForUnknownShapeType() throws Exception {
-        mockMvc.perform(post("/api/v1/shapes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                    {
-                      "type": "unknown",
-                      "parameters": {
-                        "side": 5
-                      }
-                    }
-                    """))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Unknown shape type: v1:unknown"))
-                .andExpect(jsonPath("$.errorCode").value("SHAPE_TYPE_UNKNOWN"))
-                .andExpect(jsonPath("$.httpCode").value(400))
-                .andExpect(jsonPath("$.timestamp").exists());
+    void shouldCreateCircleSuccessfully() {
+        // given
+        String circleJson = """
+    {
+      "type": "circle",
+      "parameters": {
+        "diameter": 12
+      }
     }
+    """;
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(circleJson, headers);
+
+        // when - create circle
+        ResponseEntity<Map> response = restTemplate.postForEntity(baseUrl, request, Map.class);
+
+        // then - check creation status and values
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        Map<String, Object> responseBody = response.getBody();
+        assertThat(responseBody).isNotNull();
+
+        // Use BigDecimal for exact comparison
+        BigDecimal diameter = new BigDecimal(responseBody.get("diameter").toString());
+        assertEquals(0, BigDecimal.valueOf(12L).compareTo(diameter), "The diameter should match the expected value");
+    }
 
 
     @Test
-    void shouldCreateAndRetrieveRectangleSuccessfully() throws Exception {
-        mockMvc.perform(post("/api/v1/shapes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                            {
-                              "type": "rectangle",
-                              "parameters": {
-                                "width": 8,
-                                "height": 14
-                              }
-                            }
-                            """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.width").value(8))
-                .andExpect(jsonPath("$.height").value(14));
+    void shouldGetAllSquaresSuccessfully() {
+        // given
+        String squareJson = """
+    {
+      "type": "square",
+      "parameters": {
+        "a": 10
+      }
+    }
+    """;
 
-        mockMvc.perform(get("/api/v1/shapes?type=rectangle"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].width").value(8))
-                .andExpect(jsonPath("$[0].height").value(14));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(squareJson, headers);
+
+        ResponseEntity<Map> postResponse = restTemplate.postForEntity(baseUrl, request, Map.class);
+        assertEquals(HttpStatus.OK, postResponse.getStatusCode());
+
+        // when - retrieve squares
+        ResponseEntity<List> getResponse = restTemplate.exchange(
+                baseUrl + "?type=square",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        // then - check retrieval status and values
+        assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+        List<?> shapes = getResponse.getBody();
+        assertThat(shapes).isNotNull().isNotEmpty();
+
+        Map<?, ?> shape = (Map<?, ?>) shapes.get(0);
+
+        // Use BigDecimal for exact comparison
+        BigDecimal side = new BigDecimal(shape.get("side").toString());
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(side), "The side length should match the expected value");
     }
 
 
+    @Test
+    void shouldReturnErrorForUnknownShapeType() {
+        // given
+        String unknownShapeJson = """
+        {
+          "type": "unknown",
+          "parameters": {
+            "side": 5
+          }
+        }
+        """;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(unknownShapeJson, headers);
+
+        // when
+        ResponseEntity<Map> response = restTemplate.exchange(
+                baseUrl,
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Map<String, ?> body = response.getBody();
+        assertThat(body).isNotNull();
+        assertEquals("Unknown shape type: v2:unknown", body.get("message"));
+        assertEquals("SHAPE_TYPE_UNKNOWN", body.get("errorCode"));
+        assertEquals(400, body.get("httpCode"));
+
+        // timestamp existence check
+        assertThat(body).containsKey("timestamp");
+        assertThat(body.get("timestamp")).isNotNull();
+    }
+
+
+    @Test
+    void shouldCreateAndRetrieveRectangleSuccessfully() {
+        // given
+        String requestBody = """
+        {
+          "type": "rectangle",
+          "parameters": {
+            "w": 8,
+            "h": 14
+          }
+        }
+        """;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+
+        // when
+        ResponseEntity<Map> createResponse = restTemplate.exchange(
+                baseUrl,
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        // then
+        assertEquals(HttpStatus.OK, createResponse.getStatusCode());
+        Map<?, ?> createBody = createResponse.getBody();
+        assertThat(createBody).isNotNull();
+        BigDecimal expectedW = BigDecimal.valueOf(8L);
+        BigDecimal expectedH = BigDecimal.valueOf(14L);
+        BigDecimal actualW = new BigDecimal(createBody.get("w").toString());
+        BigDecimal actualH = new BigDecimal(createBody.get("h").toString());
+        assertEquals(0, expectedW.compareTo(actualW), "The width should match the expected value");
+        assertEquals(0, expectedH.compareTo(actualH), "The height should match the expected value");
+
+        // when - retrieve rectangle
+        ResponseEntity<List<Map>> getResponse = restTemplate.exchange(
+                baseUrl + "?type=rectangle",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        // then - check retrieval status and values
+        assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+        List<Map> shapes = getResponse.getBody();
+        assertThat(shapes).isNotNull();
+        assertEquals(1, shapes.size());
+        Map<?, ?> shape = shapes.get(0);
+
+        BigDecimal retrievedW = new BigDecimal(shape.get("w").toString());
+        BigDecimal retrievedH = new BigDecimal(shape.get("h").toString());
+
+        assertEquals(0, expectedW.compareTo(retrievedW), "The retrieved width should match the expected value");
+        assertEquals(0, expectedH.compareTo(retrievedH), "The retrieved height should match the expected value");
+    }
 }

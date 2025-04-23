@@ -1,49 +1,51 @@
 package com.shape.shape_api.circle.v2;
 
-import com.shape.shape_api.circle.v2.dto.CircleDTOv2;
+import com.shape.shape_api.circle.v2.dto.CircleDtoInV2;
 import com.shape.shape_api.model.Circle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CircleV2MapperTest {
 
+    CircleV2Mapper subject = new CircleV2Mapper();
+
     @Test
     void shouldMapCircleDTOv2ToCircleEntity() {
         // given
-        CircleDTOv2 circleDTOv2 = new CircleDTOv2(20L);
+        CircleDtoInV2 circleDTOv2 = new CircleDtoInV2(BigDecimal.valueOf(20L));
 
         // when
-        Circle circle = new CircleV2Mapper().mapToEntity(circleDTOv2);
+        Circle result = subject.mapToEntity(circleDTOv2);
 
         // then
-        assertThat(circle.getRadius()).isEqualTo(10L);
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()));
     }
 
     @Test
     void shouldMapParametersToCircleDTOv2() {
         // given
-        Map<String, Long> parameters = Map.of("diameter", 30L);
+        Map<String, BigDecimal> parameters = Map.of("diameter", BigDecimal.valueOf(30L));
 
         // when
-        CircleDTOv2 result = new CircleV2Mapper().map(parameters);
+        CircleDtoInV2 result = subject.mapFromParams(parameters);
 
         // then
-        assertThat(result.getDiameter()).isEqualTo(30L);
+        assertEquals(0, BigDecimal.valueOf(30L).compareTo(result.getDiameter()));
     }
 
     @Test
-    void shouldThrowExceptionWhenDiameterIsMissing() {
+    void shouldThrowExceptionWhenDiameterParamIsMissing() {
         // given
-        Map<String, Long> parameters = Map.of();
+        Map<String, BigDecimal> parameters = Map.of();
 
         // when
-        CircleV2Mapper circleV2Mapper = new CircleV2Mapper();
-        Executable action = () -> circleV2Mapper.map(parameters);
+        Executable action = () -> subject.mapFromParams(parameters);
 
         // then
         assertThrows(IllegalArgumentException.class, action);

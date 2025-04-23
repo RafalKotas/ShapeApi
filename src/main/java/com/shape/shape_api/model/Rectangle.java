@@ -13,13 +13,8 @@ public class Rectangle extends Shape {
     private BigDecimal width;
 
 
-    public Rectangle(Long id, BigDecimal height, BigDecimal width) {
-        super();
-        this.height = height;
-        this.width = width;
-    }
-
     public Rectangle(BigDecimal height, BigDecimal width) {
+        super();
         this.height = height;
         this.width = width;
     }

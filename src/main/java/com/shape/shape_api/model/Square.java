@@ -11,11 +11,6 @@ public class Square extends Shape {
 
     private BigDecimal a;
 
-    public Square(Long id, BigDecimal a) {
-        super();
-        this.a = a;
-    }
-
     public Square(BigDecimal a) {
         super();
         this.a = a;

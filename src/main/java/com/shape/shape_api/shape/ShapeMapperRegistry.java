@@ -2,8 +2,6 @@ package com.shape.shape_api.shape;
 
 import com.shape.shape_api.model.Shape;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +13,6 @@ import java.util.Map;
 @Service
 @Slf4j
 public class ShapeMapperRegistry {
-
-    private static final Logger logger = LoggerFactory.getLogger(ShapeService.class);
 
     private final Map<String, ShapeMapper<?, ?, ?>> mappers = new HashMap<>();
 
@@ -33,7 +29,7 @@ public class ShapeMapperRegistry {
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
-        logger.info("Found mapper for key: {}, mapper: {}", key, mapper.getClass().getName());
+        log.info("Found mapper for key: {}, mapper: {}", key, mapper.getClass().getName());
         return mapper.mapFromParams(parameters);
     }
 

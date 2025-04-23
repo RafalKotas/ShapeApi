@@ -45,7 +45,7 @@ class ShapeIntegrationTest {
     }
 
     @Test
-    void shouldCreateRectangleAndFetchIt() {
+    void shouldCreateRectangleAndFetchIt() throws Exception {
         // given
         Map<String, Object> requestBody = Map.of(
                 "type", "rectangle",
@@ -87,7 +87,7 @@ class ShapeIntegrationTest {
     }
 
     @Test
-    void shouldReturnValidationErrorForInvalidRectangle() {
+    void shouldReturnValidationErrorForInvalidRectangle() throws Exception {
         // given
         String invalidRectangleJson = """
         {

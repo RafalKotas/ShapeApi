@@ -54,7 +54,7 @@ class RectangleHandlerV1Test {
                 });
 
         // when
-        List<RectangleDtoOutV1> result = rectangleHandler.getAllShapes();
+        List<Rectangle> result = rectangleHandler.getAllShapes();
 
         // then
         assertEquals(2, result.size());

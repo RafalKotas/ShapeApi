@@ -52,15 +52,15 @@ class SquareHandlerV2Test {
                 });
 
         // when
-        List<SquareDtoOutV2> result = squareHandlerV2.getAllShapes();
+        List<Square> result = squareHandlerV2.getAllShapes();
 
         // then
         BigDecimal firstExpectedSide = BigDecimal.valueOf(5L);
         BigDecimal secondExpectedSide = BigDecimal.valueOf(10L);
 
         assertEquals(2, result.size());
-        assertEquals(0, firstExpectedSide.compareTo(result.get(0).getSide()), "The first result square side should match the firstExpectedSide(5L)");
-        assertEquals(0, secondExpectedSide.compareTo(result.get(1).getSide()), "The second result square side should match the secondExpectedSide(10L)");
+        assertEquals(0, firstExpectedSide.compareTo(result.get(0).getA()), "The first result square a should match the firstExpectedSide(5L)");
+        assertEquals(0, secondExpectedSide.compareTo(result.get(1).getA()), "The second result square a should match the secondExpectedSide(10L)");
         verify(shapeRepository).findAllByShapeType(Square.class);
     }
 

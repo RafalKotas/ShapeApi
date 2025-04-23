@@ -52,8 +52,8 @@ class ShapeIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.width").value(15))
-                .andExpect(jsonPath("$.height").value(30));
+                .andExpect(jsonPath("$.w").value(15))
+                .andExpect(jsonPath("$.h").value(30));
 
         // then
         mockMvc.perform(get("/api/v2/shapes?type=rectangle"))

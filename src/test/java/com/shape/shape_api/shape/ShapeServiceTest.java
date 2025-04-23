@@ -28,7 +28,7 @@ class ShapeServiceTest {
     @Mock
     private Validator validator;
 
-    private Map<String, ShapeHandler<?, ? extends ShapeDTO, ?>> shapeHandlers;
+    private Map<String, ShapeHandler<? extends ShapeDTO, ?>> shapeHandlers;
 
     private ShapeService shapeService;
 
@@ -53,7 +53,7 @@ class ShapeServiceTest {
         expectedDTO.setSideA(BigDecimal.valueOf(10L));
 
         @SuppressWarnings("unchecked")
-        ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> handler = mock(ShapeHandler.class);
+        ShapeHandler<SquareDtoInV1, Square> handler = mock(ShapeHandler.class);
 
         shapeHandlers.put(fullType, handler);
         when(shapeMapperRegistry.mapParametersToDto(fullType, parameters)).thenReturn(dto);

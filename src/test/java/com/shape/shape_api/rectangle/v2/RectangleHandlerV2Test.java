@@ -54,17 +54,17 @@ class RectangleHandlerV2Test {
                 });
 
         // when
-        List<RectangleDtoOutV2> result = rectangleHandler.getAllShapes();
+        List<Rectangle> result = rectangleHandler.getAllShapes();
 
         // then
         BigDecimal expectedH = BigDecimal.valueOf(3L);
         BigDecimal expectedW = BigDecimal.valueOf(4L);
 
         assertEquals(2, result.size());
-        assertEquals(0, expectedH.compareTo(result.get(0).getH()),
-                "The result H should match the expected H");
-        assertEquals(0, expectedW.compareTo(result.get(0).getW()),
-                "The result W should match the expected W");
+        assertEquals(0, expectedH.compareTo(result.get(0).getHeight()),
+                "The result H should match the expected Height");
+        assertEquals(0, expectedW.compareTo(result.get(0).getWidth()),
+                "The result W should match the expected Width");
         verify(shapeRepository).findAllByShapeType(Rectangle.class);
     }
 

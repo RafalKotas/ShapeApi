@@ -52,15 +52,15 @@ class SquareHandlerV1Test {
                 });
 
         // when
-        List<SquareDtoOutV1> result = squareHandlerV1.getAllShapes();
+        List<Square> result = squareHandlerV1.getAllShapes();
 
         // then
         assertEquals(2, result.size());
         BigDecimal expectedFirstA = BigDecimal.valueOf(5L);
         BigDecimal expectedSecondA = BigDecimal.valueOf(10L);
-        assertEquals(0, expectedFirstA.compareTo(result.get(0).getSideA()),
+        assertEquals(0, expectedFirstA.compareTo(result.get(0).getA()),
                 "The result square a should match the expected square a(5L)");
-        assertEquals(0, expectedSecondA.compareTo(result.get(1).getSideA()),
+        assertEquals(0, expectedSecondA.compareTo(result.get(1).getA()),
                 "The result square a should match the expected square a(10L)");
         verify(shapeRepository).findAllByShapeType(Square.class);
     }
@@ -73,7 +73,6 @@ class SquareHandlerV1Test {
         squareDtoInV1.setA(BigDecimal.valueOf(5L));
         Square mappedSquareEntity = new Square(BigDecimal.valueOf(5L));
         Square savedSquareEntity = new Square(BigDecimal.valueOf(5L));
-        SquareDtoOutV1 expectedDto = new SquareDtoOutV1(BigDecimal.valueOf(5L));
 
         when(squareV1Mapper.mapToEntity(squareDtoInV1)).thenReturn(mappedSquareEntity);
         when(shapeRepository.save(mappedSquareEntity)).thenReturn(savedSquareEntity);

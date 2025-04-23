@@ -49,15 +49,15 @@ class CircleHandlerV2Test {
                 });
 
         // when
-        List<CircleDtoOutV2> result = circleHandlerV2.getAllShapes();
+        List<Circle> result = circleHandlerV2.getAllShapes();
 
         // then
-        BigDecimal expectedFirstDiameter = BigDecimal.valueOf(4L);
-        BigDecimal expectedSecondDiameter = BigDecimal.valueOf(8L);
-        assertEquals(0, expectedFirstDiameter.compareTo(result.get(0).getDiameter()),
-                "The result first diameter should match the expectedFirstDiameter(4L)");
-        assertEquals(0, expectedSecondDiameter.compareTo(result.get(1).getDiameter()),
-                "The result second diameter should match the expectedSecondDiameter(8L)");
+        BigDecimal expectedFirstDiameter = BigDecimal.valueOf(2L);
+        BigDecimal expectedSecondDiameter = BigDecimal.valueOf(4L);
+        assertEquals(0, expectedFirstDiameter.compareTo(result.get(0).getRadius()),
+                "The result first radius should match the expectedFirstDiameter(4L)");
+        assertEquals(0, expectedSecondDiameter.compareTo(result.get(1).getRadius()),
+                "The result second radius should match the expectedSecondDiameter(8L)");
         verify(shapeRepository).findAllByShapeType(Circle.class);
     }
 

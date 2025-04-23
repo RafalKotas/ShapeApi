@@ -1,6 +1,5 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.square.SquareResponseDto;
 import com.shape.shape_api.square.v2.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -43,12 +42,12 @@ class ShapeControllerV2Test {
 
         @Bean
         public ShapeService shapeService() {
-            return mock(ShapeService.class); // Mockowanie ShapeService
+            return mock(ShapeService.class);
         }
 
         @Bean
         public ShapeMapperRegistry shapeMapperRegistry() {
-            return mock(ShapeMapperRegistry.class); // Mockowanie ShapeMapperRegistry
+            return mock(ShapeMapperRegistry.class);
         }
     }
 
@@ -59,18 +58,18 @@ class ShapeControllerV2Test {
         String type = "square";
         Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(5L));
 
-        SquareDtoOutV2 square = new SquareDtoOutV2(BigDecimal.valueOf(5L));
-        SquareResponseDto squareResponseDto = new SquareResponseDto(BigDecimal.valueOf(5L));
-        when(shapeService.createShape(version, type, parameters)).thenReturn(square);
-        when(shapeMapperRegistry.mapEntityToDto(version + ":" + type, square)).thenReturn(squareResponseDto);
+        ShapeDTO squareResponseDto = new SquareDtoOutV2(BigDecimal.valueOf(5L));
+        when(shapeService.createShape(version, type, parameters))
+                .thenReturn((ShapeDTO) squareResponseDto);
 
         // when & then
         mockMvc.perform(post("/api/v2/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"type\":\"square\",\"parameters\":{\"a\":5}}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.a").value(5));
+                .andExpect(jsonPath("$.side").value(5));
     }
+
 
     @Test
     void shouldThrowValidationExceptionWhenDtoIsInvalid() throws Exception {
@@ -112,7 +111,7 @@ class ShapeControllerV2Test {
                         .param("type", type)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].side").value(5)); // Upewnij się, że pole ma nazwę 'side'
+                .andExpect(jsonPath("$[0].side").value(5));
     }
 
     @Test

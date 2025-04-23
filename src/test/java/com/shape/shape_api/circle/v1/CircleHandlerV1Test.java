@@ -48,7 +48,7 @@ class CircleHandlerV1Test {
                 });
 
         // when
-        List<CircleDtoOutV1> result = circleHandler.getAllShapes();
+        List<Circle> result = circleHandler.getAllShapes();
 
         // then
         assertEquals(2, result.size());

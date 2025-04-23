@@ -4,8 +4,8 @@ import com.shape.shape_api.model.Shape;
 
 import java.util.List;
 
-public interface ShapeHandler<DTO, ENTITY extends Shape> {
+public interface ShapeHandler<D, S extends Shape> {
     String getKey();
-    List<ENTITY> getAllShapes();
-    ENTITY createShape(DTO dto);
+    List<S> getAllShapes();
+    S createShape(D dto);
 }

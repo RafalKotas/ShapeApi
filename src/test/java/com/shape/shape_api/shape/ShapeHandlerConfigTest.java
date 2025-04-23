@@ -43,7 +43,7 @@ class ShapeHandlerConfigTest {
 
     @Test
     void shouldCreateShapeHandlerMapWithCorrectKey() {
-        Map<String, ShapeHandler<?, ?>> result = ShapeHandlerConfig.createShapeHandlerMap(
+        Map<String, ShapeHandler<?, ?, ?>> result = ShapeHandlerConfig.createShapeHandlerMap(
                 circleHandlerV1,
                 squareHandlerV1,
                 rectangleHandlerV1,

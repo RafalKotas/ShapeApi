@@ -71,18 +71,16 @@ class CircleHandlerV1Test {
 
         when(circleV1Mapper.mapToEntity(circleDtoInV1)).thenReturn(mappedCircleEntity);
         when(shapeRepository.save(mappedCircleEntity)).thenReturn(savedCircleEntity);
-        when(circleV1Mapper.mapToDTO(savedCircleEntity)).thenReturn(expectedDto);
 
         // when
-        CircleDtoOutV1 result = circleHandler.createShape(circleDtoInV1);
+        Circle result = circleHandler.createShape(circleDtoInV1);
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()), "The result circle radius should be 10");
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()), "The result circle radius should be equal to 10");
 
         verify(circleV1Mapper).mapToEntity(circleDtoInV1);
         verify(shapeRepository).save(mappedCircleEntity);
-        verify(circleV1Mapper).mapToDTO(savedCircleEntity);
     }
 
 

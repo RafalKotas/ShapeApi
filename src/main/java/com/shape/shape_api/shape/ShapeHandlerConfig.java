@@ -12,35 +12,35 @@ import java.util.stream.Collectors;
 @Configuration
 public class ShapeHandlerConfig {
 
-    private final Map<String, ShapeHandler<?, ?>> shapeHandlers;
+    private final Map<String, ShapeHandler<?, ?, ?>> shapeHandlers;
 
     @Autowired
-    public ShapeHandlerConfig(Map<String, ShapeHandler<?, ?>> shapeHandlers) {
+    public ShapeHandlerConfig(Map<String, ShapeHandler<?, ?, ?>> shapeHandlers) {
         this.shapeHandlers = shapeHandlers;
     }
 
     @PostConstruct
     public void logShapeHandlers() {
-        System.out.println("Zarejestrowane ShapeHandlery:");
+        System.out.println("Registered ShapeHandlers:");
         shapeHandlers.forEach((key, handler) -> System.out.println(" - " + key));
     }
 
     // Do testów jednostkowych
-    public static Map<String, ShapeHandler<?, ?>> createShapeHandlerMap(
-            ShapeHandler<?, ?>... handlers
+    public static Map<String, ShapeHandler<?, ?, ?>> createShapeHandlerMap(
+            ShapeHandler<?, ?, ?>... handlers
     ) {
         return Arrays.stream(handlers)
                 .collect(Collectors.toMap(ShapeHandler::getKey, h -> h));
     }
 
     @Bean
-    public Map<String, ShapeHandler<?, ?>> shapeHandlers(
-            ShapeHandler<?, ?> circleHandlerV1,
-            ShapeHandler<?, ?> squareHandlerV1,
-            ShapeHandler<?, ?> rectangleHandlerV1,
-            ShapeHandler<?, ?> circleHandlerV2,
-            ShapeHandler<?, ?> squareHandlerV2,
-            ShapeHandler<?, ?> rectangleHandlerV2
+    public Map<String, ShapeHandler<?, ?, ?>> shapeHandlers(
+            ShapeHandler<?, ?, ?> circleHandlerV1,
+            ShapeHandler<?, ?, ?> squareHandlerV1,
+            ShapeHandler<?, ?, ?> rectangleHandlerV1,
+            ShapeHandler<?, ?, ?> circleHandlerV2,
+            ShapeHandler<?, ?, ?> squareHandlerV2,
+            ShapeHandler<?, ?, ?> rectangleHandlerV2
     ) {
         return Map.of(
                 circleHandlerV1.getKey(), circleHandlerV1,

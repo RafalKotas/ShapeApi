@@ -1,6 +1,7 @@
 package com.shape.shape_api.shape;
 
 import com.shape.shape_api.common.exception.ShapeNotSupportedException;
+import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
 import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import jakarta.validation.Validator;
@@ -27,7 +28,7 @@ class ShapeServiceTest {
     @Mock
     private Validator validator;
 
-    private Map<String, ShapeHandler<?, ?>> shapeHandlers;
+    private Map<String, ShapeHandler<?, ? extends ShapeDTO, ?>> shapeHandlers;
 
     private ShapeService shapeService;
 
@@ -46,23 +47,28 @@ class ShapeServiceTest {
 
         Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(10L));
         SquareDtoInV1 dto = new SquareDtoInV1(BigDecimal.valueOf(10L));
-        SquareDtoOutV1 expectedDto = new SquareDtoOutV1(BigDecimal.valueOf(10L));
+        Square handlerOutShape = new Square(BigDecimal.valueOf(10L));
+
+        SquareDtoOutV1 expectedDTO = new SquareDtoOutV1();
+        expectedDTO.setSideA(BigDecimal.valueOf(10L));
 
         @SuppressWarnings("unchecked")
-        ShapeHandler<SquareDtoInV1, SquareDtoOutV1> handler = mock(ShapeHandler.class);
+        ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> handler = mock(ShapeHandler.class);
 
         shapeHandlers.put(fullType, handler);
         when(shapeMapperRegistry.mapParametersToDto(fullType, parameters)).thenReturn(dto);
         when(validator.validate(dto)).thenReturn(Collections.emptySet());
-        when(handler.createShape(dto)).thenReturn(expectedDto);
+        when(handler.createShape(dto)).thenReturn(handlerOutShape);
+        when(shapeMapperRegistry.mapEntityToDto(fullType, handlerOutShape)).thenReturn(expectedDTO);
 
         // when
-        Object result = shapeService.createShape(version, type, parameters);
+        ShapeDTO result = shapeService.createShape(version, type, parameters);
 
         // then
         assertNotNull(result);
-        assertEquals(expectedDto, result);
+        assertEquals(expectedDTO, result);
         verify(handler).createShape(dto);
+        verify(shapeMapperRegistry).mapEntityToDto(fullType, handlerOutShape);
     }
 
     @Test

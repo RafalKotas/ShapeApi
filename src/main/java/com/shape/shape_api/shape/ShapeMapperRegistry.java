@@ -38,8 +38,6 @@ public class ShapeMapperRegistry {
         return mapper.mapToDTO(shape);
     }
 
-
-
     @SuppressWarnings("unchecked")
     public <IN_DTO, ENTITY> ENTITY mapParametersToEntity(String key, Map<String, BigDecimal> parameters) {
         ShapeMapper<IN_DTO, ?, ENTITY> mapper = (ShapeMapper<IN_DTO, ?, ENTITY>) mappers.get(key);

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.shape.shape_api.circle.CircleMath.diameterFromRadius;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -69,16 +70,14 @@ class CircleHandlerV2Test {
 
         when(circleV2Mapper.mapToEntity(dtoInV2)).thenReturn(mappedCircle);
         when(shapeRepository.save(mappedCircle)).thenReturn(savedCircle);
-        when(circleV2Mapper.mapToDTO(savedCircle)).thenReturn(expectedDTO);
 
-        CircleDtoOutV2 result = circleHandlerV2.createShape(dtoInV2);
+        Circle result = circleHandlerV2.createShape(dtoInV2);
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(0, expectedDTO.getDiameter().compareTo(result.getDiameter()),
+        assertEquals(0, expectedDTO.getDiameter().compareTo(diameterFromRadius(result.getRadius())),
                 "The result diameter should match the expectedSecondDiameter(10L)");
         verify(circleV2Mapper).mapToEntity(dtoInV2);
         verify(shapeRepository).save(mappedCircle);
-        verify(circleV2Mapper).mapToDTO(savedCircle);
     }
 }

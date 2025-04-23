@@ -105,14 +105,14 @@ class ShapeControllerV2Test {
         List<ShapeDTO> shapeDTOS = List.of(squareDtoOutV2);
 
         when(shapeService.getShapesByType("v2", type)).thenReturn(shapeDTOS);
-        when(shapeMapperRegistry.mapEntityToDto("v2:square", shapeDTOS)).thenReturn(new SquareResponseDto(BigDecimal.valueOf(5L)));
+        when(shapeMapperRegistry.mapEntityToDto("v2:square", squareDtoOutV2)).thenReturn(squareDtoOutV2);
 
         // when & then
         mockMvc.perform(get("/api/v2/shapes")
                         .param("type", type)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].a").value(5));
+                .andExpect(jsonPath("$[0].side").value(5)); // Upewnij się, że pole ma nazwę 'side'
     }
 
     @Test

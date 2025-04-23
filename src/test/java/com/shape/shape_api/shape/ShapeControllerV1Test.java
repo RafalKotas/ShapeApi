@@ -61,7 +61,8 @@ class ShapeControllerV1Test {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"type\":\"square\",\"parameters\":{\"a\":5}}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.a").value(5));
+                .andExpect(jsonPath("$.type").value("v1:square"))
+                .andExpect(jsonPath("$.sideA").value(5));
     }
 
     @Test

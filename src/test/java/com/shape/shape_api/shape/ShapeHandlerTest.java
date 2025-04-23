@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
 import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShapeHandlerTest {
 
 
-    private static class TestSquareHandler implements ShapeHandler<SquareDtoInV1, SquareDtoOutV1> {
+    private static class TestSquareHandler implements ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> {
 
         @Override
-        public SquareDtoOutV1 createShape(SquareDtoInV1 dto) {
+        public Square createShape(SquareDtoInV1 dto) {
             if (dto == null) {
                 throw new IllegalArgumentException("DTO cannot be null");
             }
-            return new SquareDtoOutV1(dto.getA());
+            return new Square(dto.getA());
         }
 
         @Override
@@ -39,21 +40,21 @@ class ShapeHandlerTest {
     @Test
     void shouldCreateSquareSuccessfully() {
         // given
-        ShapeHandler<SquareDtoInV1, SquareDtoOutV1> handler = new TestSquareHandler();
+        ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> handler = new TestSquareHandler();
         SquareDtoInV1 dto = new SquareDtoInV1(BigDecimal.valueOf(5L));
 
         // when
-        SquareDtoOutV1 result = handler.createShape(dto);
+        Square result = handler.createShape(dto);
 
         // then
         assertNotNull(result);
-        assertEquals(0, BigDecimal.valueOf(5L).compareTo(result.getSideA()));
+        assertEquals(0, BigDecimal.valueOf(5L).compareTo(result.getA()));
     }
 
     @Test
     void shouldReturnCorrectKey() {
         // given
-        ShapeHandler<SquareDtoInV1, SquareDtoOutV1> handler = new TestSquareHandler();
+        ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> handler = new TestSquareHandler();
 
         // then
         assertEquals("v1:square", handler.getKey());
@@ -62,7 +63,7 @@ class ShapeHandlerTest {
     @Test
     void shouldReturnAllShapes() {
         // given
-        ShapeHandler<SquareDtoInV1, SquareDtoOutV1> handler = new TestSquareHandler();
+        ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> handler = new TestSquareHandler();
 
         // when
         List<SquareDtoOutV1> shapes = handler.getAllShapes();
@@ -80,7 +81,7 @@ class ShapeHandlerTest {
     @Test
     void shouldThrowExceptionForNullDto() {
         // given
-        ShapeHandler<SquareDtoInV1, SquareDtoOutV1> handler = new TestSquareHandler();
+        ShapeHandler<SquareDtoInV1, SquareDtoOutV1, Square> handler = new TestSquareHandler();
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> handler.createShape(null));

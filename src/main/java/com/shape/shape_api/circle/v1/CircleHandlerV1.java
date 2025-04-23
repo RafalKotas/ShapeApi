@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Hidden
-public class CircleHandlerV1 implements ShapeHandler<CircleDtoInV1, CircleDtoOutV1> {
+public class CircleHandlerV1 implements ShapeHandler<CircleDtoInV1, CircleDtoOutV1, Circle> {
 
     private final ShapeRepository shapeRepository;
     private final CircleV1Mapper circleV1Mapper;
@@ -37,9 +37,8 @@ public class CircleHandlerV1 implements ShapeHandler<CircleDtoInV1, CircleDtoOut
     }
 
     @Override
-    public CircleDtoOutV1 createShape(CircleDtoInV1 dto) {
+    public Circle createShape(CircleDtoInV1 dto) {
         Circle entity = circleV1Mapper.mapToEntity(dto);
-        Circle saved = shapeRepository.save(entity);
-        return circleV1Mapper.mapToDTO(saved);
+        return shapeRepository.save(entity);
     }
 }

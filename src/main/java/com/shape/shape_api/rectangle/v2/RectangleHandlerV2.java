@@ -12,7 +12,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class RectangleHandlerV2 implements ShapeHandler<RectangleDtoInV2, RectangleDtoOutV2> {
+public class RectangleHandlerV2 implements ShapeHandler<RectangleDtoInV2, RectangleDtoOutV2, Rectangle> {
 
     private final ShapeRepository shapeRepository;
     private final RectangleV2Mapper rectangleV2Mapper;
@@ -36,9 +36,8 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDtoInV2, Rectan
     }
 
     @Override
-    public RectangleDtoOutV2 createShape(RectangleDtoInV2 dto) {
+    public Rectangle createShape(RectangleDtoInV2 dto) {
         Rectangle entity = rectangleV2Mapper.mapToEntity(dto);
-        Rectangle saved = shapeRepository.save(entity);
-        return rectangleV2Mapper.mapToDTO(saved);
+        return shapeRepository.save(entity);
     }
 }

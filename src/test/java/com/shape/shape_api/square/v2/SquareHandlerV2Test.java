@@ -77,11 +77,11 @@ class SquareHandlerV2Test {
         when(squareV2Mapper.mapToDTO(savedSquare)).thenReturn(expectedDTO);
 
         // when
-        SquareDtoOutV2 result = squareHandlerV2.createShape(dtoInV2);
+        Square result = squareHandlerV2.createShape(dtoInV2);
 
         // then
         assertNotNull(result, "The result should not be null");
-        assertEquals(0, expectedDTO.getSide().compareTo(result.getSide()), "The 'diameter' value in the result should be 10L");
+        assertEquals(0, expectedDTO.getSide().compareTo(result.getA()), "The 'a' value in the result should be 5L");
         verify(squareV2Mapper).mapToEntity(dtoInV2);
         verify(shapeRepository).save(mappedSquare);
     }

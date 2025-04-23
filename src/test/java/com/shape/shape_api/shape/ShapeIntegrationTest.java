@@ -56,8 +56,7 @@ class ShapeIntegrationTest {
                 .andExpect(jsonPath("$.height").value(30));
 
         // then
-        mockMvc.perform(get("/api/v2/shapes")
-                        .param("type", "rectangle"))
+        mockMvc.perform(get("/api/v2/shapes?type=rectangle"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].width").value(15))
                 .andExpect(jsonPath("$[0].height").value(30));
@@ -68,10 +67,9 @@ class ShapeIntegrationTest {
         assertThat(saved.getHeight()).isEqualTo(30);
     }
 
-
     @Test
     void shouldReturnValidationErrorForInvalidRectangle() throws Exception {
-        mockMvc.perform(post("/api/v2/shapes")  // Zmieniona ścieżka na v2
+        mockMvc.perform(post("/api/v2/shapes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                     {

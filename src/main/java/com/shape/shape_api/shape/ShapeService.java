@@ -1,6 +1,7 @@
 package com.shape.shape_api.shape;
 
 import com.shape.shape_api.common.exception.ShapeNotSupportedException;
+import com.shape.shape_api.model.Shape;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -16,12 +17,12 @@ import java.util.Set;
 @Service
 public class ShapeService {
 
-    private final Map<String, ShapeHandler<?, ?>> shapeHandlers;
+    private final Map<String, ShapeHandler<?, ? extends ShapeDTO, ? extends Shape>> shapeHandlers;
     private final ShapeMapperRegistry shapeMapperRegistry;
     private final Validator validator;
 
     @Autowired
-    public ShapeService(Map<String, ShapeHandler<?, ?>> shapeHandlers,
+    public ShapeService(Map<String, ShapeHandler<?, ? extends ShapeDTO, ? extends Shape>> shapeHandlers,
                         ShapeMapperRegistry shapeMapperRegistry,
                         Validator validator) {
         this.shapeHandlers = shapeHandlers;
@@ -38,7 +39,8 @@ public class ShapeService {
     public ShapeDTO createShape(String version, String type, Map<String, BigDecimal> parameters) {
         String fullType = version + ":" + type;
 
-        ShapeHandler<Object, ShapeDTO> handler = (ShapeHandler<Object, ShapeDTO>) shapeHandlers.get(fullType);
+        ShapeHandler<Object, ShapeDTO, Shape> handler = (ShapeHandler<Object, ShapeDTO, Shape>) shapeHandlers.get(fullType);
+
         if (handler == null) {
             throw new ShapeNotSupportedException(fullType);
         }
@@ -50,7 +52,8 @@ public class ShapeService {
             throw new ConstraintViolationException("Validation failed", violations);
         }
 
-        return handler.createShape(dto);
+        Shape shape = handler.createShape(dto);
+        return shapeMapperRegistry.mapEntityToDto(fullType, shape);
     }
 
 
@@ -63,11 +66,10 @@ public class ShapeService {
      */
     public List<ShapeDTO> getShapesByType(String version, String type) {
         String fullType = version + ":" + type;
-        ShapeHandler<?, ?> shapeHandler = shapeHandlers.get(fullType);
+        ShapeHandler<?, ? extends ShapeDTO, ?> shapeHandler = (ShapeHandler<?, ? extends ShapeDTO, ?>) shapeHandlers.get(fullType);
         if (shapeHandler == null) {
             throw new ShapeNotSupportedException(fullType);
         }
         return (List<ShapeDTO>) shapeHandler.getAllShapes();
     }
-
 }

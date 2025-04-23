@@ -78,22 +78,20 @@ class RectangleHandlerV2Test {
 
         when(rectangleV2Mapper.mapToEntity(inDTO)).thenReturn(mappedRectangle);
         when(shapeRepository.save(mappedRectangle)).thenReturn(savedRectangle);
-        when(rectangleV2Mapper.mapToDTO(savedRectangle)).thenReturn(expectedDto);
 
         // when
-        RectangleDtoOutV2 result = rectangleHandler.createShape(inDTO);
+        Rectangle result = rectangleHandler.createShape(inDTO);
 
         // then
         assertNotNull(result);
-        BigDecimal expectedH = BigDecimal.valueOf(10L);
-        BigDecimal expectedW = BigDecimal.valueOf(20L);
-        assertEquals(0, expectedH.compareTo(result.getH()),
-                "The result H should match the expected H(10)");
-        assertEquals(0, expectedW.compareTo(result.getW()),
-                "The result W should match the expected W(20)");
+        BigDecimal expectedHeight = BigDecimal.valueOf(10L);
+        BigDecimal expectedWidth = BigDecimal.valueOf(20L);
+        assertEquals(0, expectedHeight.compareTo(result.getHeight()),
+                "The result height should match the expected Height(10)");
+        assertEquals(0, expectedWidth.compareTo(result.getWidth()),
+                "The result width should match the expected W(20)");
 
         verify(rectangleV2Mapper).mapToEntity(inDTO);
         verify(shapeRepository).save(mappedRectangle);
-        verify(rectangleV2Mapper).mapToDTO(savedRectangle);
     }
 }

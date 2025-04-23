@@ -12,7 +12,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class SquareHandlerV2 implements ShapeHandler<SquareDtoInV2, SquareDtoOutV2> {
+public class SquareHandlerV2 implements ShapeHandler<SquareDtoInV2, SquareDtoOutV2, Square> {
 
     private final ShapeRepository shapeRepository;
     private final SquareV2Mapper squareV2Mapper;
@@ -36,9 +36,8 @@ public class SquareHandlerV2 implements ShapeHandler<SquareDtoInV2, SquareDtoOut
     }
 
     @Override
-    public SquareDtoOutV2 createShape(SquareDtoInV2 dto) {
+    public Square createShape(SquareDtoInV2 dto) {
         Square entity = squareV2Mapper.mapToEntity(dto);
-        Square saved = shapeRepository.save(entity);
-        return squareV2Mapper.mapToDTO(saved);
+        return shapeRepository.save(entity);
     }
 }

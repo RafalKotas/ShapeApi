@@ -12,7 +12,7 @@ import java.util.List;
 
 @Hidden
 @Component
-public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, CircleDtoOutV2> {
+public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, CircleDtoOutV2, Circle> {
 
     private final ShapeRepository shapeRepository;
     private final CircleV2Mapper circleV2Mapper;
@@ -35,9 +35,8 @@ public class CircleHandlerV2 implements ShapeHandler<CircleDtoInV2, CircleDtoOut
     }
 
     @Override
-    public CircleDtoOutV2 createShape(CircleDtoInV2 circleDtoInV2) {
+    public Circle createShape(CircleDtoInV2 circleDtoInV2) {
         Circle entity = circleV2Mapper.mapToEntity(circleDtoInV2);
-        Circle saved = shapeRepository.save(entity);
-        return circleV2Mapper.mapToDTO(saved);
+        return shapeRepository.save(entity);
     }
 }

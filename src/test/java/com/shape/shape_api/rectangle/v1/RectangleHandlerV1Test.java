@@ -77,11 +77,9 @@ class RectangleHandlerV1Test {
 
         when(rectangleV1Mapper.mapToEntity(dto)).thenReturn(mappedRectangle);
         when(shapeRepository.save(mappedRectangle)).thenReturn(savedRectangle);
-        when(rectangleV1Mapper.mapToDTO(savedRectangle))
-                .thenReturn(new RectangleDtoOutV1(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L)));
 
         // when
-        RectangleDtoOutV1 result = rectangleHandler.createShape(dto);
+        Rectangle result = rectangleHandler.createShape(dto);
 
         // then
         assertNotNull(result);
@@ -94,7 +92,6 @@ class RectangleHandlerV1Test {
 
         verify(rectangleV1Mapper).mapToEntity(dto);
         verify(shapeRepository).save(mappedRectangle);
-        verify(rectangleV1Mapper).mapToDTO(savedRectangle);
     }
 
 }

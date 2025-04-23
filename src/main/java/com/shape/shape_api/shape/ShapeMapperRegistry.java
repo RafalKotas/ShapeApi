@@ -24,8 +24,8 @@ public class ShapeMapperRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <IN_DTO> IN_DTO mapParametersToDto(String key, Map<String, BigDecimal> parameters) {
-        ShapeMapper<IN_DTO, ?, ?> mapper = (ShapeMapper<IN_DTO, ?, ?>) mappers.get(key);
+    public <I> I mapParametersToDto(String key, Map<String, BigDecimal> parameters) {
+        ShapeMapper<I, ?, ?> mapper = (ShapeMapper<I, ?, ?>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
@@ -34,8 +34,8 @@ public class ShapeMapperRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <OUT_DTO extends ShapeDTO, ENTITY extends Shape> OUT_DTO mapEntityToDto(String key, ENTITY shape) {
-        ShapeMapper<?, OUT_DTO, ENTITY> mapper = (ShapeMapper<?, OUT_DTO, ENTITY>) mappers.get(key);
+    public <O extends ShapeDTO, E extends Shape> O mapEntityToDto(String key, E shape) {
+        ShapeMapper<?, O, E> mapper = (ShapeMapper<?, O, E>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
@@ -43,12 +43,12 @@ public class ShapeMapperRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <IN_DTO, ENTITY> ENTITY mapParametersToEntity(String key, Map<String, BigDecimal> parameters) {
-        ShapeMapper<IN_DTO, ?, ENTITY> mapper = (ShapeMapper<IN_DTO, ?, ENTITY>) mappers.get(key);
+    public <I, E> E mapParametersToEntity(String key, Map<String, BigDecimal> parameters) {
+        ShapeMapper<I, ?, E> mapper = (ShapeMapper<I, ?, E>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);
         }
-        IN_DTO dto = mapper.mapFromParams(parameters);
+        I dto = mapper.mapFromParams(parameters);
         return mapper.mapToEntity(dto);
     }
 }

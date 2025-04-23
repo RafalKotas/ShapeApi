@@ -1,6 +1,5 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Shape;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,13 @@ public class ShapeHandlerConfig {
     }
 
     @Bean
-    public Map<String, ShapeHandler<? extends ShapeDTO, ? extends Shape>> shapeHandlers(
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> circleHandlerV1,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> squareHandlerV1,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> rectangleHandlerV1,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> circleHandlerV2,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> squareHandlerV2,
-            ShapeHandler<? extends ShapeDTO, ? extends Shape> rectangleHandlerV2
+    public Map<String, ShapeHandler<?, ?>> shapeHandlers(
+            ShapeHandler<? , ?> circleHandlerV1,
+            ShapeHandler<? , ?> squareHandlerV1,
+            ShapeHandler<? , ?> rectangleHandlerV1,
+            ShapeHandler<? , ?> circleHandlerV2,
+            ShapeHandler<? , ?> squareHandlerV2,
+            ShapeHandler<? , ?> rectangleHandlerV2
     ) {
         return Map.of(
                 "v1:circle", circleHandlerV1,

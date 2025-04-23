@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.model.Square;
 import com.shape.shape_api.square.v2.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -100,11 +101,11 @@ class ShapeControllerV2Test {
     void shouldGetShapesSuccessfullyForValidType() throws Exception {
         // given
         String type = "square";
+        Square square = new Square(BigDecimal.valueOf(5L));
         SquareDtoOutV2 squareDtoOutV2 = new SquareDtoOutV2(BigDecimal.valueOf(5L));
         List<ShapeDTO> shapeDTOS = List.of(squareDtoOutV2);
 
         when(shapeService.getShapesByType("v2", type)).thenReturn(shapeDTOS);
-        when(shapeMapperRegistry.mapEntityToDto("v2:square", squareDtoOutV2)).thenReturn(squareDtoOutV2);
 
         // when & then
         mockMvc.perform(get("/api/v2/shapes")

@@ -7,7 +7,9 @@ import com.shape.shape_api.shape.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Hidden
 @Component
@@ -30,7 +32,7 @@ public class RectangleHandlerV2 implements ShapeHandler<RectangleDtoInV2, Rectan
     public List<Rectangle> getAllShapes() {
         return shapeRepository.findAllByShapeType(Rectangle.class).stream()
                 .map(shape -> (Rectangle) shape)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

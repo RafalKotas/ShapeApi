@@ -10,8 +10,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
 import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.BAD_REQUEST_400;
@@ -71,12 +71,9 @@ public class ShapeControllerV2 {
             @RequestParam
             @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION_SHORT, example = CIRCLE) String type) {
 
-        List<? extends ShapeDTO> entities = shapeService.getShapesByType(VERSION_2, type);
-        String key = VERSION_2 + ":" + type;
+        List<ShapeDTO> shapeDTOS = shapeService.getShapesByType(VERSION_2, type);
 
-        return entities.stream()
-                .map(entity -> (ShapeDTO) shapeMapperRegistry.mapEntityToDto(key, entity))
-                .collect(Collectors.toList());
+        return new ArrayList<>(shapeDTOS);
     }
 }
 

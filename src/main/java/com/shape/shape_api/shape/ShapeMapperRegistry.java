@@ -38,7 +38,7 @@ public class ShapeMapperRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <OUT_DTO, ENTITY> OUT_DTO mapEntityToDto(String key, ENTITY shape) {
+    public <OUT_DTO extends ShapeDTO, ENTITY extends Shape> OUT_DTO mapEntityToDto(String key, ENTITY shape) {
         ShapeMapper<?, OUT_DTO, ENTITY> mapper = (ShapeMapper<?, OUT_DTO, ENTITY>) mappers.get(key);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for shape type: " + key);

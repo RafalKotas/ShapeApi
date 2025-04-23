@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RectangleV2MapperTest {
 
-    RectangleV2Mapper subject = new RectangleV2Mapper();
+    final RectangleV2Mapper subject = new RectangleV2Mapper();
 
     @Test
     void shouldMapRectangleDTOv2ToRectangleEntity() {

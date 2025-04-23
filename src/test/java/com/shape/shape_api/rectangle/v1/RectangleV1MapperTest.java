@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RectangleV1MapperTest {
 
-    RectangleV1Mapper subject = new RectangleV1Mapper();
+    final RectangleV1Mapper subject = new RectangleV1Mapper();
 
     @Test
     void shouldMapRectangleDTOv1ToRectangleEntity() {

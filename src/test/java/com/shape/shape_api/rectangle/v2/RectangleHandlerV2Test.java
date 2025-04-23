@@ -73,8 +73,7 @@ class RectangleHandlerV2Test {
         // given
         RectangleDtoInV2 inDTO = new RectangleDtoInV2(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
         Rectangle mappedRectangle = new Rectangle(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
-        Rectangle savedRectangle = new Rectangle(1L, BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
-        RectangleDtoOutV2 expectedDto = new RectangleDtoOutV2(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
+        Rectangle savedRectangle = new Rectangle(BigDecimal.valueOf(10L), BigDecimal.valueOf(20L));
 
         when(rectangleV2Mapper.mapToEntity(inDTO)).thenReturn(mappedRectangle);
         when(shapeRepository.save(mappedRectangle)).thenReturn(savedRectangle);

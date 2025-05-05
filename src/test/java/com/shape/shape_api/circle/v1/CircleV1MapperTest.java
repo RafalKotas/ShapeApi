@@ -22,7 +22,19 @@ class CircleV1MapperTest {
     }
 
     @Test
-    void shouldMapFromParamsSuccessfully() {
+    void shouldMapCircleDTOv1ToCircleEntity() {
+        // given
+        CircleDtoInV1 circleDTOv1 = new CircleDtoInV1(BigDecimal.valueOf(10L));
+
+        // when
+        Circle result = subject.mapToEntity(circleDTOv1);
+
+        // then
+        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()));
+    }
+
+    @Test
+    void shouldMapParametersToCircleDTOv1() {
         Map<String, BigDecimal> params = new HashMap<>();
         params.put("radius", new BigDecimal("4.5"));
 
@@ -33,8 +45,8 @@ class CircleV1MapperTest {
     }
 
     @Test
-    void shouldThrowWhenRadiusMissing() {
-        Map<String, BigDecimal> params = new HashMap<>();
+    void shouldThrowExceptionOnEmptyParams() {
+        Map<String, BigDecimal> params = Map.of();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -45,7 +57,7 @@ class CircleV1MapperTest {
     }
 
     @Test
-    void shouldMapToDtoSuccessfully() {
+    void shouldMapCircleEntityToCircleDtoOutV1() {
         Circle circle = new Circle(new BigDecimal("3.2"));
 
         CircleDtoOutV1 dto = subject.mapToDTO(circle);
@@ -56,14 +68,26 @@ class CircleV1MapperTest {
     }
 
     @Test
-    void shouldMapCircleDTOv1ToCircleEntity() {
+    void shouldThrowExceptionIfCircleIsNull() {
         // given
-        CircleDtoInV1 circleDTOv1 = new CircleDtoInV1(BigDecimal.valueOf(10L));
+        Circle circle = null;
 
         // when
-        Circle result = subject.mapToEntity(circleDTOv1);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(circle));
 
         // then
-        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getRadius()));
+        assertEquals("Radius must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionIfCircleHasNullRadius() {
+        // given
+        Circle circle = new Circle(null);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(circle));
+
+        // then
+        assertEquals("Radius must not be null", exception.getMessage());
     }
 }

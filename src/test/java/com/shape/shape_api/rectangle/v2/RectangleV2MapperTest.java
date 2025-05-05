@@ -2,6 +2,7 @@ package com.shape.shape_api.rectangle.v2;
 
 import com.shape.shape_api.model.Rectangle;
 import com.shape.shape_api.rectangle.v2.dto.RectangleDtoInV2;
+import com.shape.shape_api.rectangle.v2.dto.RectangleDtoOutV2;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -62,7 +63,7 @@ class RectangleV2MapperTest {
     }
 
     @Test
-    void testMapFromParamsThrowsWhenHIsMissing() {
+    void shouldThrowExceptionWhenHParamIsMissing() {
         Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
 
         IllegalArgumentException exception = assertThrows(
@@ -74,7 +75,7 @@ class RectangleV2MapperTest {
     }
 
     @Test
-    void testMapFromParamsThrowsWhenWIsMissing() {
+    void shouldThrowExceptionWhenWParamIsMissing() {
         Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
 
         IllegalArgumentException exception = assertThrows(
@@ -86,14 +87,75 @@ class RectangleV2MapperTest {
     }
 
     @Test
-    void testMapFromParamsThrowsWhenBothAreMissing() {
+    void shouldThrowExceptionOnEmptyParams() {
+        // given
         Map<String, BigDecimal> params = Map.of();
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> subject.mapFromParams(params)
-        );
+        // when
+        Executable action = () -> subject.mapFromParams(params);
 
-        assertEquals("Missing required parameters: 'h' and/or 'w'.", exception.getMessage());
+        // then
+        assertThrows(IllegalArgumentException.class, action, "Empty parameters should throw IllegalArgumentException");
+    }
+
+    @Test
+    void shouldMapRectangleEntityToRectangleDtoOutV2() {
+        // given
+        Rectangle rectangle = new Rectangle(new BigDecimal("6"), new BigDecimal("7"));
+
+        // when
+        RectangleDtoOutV2 dto = subject.mapToDTO(rectangle);
+
+        // then
+        assertEquals(new BigDecimal("6"), dto.getH());
+        assertEquals(new BigDecimal("7"), dto.getW());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleIsNull() {
+        // given
+        Rectangle rectangle = null;
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleHasNullHeight() {
+        // given
+        Rectangle rectangle = new Rectangle(null, new BigDecimal("10"));
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleHasNullWidth() {
+        // given
+        Rectangle rectangle = new Rectangle(new BigDecimal("5"), null);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleHasNullHeightAndWidth() {
+        // given
+        Rectangle rectangle = new Rectangle(null, null);
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
     }
 }

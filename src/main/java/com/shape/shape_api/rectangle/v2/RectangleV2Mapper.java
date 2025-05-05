@@ -38,9 +38,14 @@ public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, Rectangl
 
     @Override
     public RectangleDtoOutV2 mapToDTO(Rectangle entity) {
+        if (entity == null || entity.getHeight() == null || entity.getWidth() == null) {
+            throw new IllegalArgumentException("Height and Width must not be null");
+        }
+
         RectangleDtoOutV2 dto = new RectangleDtoOutV2();
         dto.setH(entity.getHeight());
         dto.setW(entity.getWidth());
+
         return dto;
     }
 }

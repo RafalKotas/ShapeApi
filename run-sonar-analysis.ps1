@@ -4,7 +4,6 @@ $mvnCommand = @(
     "clean",
     "verify",
     "sonar:sonar",
-    "sonar:sonar",
     "-Dsonar.projectKey=Shape-API",
     "-Dsonar.projectName=Shape-API",
     "-Dsonar.host.url=http://localhost:9000",

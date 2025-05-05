@@ -46,7 +46,7 @@ public class ShapeControllerV2 {
                             examples = @ExampleObject(
                                     name = RECTANGLE_EXAMPLE_NAME,
                                     summary = RECTANGLE_EXAMPLE_SUMMARY,
-                                    value = RECTANGLE_REQUEST_EXAMPLE
+                                    value = RECTANGLE_V2_REQUEST_EXAMPLE
                             )
                     )
             )

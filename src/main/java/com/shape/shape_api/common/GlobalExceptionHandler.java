@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
-        ApiError error = new ApiError(400, ex.getMessage(), "SHAPE_TYPE_UNKNOWN");
+        ApiError error = new ApiError(400, ex.getMessage(), "NOT_VALID_PARAM");
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

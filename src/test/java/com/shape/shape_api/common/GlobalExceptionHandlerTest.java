@@ -84,7 +84,7 @@ class GlobalExceptionHandlerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         ApiError body = response.getBody();
         assertEquals("An unexpected error occurred", body.getMessage());
-        assertEquals("INTERNAL_ERROR", body.getErrorCode());
+        assertEquals("INTERNAL_SERVER_ERROR", body.getErrorCode());
         assertEquals(500, body.getHttpCode());
         assertNotNull(body.getTimestamp());
     }
@@ -104,6 +104,6 @@ class GlobalExceptionHandlerTest {
         ApiError error = responseEntity.getBody();
         assertEquals(400, error.getHttpCode());
         assertEquals("Invalid argument", error.getMessage());
-        assertEquals("SHAPE_TYPE_UNKNOWN", error.getErrorCode());
+        assertEquals("NOT_VALID_PARAM", error.getErrorCode());
     }
 }

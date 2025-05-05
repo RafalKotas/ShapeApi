@@ -63,7 +63,7 @@ class CircleV2MapperTest {
     }
 
     @Test
-    void shouldThrowExceptionIfCircleIsNull() {
+    void shouldThrowExceptionIfCircleEntityIsNull() {
         // given
         Circle circle = null;
 
@@ -71,7 +71,7 @@ class CircleV2MapperTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(circle));
 
         // then
-        assertEquals("Radius must not be null", exception.getMessage());
+        assertEquals("Circle entity must not be null", exception.getMessage());
     }
 
     @Test

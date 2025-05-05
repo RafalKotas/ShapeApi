@@ -112,7 +112,7 @@ class RectangleV2MapperTest {
     }
 
     @Test
-    void shouldThrowExceptionIfRectangleIsNull() {
+    void shouldThrowExceptionIfRectangleEntityIsNull() {
         // given
         Rectangle rectangle = null;
 
@@ -120,7 +120,7 @@ class RectangleV2MapperTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", exception.getMessage());
+        assertEquals("Rectangle entity must not be null", exception.getMessage());
     }
 
     @Test

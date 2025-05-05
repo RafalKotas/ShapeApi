@@ -38,7 +38,11 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
 
     @Override
     public CircleDtoOutV2 mapToDTO(Circle entity) {
-        if (entity == null || entity.getRadius() == null) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Circle entity must not be null");
+        }
+
+        if (entity.getRadius() == null) {
             throw new IllegalArgumentException("Radius must not be null");
         }
 

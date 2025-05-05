@@ -25,7 +25,11 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
 
     @Override
     public SquareDtoOutV1 mapToDTO(Square entity) {
-        if (entity == null || entity.getA() == null) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Square entity must not be null");
+        }
+
+        if (entity.getA() == null) {
             throw new IllegalArgumentException("Side 'a' must not be null");
         }
 

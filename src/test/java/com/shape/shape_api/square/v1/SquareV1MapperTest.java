@@ -58,7 +58,7 @@ class SquareV1MapperTest {
 
 
     @Test
-    void shouldMapSquareToSquareDtoOutV1() {
+    void shouldMapSquareEntityToSquareDtoOutV1() {
         // given
         Square square = new Square(new BigDecimal("10"));
 
@@ -67,6 +67,18 @@ class SquareV1MapperTest {
 
         // then
         assertEquals(new BigDecimal("10"), dto.getSideA());
+    }
+
+    @Test
+    void shouldThrowExceptionIfSquareIsNull() {
+        // given
+        Square square = null;
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
+
+        // then
+        assertEquals("Side 'a' must not be null", exception.getMessage());
     }
 
     @Test

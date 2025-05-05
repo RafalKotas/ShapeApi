@@ -88,7 +88,7 @@ class RectangleV1MapperTest {
     }
 
     @Test
-    void shouldMapRectangleToRectangleDtoOutV1() {
+    void shouldMapRectangleEntityToRectangleDtoOutV1() {
         // given
         Rectangle rectangle = new Rectangle(new BigDecimal("5"), new BigDecimal("10"));
 
@@ -98,6 +98,18 @@ class RectangleV1MapperTest {
         // then
         assertEquals(new BigDecimal("5"), dto.getHeight());
         assertEquals(new BigDecimal("10"), dto.getWidth());
+    }
+
+    @Test
+    void shouldThrowExceptionIfRectangleIsNull() {
+        // given
+        Rectangle rectangle = null;
+
+        // when
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+
+        // then
+        assertEquals("Height and Width must not be null", exception.getMessage());
     }
 
     @Test

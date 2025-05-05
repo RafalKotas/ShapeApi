@@ -62,12 +62,12 @@ public class SwaggerDescriptions {
         }
     """;
 
-    public static final String RECTANGLE_REQUEST_EXAMPLE = """
+    public static final String RECTANGLE_V2_REQUEST_EXAMPLE = """
                         {
                           "type": "rectangle",
                           "parameters": {
-                            "width": 15,
-                            "height": 30
+                            "w": 15,
+                            "h": 30
                           }
                         }
                     """;

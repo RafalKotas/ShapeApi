@@ -18,7 +18,7 @@ public class SwaggerDescriptions {
     public static final String SHAPE_TYPE_NOT_EMPTY = "Shape type must not be empty";
     public static final String SHAPE_PARAMETERS_NOT_NULL = "Parameters must not be null";
 
-    public static final String CIRCLE = "cirlce";
+    public static final String CIRCLE = "circle";
     public static final String SQUARE = "square";
     public static final String RECTANGLE = "rectangle";
 

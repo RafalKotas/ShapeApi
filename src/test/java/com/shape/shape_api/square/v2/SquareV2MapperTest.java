@@ -64,7 +64,7 @@ class SquareV2MapperTest {
     }
 
     @Test
-    void shouldThrowExceptionIfSquareIsNull() {
+    void shouldThrowExceptionIfSquareEntityIsNull() {
         // given
         Square square = null;
 
@@ -72,25 +72,13 @@ class SquareV2MapperTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
 
         // then
-        assertEquals("Side 'a' must not be null", exception.getMessage());
+        assertEquals("Square entity must not be null", exception.getMessage());
     }
 
     @Test
     void shouldThrowExceptionWhenSideAIsNull() {
         // given
         Square square = new Square(null);
-
-        // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
-
-        // then
-        assertEquals("Side 'a' must not be null", exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenEntityIsNull() {
-        // given
-        Square square = null;
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));

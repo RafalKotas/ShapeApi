@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "b1480416-1650-4f1e-ab19-b46084a15eb7",
+		"name": "ShapeApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44025261",
+		"_collection_link": "https://lunar-resonance-1133722.postman.co/workspace/Rafa%C5%82-Kotas's-Workspace~e5586493-4ccb-48a8-8932-3019ef6429a8/collection/44025261-b1480416-1650-4f1e-ab19-b46084a15eb7?action=share&source=collection_link&creator=44025261"
+	},
+	"item": [
+		{
+			"name": "V2 Shape GET Rectangle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/v2/shapes?type=rectangle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v2",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "rectangle"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V2 Shape GET Square",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v2/shapes?type=square",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v2",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "square"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V2 Shape GET Circle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v2/shapes?type=circle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v2",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "circle"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V1 Shape GET Rectangle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/shapes?type=rectangle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "rectangle"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V1 Shape GET Square",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/shapes?type=square",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "square"
+						}
+					]
+				},
+				"description": "V1 Shape GET Square"
+			},
+			"response": []
+		},
+		{
+			"name": "V1 Shape GET Circle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/shapes?type=circle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "circle"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V2 Shape POST Rectangle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"rectangle\",\r\n    \"parameters\": {\r\n        \"w\": 80,\r\n        \"h\": 24\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v2/shapes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v2",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "v1:square",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V2 Shape POST Square",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"square\",\r\n    \"parameters\": {\r\n        \"a\": 80\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v2/shapes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v2",
+						"shapes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V2 Shape POST Circle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"circle\",\r\n    \"parameters\": {\r\n        \"diameter\" : 80\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v2/shapes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v2",
+						"shapes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V1 Shape POST Rectangle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"rectangle\",\r\n    \"parameters\": {\r\n        \"width\": 5,\r\n        \"height\": 6\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/shapes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"shapes"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "v1:square",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V1 Shape POST Square",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"square\",\r\n    \"parameters\": {\r\n        \"a\": 80\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/shapes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"shapes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "V1 Shape POST Circle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"circle\",\r\n    \"parameters\": {\r\n        \"radius\" : 80\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/shapes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"shapes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

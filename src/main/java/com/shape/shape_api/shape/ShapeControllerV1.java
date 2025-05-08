@@ -50,7 +50,7 @@ public class ShapeControllerV1 {
                             )
                     )
             )
-            @RequestBody @Valid ShapeCreationRequest request
+            @Valid @RequestBody ShapeCreationRequest request
     ) {
         return shapeService.createShape(VERSION_1, request.getType(), request.getParameters());
     }

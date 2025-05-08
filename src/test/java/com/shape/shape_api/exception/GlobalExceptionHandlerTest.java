@@ -1,9 +1,6 @@
 package com.shape.shape_api.exception;
 
 import com.shape.shape_api.error.ApiError;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Path;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +9,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -46,40 +42,13 @@ class GlobalExceptionHandlerTest {
         assertNotNull(body.getTimestamp());
     }
 
-
     @Test
-    void shouldHandleConstraintViolationException() {
+    void shouldHandleInvalidEntityException() {
         // given
-        ConstraintViolationException constraintViolationException = mock(ConstraintViolationException.class);
-
-        Path path = mock(Path.class);
-        when(path.toString()).thenReturn("field");
-
-        ConstraintViolation<?> constraintViolation = mock(ConstraintViolation.class);
-        when(constraintViolation.getPropertyPath()).thenReturn(path);
-        when(constraintViolation.getMessage()).thenReturn("Constraint violation error");
-
-        when(constraintViolationException.getConstraintViolations()).thenReturn(Set.of(constraintViolation));
+        InvalidEntityException exception = new InvalidEntityException("Invalid argument");
 
         // when
-        ResponseEntity<ApiError> response = exceptionHandler.handleConstraintViolation(constraintViolationException);
-
-        // then
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ApiError body = response.getBody();
-        assertEquals("Constraint violation error", body.getMessage());
-        assertEquals("CONSTRAINT_VIOLATION", body.getErrorCode());
-        assertEquals(400, body.getHttpCode());
-        assertNotNull(body.getTimestamp());
-    }
-
-    @Test
-    void shouldHandleIllegalArgumentException() {
-        // given
-        IllegalArgumentException exception = new IllegalArgumentException("Invalid argument");
-
-        // when
-        ResponseEntity<ApiError> responseEntity = exceptionHandler.handleIllegalArgument(exception);
+        ResponseEntity<ApiError> responseEntity = exceptionHandler.handleInvalidEntity(exception);
 
         // then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -87,6 +56,59 @@ class GlobalExceptionHandlerTest {
         ApiError error = responseEntity.getBody();
         assertEquals(400, error.getHttpCode());
         assertEquals("Invalid argument", error.getMessage());
-        assertEquals("NOT_VALID_PARAM", error.getErrorCode());
+        assertEquals("ENTITY_INVALID", error.getErrorCode());
+    }
+
+    @Test
+    void shouldHandleMissingParameterException() {
+        // given
+        MissingParameterException exception = new MissingParameterException("Parameter missing");
+
+        // when
+        ResponseEntity<ApiError> response = exceptionHandler.handleMissingParam(exception);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        ApiError body = response.getBody();
+        assertNotNull(body);
+        assertEquals(400, body.getHttpCode());
+        assertEquals("Parameter missing", body.getMessage());
+        assertEquals("PARAMETER_MISSING", body.getErrorCode());
+    }
+
+
+    @Test
+    void shouldHandleInvalidShapeParameterException() {
+        // given
+        InvalidShapeParameterException exception = new InvalidShapeParameterException("Shape parameter invalid");
+
+        // when
+        ResponseEntity<ApiError> response = exceptionHandler.handleInvalidParams(exception);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        ApiError body = response.getBody();
+        assertNotNull(body);
+        assertEquals(400, body.getHttpCode());
+        assertEquals("Shape parameter invalid", body.getMessage());
+        assertEquals("INVALID_SHAPE_PARAMETER", body.getErrorCode());
+    }
+
+    @Test
+    void shouldHandleShapeNotSupportedException() {
+        // given
+        String unknownType = "v1:triangle";
+        ShapeNotSupportedException exception = new ShapeNotSupportedException(unknownType);
+
+        // when
+        ResponseEntity<ApiError> response = exceptionHandler.handleShapeNotSupported(exception);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        ApiError body = response.getBody();
+        assertNotNull(body);
+        assertEquals(400, body.getHttpCode());
+        assertEquals("Unknown shape type: " + unknownType, body.getMessage());
+        assertEquals("SHAPE_TYPE_UNKNOWN", body.getErrorCode());
     }
 }

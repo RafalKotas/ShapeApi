@@ -2,6 +2,7 @@ package com.shape.shape_api.circle.validator;
 
 import com.shape.shape_api.circle.model.Circle;
 import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.InvalidShapeParameterValueException;
 import com.shape.shape_api.exception.MissingParameterException;
 
 import java.math.BigDecimal;
@@ -15,16 +16,15 @@ public class CircleValidator {
                 .orElseThrow(() -> new MissingParameterException("Missing required parameter: '" + radiusKey + "'"));
 
         if (radius.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidEntityException("Parameter '" + radius + "' must be greater than 0");
+            throw new InvalidShapeParameterValueException("Parameter '" + radius + "' must be greater than 0");
         }
     }
 
     public static void validateEntity(Circle circle) {
-        Optional.ofNullable(circle)
+        Circle validatedCircle = Optional.ofNullable(circle)
                 .orElseThrow(() -> new InvalidEntityException("Circle entity must not be null"));
 
-        if (circle.getRadius() == null) {
-            throw new InvalidEntityException("Radius must not be null");
-        }
+        Optional.ofNullable(validatedCircle.getRadius())
+                .orElseThrow(() -> new InvalidEntityException("Radius must not be null"));
     }
 }

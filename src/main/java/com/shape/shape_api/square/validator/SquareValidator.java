@@ -1,6 +1,7 @@
 package com.shape.shape_api.square.validator;
 
 import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.InvalidShapeParameterValueException;
 import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.square.model.Square;
 
@@ -17,16 +18,15 @@ public class SquareValidator {
                 .orElseThrow(() -> new MissingParameterException("Missing required parameter: '" + aKey + "'"));
 
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidEntityException("'" + a + "' must be greater than 0");
+            throw new InvalidShapeParameterValueException("'" + a + "' must be greater than 0");
         }
     }
 
     public static void validateEntity(Square square) {
-        Optional.ofNullable(square)
+        Square validatedSquare = Optional.ofNullable(square)
                 .orElseThrow(() -> new InvalidEntityException("Square entity must not be null"));
 
-        if (square.getA() == null) {
-            throw new InvalidEntityException("Side 'a' must not be null");
-        }
+        Optional.ofNullable(validatedSquare.getA())
+                .orElseThrow(() -> new InvalidEntityException("Side 'a' must not be null"));
     }
 }

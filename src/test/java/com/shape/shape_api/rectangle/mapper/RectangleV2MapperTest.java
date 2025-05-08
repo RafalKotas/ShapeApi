@@ -1,5 +1,7 @@
 package com.shape.shape_api.rectangle.mapper;
 
+import com.shape.shape_api.error.InvalidEntityException;
+import com.shape.shape_api.error.MissingParameterException;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV2;
 import com.shape.shape_api.rectangle.model.Rectangle;
@@ -59,15 +61,15 @@ class RectangleV2MapperTest {
         Executable action = () -> subject.mapFromParams(parameters);
 
         // then
-        assertThrows(IllegalArgumentException.class, action);
+        assertThrows(MissingParameterException.class, action);
     }
 
     @Test
     void shouldThrowExceptionWhenHParamIsMissing() {
         Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        MissingParameterException exception = assertThrows(
+                MissingParameterException.class,
                 () -> subject.mapFromParams(params)
         );
 
@@ -78,8 +80,8 @@ class RectangleV2MapperTest {
     void shouldThrowExceptionWhenWParamIsMissing() {
         Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        MissingParameterException exception = assertThrows(
+                MissingParameterException.class,
                 () -> subject.mapFromParams(params)
         );
 
@@ -95,7 +97,7 @@ class RectangleV2MapperTest {
         Executable action = () -> subject.mapFromParams(params);
 
         // then
-        assertThrows(IllegalArgumentException.class, action, "Empty parameters should throw IllegalArgumentException");
+        assertThrows(MissingParameterException.class, action, "Empty parameters should throw IllegalArgumentException");
     }
 
     @Test
@@ -117,7 +119,7 @@ class RectangleV2MapperTest {
         Rectangle rectangle = null;
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Rectangle entity must not be null", exception.getMessage());
@@ -129,7 +131,7 @@ class RectangleV2MapperTest {
         Rectangle rectangle = new Rectangle(null, new BigDecimal("10"));
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Height and Width must not be null", exception.getMessage());
@@ -141,7 +143,7 @@ class RectangleV2MapperTest {
         Rectangle rectangle = new Rectangle(new BigDecimal("5"), null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Height and Width must not be null", exception.getMessage());
@@ -153,7 +155,7 @@ class RectangleV2MapperTest {
         Rectangle rectangle = new Rectangle(null, null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(rectangle));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
         assertEquals("Height and Width must not be null", exception.getMessage());

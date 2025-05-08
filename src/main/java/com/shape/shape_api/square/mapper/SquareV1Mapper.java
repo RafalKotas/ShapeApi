@@ -1,5 +1,7 @@
 package com.shape.shape_api.square.mapper;
 
+import com.shape.shape_api.error.InvalidEntityException;
+import com.shape.shape_api.error.MissingParameterException;
 import com.shape.shape_api.shape.ShapeMapper;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
@@ -26,11 +28,11 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
     @Override
     public SquareDtoOutV1 mapToDTO(Square entity) {
         if (entity == null) {
-            throw new IllegalArgumentException("Square entity must not be null");
+            throw new InvalidEntityException("Square entity must not be null");
         }
 
         if (entity.getA() == null) {
-            throw new IllegalArgumentException("Side 'a' must not be null");
+            throw new InvalidEntityException("Side 'a' must not be null");
         }
 
         SquareDtoOutV1 dto = new SquareDtoOutV1();
@@ -43,7 +45,7 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
     public SquareDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
         BigDecimal a = parameters.get("a");
         if (a == null) {
-            throw new IllegalArgumentException("Missing parameter 'a' for square");
+            throw new MissingParameterException("Missing parameter 'a' for square");
         }
         SquareDtoInV1 dtoInV1 = new SquareDtoInV1();
         dtoInV1.setA(a);

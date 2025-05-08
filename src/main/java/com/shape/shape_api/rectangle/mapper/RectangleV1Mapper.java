@@ -1,5 +1,7 @@
 package com.shape.shape_api.rectangle.mapper;
 
+import com.shape.shape_api.error.InvalidEntityException;
+import com.shape.shape_api.error.MissingParameterException;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV1;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV1;
 import com.shape.shape_api.rectangle.model.Rectangle;
@@ -23,7 +25,7 @@ public class RectangleV1Mapper implements ShapeMapper<RectangleDtoInV1, Rectangl
         BigDecimal width = parameters.get("width");
 
         if (height == null || width == null) {
-            throw new IllegalArgumentException("Missing required parameters: 'height' and/or 'width'.");
+            throw new MissingParameterException("Missing required parameters: 'height' and/or 'width'.");
         }
 
         return new RectangleDtoInV1(height, width);
@@ -37,11 +39,11 @@ public class RectangleV1Mapper implements ShapeMapper<RectangleDtoInV1, Rectangl
     @Override
     public RectangleDtoOutV1 mapToDTO(Rectangle entity) {
         if (entity == null) {
-            throw new IllegalArgumentException("Rectangle entity must not be null");
+            throw new InvalidEntityException("Rectangle entity must not be null");
         }
 
         if (entity.getHeight() == null || entity.getWidth() == null) {
-            throw new IllegalArgumentException("Height and Width must not be null");
+            throw new InvalidEntityException("Height and Width must not be null");
         }
 
         RectangleDtoOutV1 dto = new RectangleDtoOutV1();

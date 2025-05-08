@@ -3,6 +3,8 @@ package com.shape.shape_api.circle.mapper;
 import com.shape.shape_api.circle.dto.CircleDtoInV2;
 import com.shape.shape_api.circle.dto.CircleDtoOutV2;
 import com.shape.shape_api.circle.model.Circle;
+import com.shape.shape_api.error.InvalidEntityException;
+import com.shape.shape_api.error.MissingParameterException;
 import com.shape.shape_api.shape.ShapeMapper;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +25,7 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
     public CircleDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
         BigDecimal diameter = parameters.get("diameter");
         if (diameter == null) {
-            throw new IllegalArgumentException("Parameter 'diameter' is required for circle.");
+            throw new MissingParameterException("Parameter 'diameter' is required for circle.");
         }
         CircleDtoInV2 dtoInV2 = new CircleDtoInV2();
         dtoInV2.setDiameter(diameter);
@@ -39,11 +41,11 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
     @Override
     public CircleDtoOutV2 mapToDTO(Circle entity) {
         if (entity == null) {
-            throw new IllegalArgumentException("Circle entity must not be null");
+            throw new InvalidEntityException("Circle entity must not be null");
         }
 
         if (entity.getRadius() == null) {
-            throw new IllegalArgumentException("Radius must not be null");
+            throw new InvalidEntityException("Radius must not be null");
         }
 
         CircleDtoOutV2 circleDtoOutV2 = new CircleDtoOutV2();

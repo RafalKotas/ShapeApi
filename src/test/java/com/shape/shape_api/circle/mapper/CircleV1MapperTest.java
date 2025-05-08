@@ -3,6 +3,8 @@ package com.shape.shape_api.circle.mapper;
 import com.shape.shape_api.circle.dto.CircleDtoInV1;
 import com.shape.shape_api.circle.dto.CircleDtoOutV1;
 import com.shape.shape_api.circle.model.Circle;
+import com.shape.shape_api.error.InvalidEntityException;
+import com.shape.shape_api.error.MissingParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,8 +50,8 @@ class CircleV1MapperTest {
     void shouldThrowExceptionOnEmptyParams() {
         Map<String, BigDecimal> params = Map.of();
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        MissingParameterException exception = assertThrows(
+                MissingParameterException.class,
                 () -> subject.mapFromParams(params)
         );
 
@@ -73,7 +75,7 @@ class CircleV1MapperTest {
         Circle circle = null;
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(circle));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(circle));
 
         // then
         assertEquals("Circle entity must not be null", exception.getMessage());
@@ -85,7 +87,7 @@ class CircleV1MapperTest {
         Circle circle = new Circle(null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(circle));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(circle));
 
         // then
         assertEquals("Radius must not be null", exception.getMessage());

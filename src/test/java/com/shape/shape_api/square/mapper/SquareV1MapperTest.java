@@ -1,5 +1,7 @@
 package com.shape.shape_api.square.mapper;
 
+import com.shape.shape_api.error.InvalidEntityException;
+import com.shape.shape_api.error.MissingParameterException;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
 import com.shape.shape_api.square.model.Square;
@@ -53,7 +55,7 @@ class SquareV1MapperTest {
         Executable action = () -> subject.mapFromParams(parameters);
 
         // then
-        assertThrows(IllegalArgumentException.class, action, "Empty parameters should throw IllegalArgumentException");
+        assertThrows(MissingParameterException.class, action, "Empty parameters should throw IllegalArgumentException");
     }
 
 
@@ -75,7 +77,7 @@ class SquareV1MapperTest {
         Square square = null;
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(square));
 
         // then
         assertEquals("Square entity must not be null", exception.getMessage());
@@ -87,7 +89,7 @@ class SquareV1MapperTest {
         Square square = new Square(null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapToDTO(square));
+        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(square));
 
         // then
         assertEquals("Side 'a' must not be null", exception.getMessage());

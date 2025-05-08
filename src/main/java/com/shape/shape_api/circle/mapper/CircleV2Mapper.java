@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.shape.shape_api.circle.CircleMath.radiusFromDiameter;
 
@@ -23,13 +24,10 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
 
     @Override
     public CircleDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
-        BigDecimal diameter = parameters.get("diameter");
-        if (diameter == null) {
-            throw new MissingParameterException("Parameter 'diameter' is required for circle.");
-        }
-        CircleDtoInV2 dtoInV2 = new CircleDtoInV2();
-        dtoInV2.setDiameter(diameter);
-        return dtoInV2;
+        BigDecimal diameter = Optional.ofNullable(parameters.get("diameter"))
+                .orElseThrow(() -> new MissingParameterException("Parameter 'diameter' is required for circle."));
+
+        return new CircleDtoInV2(diameter);
     }
 
     @Override
@@ -40,17 +38,12 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
 
     @Override
     public CircleDtoOutV2 mapToDTO(Circle entity) {
-        if (entity == null) {
-            throw new InvalidEntityException("Circle entity must not be null");
-        }
+        Optional.ofNullable(entity)
+                .orElseThrow(() -> new InvalidEntityException("Circle entity must not be null"));
 
-        if (entity.getRadius() == null) {
-            throw new InvalidEntityException("Radius must not be null");
-        }
+        Optional.ofNullable(entity.getRadius())
+                .orElseThrow(() -> new InvalidEntityException("Radius must not be null"));
 
-        CircleDtoOutV2 circleDtoOutV2 = new CircleDtoOutV2();
-        circleDtoOutV2.setDiameter(entity.getRadius().multiply(BigDecimal.valueOf(2)));
-
-        return circleDtoOutV2;
+        return new CircleDtoOutV2(entity.getRadius().multiply(BigDecimal.valueOf(2)));
     }
 }

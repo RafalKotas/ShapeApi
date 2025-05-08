@@ -57,7 +57,7 @@ class RectangleV1MapperTest {
 
         // then
         MissingParameterException ex = assertThrows(MissingParameterException.class, action);
-        assertEquals("Missing required parameters: 'height' and/or 'width'.", ex.getMessage());
+        assertEquals("Parameter 'height' is required for rectangle.", ex.getMessage());
     }
 
     @Test
@@ -70,7 +70,7 @@ class RectangleV1MapperTest {
 
         // then
         MissingParameterException ex = assertThrows(MissingParameterException.class, action);
-        assertEquals("Missing required parameters: 'height' and/or 'width'.", ex.getMessage());
+        assertEquals("Parameter 'width' is required for rectangle.", ex.getMessage());
     }
 
     @Test
@@ -83,7 +83,7 @@ class RectangleV1MapperTest {
 
         // then
         MissingParameterException ex = assertThrows(MissingParameterException.class, action);
-        assertEquals("Missing required parameters: 'height' and/or 'width'.", ex.getMessage());
+        assertEquals("Parameter 'height' is required for rectangle.", ex.getMessage());
     }
 
     @Test
@@ -117,7 +117,7 @@ class RectangleV1MapperTest {
         InvalidEntityException ex = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", ex.getMessage());
+        assertEquals("Height must not be null", ex.getMessage());
     }
 
     @Test
@@ -129,7 +129,7 @@ class RectangleV1MapperTest {
         InvalidEntityException ex = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", ex.getMessage());
+        assertEquals("Width must not be null", ex.getMessage());
     }
 
     @Test
@@ -141,6 +141,6 @@ class RectangleV1MapperTest {
         InvalidEntityException ex = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", ex.getMessage());
+        assertEquals("Height must not be null", ex.getMessage());
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, RectangleDtoOutV2, Rectangle> {
@@ -21,16 +22,13 @@ public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, Rectangl
 
     @Override
     public RectangleDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
-        BigDecimal h = parameters.get("h");
-        BigDecimal w = parameters.get("w");
+        BigDecimal h = Optional.ofNullable(parameters.get("h"))
+                .orElseThrow(() -> new MissingParameterException("Parameter 'h' is required for rectangle."));
 
-        if (h == null || w == null) {
-            throw new MissingParameterException("Missing required parameters: 'h' and/or 'w'.");
-        }
-        RectangleDtoInV2 dtoInV2 = new RectangleDtoInV2();
-        dtoInV2.setH(h);
-        dtoInV2.setW(w);
-        return dtoInV2;
+        BigDecimal w = Optional.ofNullable(parameters.get("w"))
+                .orElseThrow(() -> new MissingParameterException("Parameter 'w' is required for rectangle."));
+
+        return new RectangleDtoInV2(h, w);
     }
 
     @Override
@@ -40,13 +38,14 @@ public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, Rectangl
 
     @Override
     public RectangleDtoOutV2 mapToDTO(Rectangle entity) {
-        if (entity == null) {
-            throw new InvalidEntityException("Rectangle entity must not be null");
-        }
+        Rectangle rect = Optional.ofNullable(entity)
+                .orElseThrow(() -> new InvalidEntityException("Rectangle entity must not be null"));
 
-        if (entity.getHeight() == null || entity.getWidth() == null) {
-            throw new InvalidEntityException("Height and Width must not be null");
-        }
+        Optional.ofNullable(rect.getHeight())
+                .orElseThrow(() -> new InvalidEntityException("Height must not be null"));
+
+        Optional.ofNullable(rect.getWidth())
+                .orElseThrow(() -> new InvalidEntityException("Width must not be null"));
 
         RectangleDtoOutV2 dto = new RectangleDtoOutV2();
         dto.setH(entity.getHeight());

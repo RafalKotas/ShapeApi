@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class SquareV2Mapper implements ShapeMapper<SquareDtoInV2, SquareDtoOutV2, Square> {
@@ -27,29 +28,21 @@ public class SquareV2Mapper implements ShapeMapper<SquareDtoInV2, SquareDtoOutV2
 
     @Override
     public SquareDtoOutV2 mapToDTO(Square entity) {
-        if (entity == null) {
-            throw new InvalidEntityException("Square entity must not be null");
-        }
+        Square square = Optional.ofNullable(entity)
+                .orElseThrow(() -> new InvalidEntityException("Square entity must not be null"));
 
-        if (entity.getA() == null) {
-            throw new InvalidEntityException("Side 'a' must not be null");
-        }
+        BigDecimal a = Optional.ofNullable(square.getA())
+                .orElseThrow(() -> new InvalidEntityException("Side 'a' must not be null"));
 
-        SquareDtoOutV2 dto = new SquareDtoOutV2();
-        dto.setSide(entity.getA());
-
-        return dto;
+        return new SquareDtoOutV2(a);
     }
 
     @Override
     public SquareDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
-        BigDecimal a = parameters.get("a");
-        if (a == null) {
-            throw new MissingParameterException("Parameter 'a' (side length) is required for square.");
-        }
-        SquareDtoInV2 squareDtoInV2 = new SquareDtoInV2();
-        squareDtoInV2.setSide(a);
-        return squareDtoInV2;
+        BigDecimal a = Optional.ofNullable(parameters.get("a"))
+                .orElseThrow(() -> new MissingParameterException("Parameter 'a' is required for square."));
+
+        return new SquareDtoInV2(a);
     }
 }
 

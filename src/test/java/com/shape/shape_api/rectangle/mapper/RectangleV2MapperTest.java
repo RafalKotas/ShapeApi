@@ -73,7 +73,7 @@ class RectangleV2MapperTest {
                 () -> subject.mapFromParams(params)
         );
 
-        assertEquals("Missing required parameters: 'h' and/or 'w'.", exception.getMessage());
+        assertEquals("Parameter 'h' is required for rectangle.", exception.getMessage());
     }
 
     @Test
@@ -85,7 +85,7 @@ class RectangleV2MapperTest {
                 () -> subject.mapFromParams(params)
         );
 
-        assertEquals("Missing required parameters: 'h' and/or 'w'.", exception.getMessage());
+        assertEquals("Parameter 'w' is required for rectangle.", exception.getMessage());
     }
 
     @Test
@@ -134,7 +134,7 @@ class RectangleV2MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", exception.getMessage());
+        assertEquals("Height must not be null", exception.getMessage());
     }
 
     @Test
@@ -146,7 +146,7 @@ class RectangleV2MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", exception.getMessage());
+        assertEquals("Width must not be null", exception.getMessage());
     }
 
     @Test
@@ -158,6 +158,6 @@ class RectangleV2MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Height and Width must not be null", exception.getMessage());
+        assertEquals("Height must not be null", exception.getMessage());
     }
 }

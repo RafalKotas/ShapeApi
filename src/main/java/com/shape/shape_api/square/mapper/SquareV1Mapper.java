@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1, Square> {
@@ -20,6 +21,14 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
     }
 
     @Override
+    public SquareDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
+        BigDecimal a = Optional.ofNullable(parameters.get("a"))
+                .orElseThrow(() -> new MissingParameterException("Parameter 'a' is required for square."));
+
+        return new SquareDtoInV1(a);
+    }
+
+    @Override
     public Square mapToEntity(SquareDtoInV1 squareDtoInV1) {
         BigDecimal a = squareDtoInV1.getA();
         return new Square(a);
@@ -27,28 +36,12 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
 
     @Override
     public SquareDtoOutV1 mapToDTO(Square entity) {
-        if (entity == null) {
-            throw new InvalidEntityException("Square entity must not be null");
-        }
+        Square square = Optional.ofNullable(entity)
+                .orElseThrow(() -> new InvalidEntityException("Square entity must not be null"));
 
-        if (entity.getA() == null) {
-            throw new InvalidEntityException("Side 'a' must not be null");
-        }
+        BigDecimal side = Optional.ofNullable(square.getA())
+                .orElseThrow(() -> new InvalidEntityException("Side 'a' must not be null"));
 
-        SquareDtoOutV1 dto = new SquareDtoOutV1();
-        dto.setSideA(entity.getA());
-
-        return dto;
-    }
-
-    @Override
-    public SquareDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
-        BigDecimal a = parameters.get("a");
-        if (a == null) {
-            throw new MissingParameterException("Missing parameter 'a' for square");
-        }
-        SquareDtoInV1 dtoInV1 = new SquareDtoInV1();
-        dtoInV1.setA(a);
-        return dtoInV1;
+        return new SquareDtoOutV1(side);
     }
 }

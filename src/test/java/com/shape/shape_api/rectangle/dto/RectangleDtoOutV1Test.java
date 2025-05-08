@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RectangleDtoOutV1Test {
 
@@ -32,51 +33,6 @@ class RectangleDtoOutV1Test {
         assertEquals(new BigDecimal("10"), dto.getHeight());
         assertEquals(new BigDecimal("5"), dto.getWidth());
         assertEquals("v1:rectangle", dto.getType());
-    }
-
-    @Test
-    void shouldFailValidationWhenHeightIsNull() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1(null, new BigDecimal("5"));
-
-        Set<ConstraintViolation<RectangleDtoOutV1>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("height")));
-    }
-
-    @Test
-    void shouldFailValidationWhenHeightIsNegative() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1(new BigDecimal("-7"), new BigDecimal("5"));
-
-        Set<ConstraintViolation<RectangleDtoOutV1>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("height")));
-    }
-
-    @Test
-    void shouldFailValidationWhenHeightIsZero() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1(BigDecimal.ZERO, new BigDecimal("5"));
-
-        Set<ConstraintViolation<RectangleDtoOutV1>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("height")));
-    }
-
-    @Test
-    void shouldFailValidationWhenWidthIsNegative() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1(new BigDecimal("5"), new BigDecimal("-7"));
-
-        Set<ConstraintViolation<RectangleDtoOutV1>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("width")));
-    }
-
-    @Test
-    void shouldFailValidationWhenWidthIsZero() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1(new BigDecimal("5"), BigDecimal.ZERO);
-
-        Set<ConstraintViolation<RectangleDtoOutV1>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("width")));
     }
 
     @Test

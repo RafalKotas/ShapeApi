@@ -3,8 +3,8 @@ package com.shape.shape_api.circle.mapper;
 import com.shape.shape_api.circle.dto.CircleDtoInV2;
 import com.shape.shape_api.circle.dto.CircleDtoOutV2;
 import com.shape.shape_api.circle.model.Circle;
-import com.shape.shape_api.error.InvalidEntityException;
-import com.shape.shape_api.error.MissingParameterException;
+import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.MissingParameterException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 

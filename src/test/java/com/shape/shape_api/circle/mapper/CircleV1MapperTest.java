@@ -3,13 +3,12 @@ package com.shape.shape_api.circle.mapper;
 import com.shape.shape_api.circle.dto.CircleDtoInV1;
 import com.shape.shape_api.circle.dto.CircleDtoOutV1;
 import com.shape.shape_api.circle.model.Circle;
-import com.shape.shape_api.error.InvalidEntityException;
-import com.shape.shape_api.error.MissingParameterException;
+import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.MissingParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,8 +36,7 @@ class CircleV1MapperTest {
 
     @Test
     void shouldMapParametersToCircleDTOv1() {
-        Map<String, BigDecimal> params = new HashMap<>();
-        params.put("radius", new BigDecimal("4.5"));
+        Map<String, BigDecimal> params = Map.of("radius", BigDecimal.valueOf(4.5));
 
         CircleDtoInV1 dto = subject.mapFromParams(params);
 
@@ -55,7 +53,7 @@ class CircleV1MapperTest {
                 () -> subject.mapFromParams(params)
         );
 
-        assertEquals("Parameter 'radius' is required for circle.", exception.getMessage());
+        assertEquals("Missing required parameter: 'radius'", exception.getMessage());
     }
 
     @Test

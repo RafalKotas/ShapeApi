@@ -1,7 +1,7 @@
 package com.shape.shape_api.rectangle.mapper;
 
-import com.shape.shape_api.error.InvalidEntityException;
-import com.shape.shape_api.error.MissingParameterException;
+import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV1;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV1;
 import com.shape.shape_api.rectangle.model.Rectangle;
@@ -57,7 +57,7 @@ class RectangleV1MapperTest {
 
         // then
         MissingParameterException ex = assertThrows(MissingParameterException.class, action);
-        assertEquals("Parameter 'height' is required for rectangle.", ex.getMessage());
+        assertEquals("Missing required parameter: 'height'", ex.getMessage());
     }
 
     @Test
@@ -70,7 +70,7 @@ class RectangleV1MapperTest {
 
         // then
         MissingParameterException ex = assertThrows(MissingParameterException.class, action);
-        assertEquals("Parameter 'width' is required for rectangle.", ex.getMessage());
+        assertEquals("Missing required parameter: 'width'", ex.getMessage());
     }
 
     @Test
@@ -83,7 +83,7 @@ class RectangleV1MapperTest {
 
         // then
         MissingParameterException ex = assertThrows(MissingParameterException.class, action);
-        assertEquals("Parameter 'height' is required for rectangle.", ex.getMessage());
+        assertEquals("Missing required parameter: 'height'", ex.getMessage());
     }
 
     @Test

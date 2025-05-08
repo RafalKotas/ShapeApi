@@ -1,7 +1,7 @@
 package com.shape.shape_api.rectangle.mapper;
 
-import com.shape.shape_api.error.InvalidEntityException;
-import com.shape.shape_api.error.MissingParameterException;
+import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV2;
 import com.shape.shape_api.rectangle.model.Rectangle;
@@ -73,7 +73,7 @@ class RectangleV2MapperTest {
                 () -> subject.mapFromParams(params)
         );
 
-        assertEquals("Parameter 'h' is required for rectangle.", exception.getMessage());
+        assertEquals("Missing required parameter: 'h'", exception.getMessage());
     }
 
     @Test
@@ -85,7 +85,7 @@ class RectangleV2MapperTest {
                 () -> subject.mapFromParams(params)
         );
 
-        assertEquals("Parameter 'w' is required for rectangle.", exception.getMessage());
+        assertEquals("Missing required parameter: 'w'", exception.getMessage());
     }
 
     @Test

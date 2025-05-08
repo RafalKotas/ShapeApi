@@ -1,7 +1,7 @@
 package com.shape.shape_api.square.mapper;
 
-import com.shape.shape_api.error.InvalidEntityException;
-import com.shape.shape_api.error.MissingParameterException;
+import com.shape.shape_api.exception.InvalidEntityException;
+import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
 import com.shape.shape_api.square.model.Square;

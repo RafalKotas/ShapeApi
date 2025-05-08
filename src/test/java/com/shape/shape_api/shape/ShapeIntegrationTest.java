@@ -110,8 +110,8 @@ class ShapeIntegrationTest {
         // then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         Map responseBody = response.getBody();
-        assertEquals("CONSTRAINT_VIOLATION", responseBody.get("errorCode"));
-        assertEquals("Side 'w' must be greater than 0", responseBody.get("message"));
+        assertEquals("INVALID_SHAPE_PARAMETER", responseBody.get("errorCode"));
+        assertEquals("'w' must be greater than 0", responseBody.get("message"));
         assertEquals(400, responseBody.get("httpCode"));
     }
 

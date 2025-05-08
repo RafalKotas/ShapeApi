@@ -3,14 +3,12 @@ package com.shape.shape_api.circle.mapper;
 import com.shape.shape_api.circle.dto.CircleDtoInV1;
 import com.shape.shape_api.circle.dto.CircleDtoOutV1;
 import com.shape.shape_api.circle.model.Circle;
-import com.shape.shape_api.error.InvalidEntityException;
-import com.shape.shape_api.error.MissingParameterException;
+import com.shape.shape_api.circle.validator.CircleValidator;
 import com.shape.shape_api.shape.ShapeMapper;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1, Circle> {
@@ -22,10 +20,8 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
 
     @Override
     public CircleDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
-        BigDecimal radius = Optional.ofNullable(parameters.get("radius"))
-                .orElseThrow(() -> new MissingParameterException("Parameter 'radius' is required for circle."));
-
-        return new CircleDtoInV1(radius);
+        CircleValidator.validateParams(parameters, "radius");
+        return new CircleDtoInV1(parameters.get("radius"));
     }
 
     @Override
@@ -35,12 +31,7 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
 
     @Override
     public CircleDtoOutV1 mapToDTO(Circle entity) {
-        Optional.ofNullable(entity)
-                .orElseThrow(() -> new InvalidEntityException("Circle entity must not be null"));
-
-        Optional.ofNullable(entity.getRadius())
-                .orElseThrow(() -> new InvalidEntityException("Radius must not be null"));
-
+        CircleValidator.validateEntity(entity);
         return new CircleDtoOutV1(entity.getRadius());
     }
 }

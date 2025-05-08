@@ -1,20 +1,17 @@
 package com.shape.shape_api.rectangle.dto;
 
 import com.shape.shape_api.shape.ShapeDTO;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 public class RectangleDtoInV2 extends ShapeDTO {
     private static final String V2_RECTANGLE_TYPE = "v2:rectangle";
 
-    @NotNull(message = "Side 'h' must not be null")
-    @Min(value = 1, message = "Side 'h' must be greater than 0")
     private BigDecimal h;
-
-    @NotNull(message = "Side 'w' must not be null")
-    @Min(value = 1, message = "Side 'w' must be greater than 0")
     private BigDecimal w;
 
     public RectangleDtoInV2(BigDecimal h, BigDecimal w) {
@@ -25,21 +22,5 @@ public class RectangleDtoInV2 extends ShapeDTO {
 
     public RectangleDtoInV2() {
         super(V2_RECTANGLE_TYPE);
-    }
-
-    public BigDecimal getH() {
-        return this.h;
-    }
-
-    public BigDecimal getW() {
-        return this.w;
-    }
-
-    public void setH(@NotNull(message = "Side 'h' must not be null") @Min(value = 1, message = "Side 'h' must be greater than 0") BigDecimal h) {
-        this.h = h;
-    }
-
-    public void setW(@NotNull(message = "Side 'w' must not be null") @Min(value = 1, message = "Side 'w' must be greater than 0") BigDecimal w) {
-        this.w = w;
     }
 }

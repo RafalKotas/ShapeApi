@@ -20,12 +20,4 @@ public class SquareDtoOutV2 extends ShapeDTO {
     public SquareDtoOutV2() {
         super("v2:square");
     }
-
-    public void setSide(BigDecimal side) {
-        this.side = side;
-    }
-
-    public BigDecimal getSide() {
-        return this.side;
-    }
 }

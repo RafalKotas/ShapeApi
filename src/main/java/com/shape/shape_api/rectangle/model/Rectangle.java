@@ -3,11 +3,17 @@ package com.shape.shape_api.rectangle.model;
 import com.shape.shape_api.domain.Shape;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @DiscriminatorValue("rectangle")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Rectangle extends Shape {
 
     private BigDecimal height;
@@ -18,24 +24,5 @@ public class Rectangle extends Shape {
         super();
         this.height = height;
         this.width = width;
-    }
-
-    public Rectangle() {
-    }
-
-    public BigDecimal getWidth() {
-        return this.width;
-    }
-
-    public BigDecimal getHeight() {
-        return this.height;
-    }
-
-    public void setWidth(BigDecimal width) {
-        this.width = width;
-    }
-
-    public void setHeight(BigDecimal height) {
-        this.height = height;
     }
 }

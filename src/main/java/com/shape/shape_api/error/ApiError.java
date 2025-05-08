@@ -1,12 +1,16 @@
 package com.shape.shape_api.error;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 import static com.shape.shape_api.error.ErrorTypes.SHAPE_TYPE_UNKNOWN;
 
 @Schema(description = "Standardized error response")
+@Getter
+@Setter
 public class ApiError {
 
     @Schema(description = "HTTP status code", example = "400")
@@ -25,37 +29,5 @@ public class ApiError {
         this.httpCode = httpCode;
         this.message = message;
         this.errorCode = errorCode;
-    }
-
-    public void setHttpCode(int httpCode) {
-        this.httpCode = httpCode;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getHttpCode() {
-        return httpCode;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }

@@ -1,9 +1,13 @@
 package com.shape.shape_api.circle.dto;
 
 import com.shape.shape_api.shape.ShapeDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 public class CircleDtoInV2 extends ShapeDTO {
     private BigDecimal diameter;
 
@@ -14,14 +18,6 @@ public class CircleDtoInV2 extends ShapeDTO {
 
     public CircleDtoInV2() {
         super("v2:circle");
-    }
-
-    public BigDecimal getDiameter() {
-        return diameter;
-    }
-
-    public void setDiameter(BigDecimal diameter) {
-        this.diameter = diameter;
     }
 }
 

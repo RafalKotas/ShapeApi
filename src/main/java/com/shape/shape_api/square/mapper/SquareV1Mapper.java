@@ -1,0 +1,52 @@
+package com.shape.shape_api.square.mapper;
+
+import com.shape.shape_api.shape.ShapeMapper;
+import com.shape.shape_api.square.dto.SquareDtoInV1;
+import com.shape.shape_api.square.dto.SquareDtoOutV1;
+import com.shape.shape_api.square.model.Square;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+@Component
+public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1, Square> {
+
+    @Override
+    public String getKey() {
+        return "v1:square";
+    }
+
+    @Override
+    public Square mapToEntity(SquareDtoInV1 squareDtoInV1) {
+        BigDecimal a = squareDtoInV1.getA();
+        return new Square(a);
+    }
+
+    @Override
+    public SquareDtoOutV1 mapToDTO(Square entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Square entity must not be null");
+        }
+
+        if (entity.getA() == null) {
+            throw new IllegalArgumentException("Side 'a' must not be null");
+        }
+
+        SquareDtoOutV1 dto = new SquareDtoOutV1();
+        dto.setSideA(entity.getA());
+
+        return dto;
+    }
+
+    @Override
+    public SquareDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
+        BigDecimal a = parameters.get("a");
+        if (a == null) {
+            throw new IllegalArgumentException("Missing parameter 'a' for square");
+        }
+        SquareDtoInV1 dtoInV1 = new SquareDtoInV1();
+        dtoInV1.setA(a);
+        return dtoInV1;
+    }
+}

@@ -1,11 +1,11 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.circle.v1.CircleHandlerV1;
-import com.shape.shape_api.circle.v2.CircleHandlerV2;
-import com.shape.shape_api.rectangle.v1.RectangleHandlerV1;
-import com.shape.shape_api.rectangle.v2.RectangleHandlerV2;
-import com.shape.shape_api.square.v1.SquareHandlerV1;
-import com.shape.shape_api.square.v2.SquareHandlerV2;
+import com.shape.shape_api.circle.handler.CircleHandlerV1;
+import com.shape.shape_api.circle.handler.CircleHandlerV2;
+import com.shape.shape_api.rectangle.handler.RectangleHandlerV1;
+import com.shape.shape_api.rectangle.handler.RectangleHandlerV2;
+import com.shape.shape_api.square.handler.SquareHandlerV1;
+import com.shape.shape_api.square.handler.SquareHandlerV2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

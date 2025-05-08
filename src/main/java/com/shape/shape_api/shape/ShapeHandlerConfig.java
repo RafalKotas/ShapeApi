@@ -1,15 +1,15 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.circle.v1.dto.CircleDtoInV1;
-import com.shape.shape_api.circle.v2.dto.CircleDtoInV2;
-import com.shape.shape_api.model.Circle;
-import com.shape.shape_api.model.Rectangle;
-import com.shape.shape_api.model.Shape;
-import com.shape.shape_api.model.Square;
-import com.shape.shape_api.rectangle.v1.dto.RectangleDtoInV1;
-import com.shape.shape_api.rectangle.v2.dto.RectangleDtoInV2;
-import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
-import com.shape.shape_api.square.v2.dto.SquareDtoInV2;
+import com.shape.shape_api.circle.dto.CircleDtoInV1;
+import com.shape.shape_api.circle.dto.CircleDtoInV2;
+import com.shape.shape_api.circle.model.Circle;
+import com.shape.shape_api.domain.Shape;
+import com.shape.shape_api.rectangle.dto.RectangleDtoInV1;
+import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
+import com.shape.shape_api.rectangle.model.Rectangle;
+import com.shape.shape_api.square.dto.SquareDtoInV1;
+import com.shape.shape_api.square.dto.SquareDtoInV2;
+import com.shape.shape_api.square.model.Square;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

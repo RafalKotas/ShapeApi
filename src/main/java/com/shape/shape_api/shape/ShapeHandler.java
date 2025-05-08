@@ -1,6 +1,6 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Shape;
+import com.shape.shape_api.domain.Shape;
 
 import java.util.List;
 

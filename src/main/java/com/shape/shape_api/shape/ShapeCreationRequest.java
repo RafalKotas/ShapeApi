@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
+import static com.shape.shape_api.documentation.SwaggerDescriptions.*;
 
 @Schema(description = SHAPE_CREATION_REQUEST_DESCRIPTION)
 public class ShapeCreationRequest {

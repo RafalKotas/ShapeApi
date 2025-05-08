@@ -1,6 +1,6 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Shape;
+import com.shape.shape_api.domain.Shape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

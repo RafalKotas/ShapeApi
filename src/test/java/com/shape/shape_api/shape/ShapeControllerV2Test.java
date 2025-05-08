@@ -1,6 +1,6 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.square.v2.dto.SquareDtoOutV2;
+import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

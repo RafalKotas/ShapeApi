@@ -1,7 +1,7 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Square;
-import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.square.dto.SquareDtoInV1;
+import com.shape.shape_api.square.model.Square;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

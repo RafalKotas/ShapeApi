@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
-import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.BAD_REQUEST_400;
-import static com.shape.shape_api.shape.docs.SwaggerResponseCodes.OK_200;
+import static com.shape.shape_api.documentation.SwaggerDescriptions.*;
+import static com.shape.shape_api.documentation.SwaggerResponseCodes.BAD_REQUEST_400;
+import static com.shape.shape_api.documentation.SwaggerResponseCodes.OK_200;
 
 @RestController
 @RequestMapping("/api/v2/shapes")

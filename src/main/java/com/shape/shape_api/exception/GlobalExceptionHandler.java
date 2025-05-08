@@ -15,6 +15,12 @@ import static com.shape.shape_api.error.ErrorTypes.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidShapeParameterException.class)
+    public ResponseEntity<ApiError> handleInvalidParams(InvalidShapeParameterException ex) {
+        ApiError error = new ApiError(400, ex.getMessage(), NOT_VALID_PARAM);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getAllErrors().stream()
@@ -47,12 +53,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleShapeNotSupported(ShapeNotSupportedException ex) {
         ApiError error = new ApiError(400, ex.getMessage(), SHAPE_TYPE_UNKNOWN);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleOtherExceptions(Exception ex) {
-        ApiError error = new ApiError(500, ex.getMessage(), INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

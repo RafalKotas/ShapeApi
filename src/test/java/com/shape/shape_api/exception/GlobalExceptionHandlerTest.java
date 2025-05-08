@@ -74,24 +74,6 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void shouldHandleGenericException() {
-        // given
-        Exception ex = new Exception("An unexpected error occurred");
-
-        // when
-        ResponseEntity<ApiError> response = exceptionHandler.handleOtherExceptions(ex);
-
-        // then
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        ApiError body = response.getBody();
-        assertEquals("An unexpected error occurred", body.getMessage());
-        assertEquals("INTERNAL_SERVER_ERROR", body.getErrorCode());
-        assertEquals(500, body.getHttpCode());
-        assertNotNull(body.getTimestamp());
-    }
-
-
-    @Test
     void shouldHandleIllegalArgumentException() {
         // given
         IllegalArgumentException exception = new IllegalArgumentException("Invalid argument");

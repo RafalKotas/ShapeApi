@@ -17,7 +17,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidShapeParameterException.class)
     public ResponseEntity<ApiError> handleInvalidParams(InvalidShapeParameterException ex) {
-        ApiError error = new ApiError(400, ex.getMessage(), NOT_VALID_PARAM);
+        ApiError error = new ApiError(400, ex.getMessage(), INVALID_SHAPE_PARAMETER);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MissingParameterException.class)
+    public ResponseEntity<ApiError> handleMissingParam(MissingParameterException ex) {
+        ApiError error = new ApiError(400, ex.getMessage(), PARAMETER_MISSING);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidEntityException.class)
+    public ResponseEntity<ApiError> handleInvalidEntity(InvalidEntityException ex) {
+        ApiError error = new ApiError(400, ex.getMessage(), ENTITY_INVALID);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ShapeNotSupportedException.class)
+    public ResponseEntity<ApiError> handleShapeNotSupported(ShapeNotSupportedException ex) {
+        ApiError error = new ApiError(400, ex.getMessage(), SHAPE_TYPE_UNKNOWN);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -43,15 +61,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
-        ApiError error = new ApiError(400, ex.getMessage(), NOT_VALID_PARAM);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ShapeNotSupportedException.class)
-    public ResponseEntity<ApiError> handleShapeNotSupported(ShapeNotSupportedException ex) {
-        ApiError error = new ApiError(400, ex.getMessage(), SHAPE_TYPE_UNKNOWN);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(InvalidShapeParameterValueException.class)
+    public ResponseEntity<ApiError> handleInvalidParameterValue(InvalidShapeParameterValueException ex) {
+        return new ResponseEntity<>(
+                new ApiError(400, ex.getMessage(), CONSTRAINT_VIOLATION),
+                HttpStatus.BAD_REQUEST
+        );
     }
 }

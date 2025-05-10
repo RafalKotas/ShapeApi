@@ -3,10 +3,12 @@ package com.shape.shape_api.square.validator;
 import com.shape.shape_api.exception.InvalidEntityException;
 import com.shape.shape_api.shape.validator.ShapeValidator;
 import com.shape.shape_api.square.model.Square;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class SquareV1Validator implements ShapeValidator<Square>  {
 
     @Override

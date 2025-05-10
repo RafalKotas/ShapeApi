@@ -110,8 +110,8 @@ class ShapeIntegrationTest {
         // then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         Map responseBody = response.getBody();
-        assertEquals("INVALID_SHAPE_PARAMETER", responseBody.get("errorCode"));
-        assertEquals("'w' must be greater than 0", responseBody.get("message"));
+        assertEquals("INVALID_SHAPE_PARAMETER_VALUE", responseBody.get("errorCode"));
+        assertEquals("Parameter 'w' must be greater than 0", responseBody.get("message"));
         assertEquals(400, responseBody.get("httpCode"));
     }
 
@@ -119,13 +119,13 @@ class ShapeIntegrationTest {
     void shouldCreateCircleSuccessfully() {
         // given
         String circleJson = """
-    {
-      "type": "circle",
-      "parameters": {
-        "diameter": 12
-      }
-    }
-    """;
+            {
+              "type": "circle",
+              "parameters": {
+                "diameter": 12
+              }
+            }
+        """;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

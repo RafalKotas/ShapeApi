@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidShapeParameterValueException.class)
     public ResponseEntity<ApiError> handleInvalidParameterValue(InvalidShapeParameterValueException ex) {
         return new ResponseEntity<>(
-                new ApiError(400, ex.getMessage(), CONSTRAINT_VIOLATION),
+                new ApiError(400, ex.getMessage(), INVALID_SHAPE_PARAMETER_VALUE),
                 HttpStatus.BAD_REQUEST
         );
     }

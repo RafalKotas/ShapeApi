@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RectangleValidatorTest {
 
     @Test
-    void shouldThrowWhenHeightIsMissing() {
+    void shouldThrowWhenHeightParamIsNull() {
         // given
         Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
 
@@ -24,7 +24,7 @@ class RectangleValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenWidthIsMissing() {
+    void shouldThrowWhenWidthParamIsNull() {
         // given
         Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
 
@@ -34,7 +34,7 @@ class RectangleValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenBothHeightAndWidthAreMissing() {
+    void shouldThrowWhenBothHeightAndWidthParamsAreNull() {
         // given
         Map<String, BigDecimal> params = Map.of();
 
@@ -44,7 +44,14 @@ class RectangleValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenHeightIsBelowMin() {
+    void shouldThrowWhenEntityIsNull() {
+        // when / then
+        assertThrows(InvalidEntityException.class,
+                () -> RectangleValidator.validateEntity(null));
+    }
+
+    @Test
+    void shouldThrowWhenHeightIsZero() {
         // given
         Map<String, BigDecimal> params = Map.of("h", BigDecimal.ZERO, "w", BigDecimal.TEN);
 
@@ -54,7 +61,7 @@ class RectangleValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenWidthIsBelowMin() {
+    void shouldThrowWhenWidthIsZero() {
         // given
         Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN, "w", BigDecimal.valueOf(-5));
 
@@ -64,16 +71,9 @@ class RectangleValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenRectangleIsNull() {
-        // when / then
-        assertThrows(InvalidEntityException.class,
-                () -> RectangleValidator.validateEntity(null));
-    }
-
-    @Test
-    void shouldThrowWhenHeightIsNull() {
+    void shouldThrowWhenWidthIsNull() {
         // given
-        Rectangle rectangle = new Rectangle(null, BigDecimal.TEN);
+        Rectangle rectangle = new Rectangle(BigDecimal.TEN, null);
 
         // when / then
         assertThrows(InvalidEntityException.class,
@@ -81,9 +81,9 @@ class RectangleValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenWidthIsNull() {
+    void shouldThrowWhenHeightIsNull() {
         // given
-        Rectangle rectangle = new Rectangle(BigDecimal.TEN, null);
+        Rectangle rectangle = new Rectangle(null, BigDecimal.TEN);
 
         // when / then
         assertThrows(InvalidEntityException.class,

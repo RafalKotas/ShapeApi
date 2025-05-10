@@ -4,6 +4,7 @@ import com.shape.shape_api.circle.handler.CircleHandlerV1;
 import com.shape.shape_api.circle.handler.CircleHandlerV2;
 import com.shape.shape_api.rectangle.handler.RectangleHandlerV1;
 import com.shape.shape_api.rectangle.handler.RectangleHandlerV2;
+import com.shape.shape_api.shape.handler.ShapeHandler;
 import com.shape.shape_api.square.handler.SquareHandlerV1;
 import com.shape.shape_api.square.handler.SquareHandlerV2;
 import org.junit.jupiter.api.BeforeEach;

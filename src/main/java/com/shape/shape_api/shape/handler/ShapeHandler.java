@@ -1,6 +1,7 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.handler;
 
 import com.shape.shape_api.domain.Shape;
+import com.shape.shape_api.shape.dto.ShapeDTO;
 
 import java.util.List;
 

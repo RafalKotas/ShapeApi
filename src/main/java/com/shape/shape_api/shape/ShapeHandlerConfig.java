@@ -7,6 +7,8 @@ import com.shape.shape_api.domain.Shape;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV1;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.model.Rectangle;
+import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.shape.handler.ShapeHandler;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoInV2;
 import com.shape.shape_api.square.model.Square;

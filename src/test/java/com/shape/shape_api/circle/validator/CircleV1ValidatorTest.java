@@ -22,17 +22,7 @@ class CircleV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenRadiusParamIsMissing() {
-        // given
-        Map<String, BigDecimal> params = Map.of();
-
-        // when / then
-        assertThrows(MissingParameterException.class,
-                () -> subject.validateParams(params));
-    }
-
-    @Test
-    void shouldThrowWhenDiameterParamIsMissing() {
+    void shouldThrowWhenRadiusParamIsNull() {
         // given
         Map<String, BigDecimal> params = Map.of();
 

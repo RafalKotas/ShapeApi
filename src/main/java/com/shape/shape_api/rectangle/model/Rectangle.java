@@ -19,7 +19,6 @@ public class Rectangle extends Shape {
     private BigDecimal height;
     private BigDecimal width;
 
-
     public Rectangle(BigDecimal height, BigDecimal width) {
         super();
         this.height = height;

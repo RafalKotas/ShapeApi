@@ -1,13 +1,13 @@
 package com.shape.shape_api.rectangle.dto;
 
 import com.shape.shape_api.shape.dto.ShapeDTO;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 public class RectangleDtoInV2 extends ShapeDTO {
+
     private static final String V2_RECTANGLE_TYPE = "v2:rectangle";
 
     private BigDecimal h;

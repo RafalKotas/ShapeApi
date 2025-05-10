@@ -8,15 +8,17 @@ import java.math.BigDecimal;
 @Setter
 public class CircleDtoOutV1 extends ShapeDTO {
 
+    private static final String V1_CIRCLE_TYPE = "v1:circle";
+
     private BigDecimal radius;
 
     public CircleDtoOutV1(BigDecimal radius) {
-        super("v1:circle");
+        super(V1_CIRCLE_TYPE);
         this.radius = radius;
     }
 
     public CircleDtoOutV1() {
-        super("v1:circle");
+        super(V1_CIRCLE_TYPE);
     }
 }
 

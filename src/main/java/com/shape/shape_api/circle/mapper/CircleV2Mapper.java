@@ -15,6 +15,8 @@ import static com.shape.shape_api.circle.CircleMath.radiusFromDiameter;
 @Component
 public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2, Circle> {
 
+    public static final String DIAMETER_PARAM_NAME = "diameter";
+
     @Override
     public String getKey() {
         return "v2:circle";
@@ -27,8 +29,8 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
 
     @Override
     public CircleDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
-        CircleValidator.validateParams(parameters, "diameter");
-        return new CircleDtoInV2(parameters.get("diameter"));
+        CircleValidator.validateParams(parameters, DIAMETER_PARAM_NAME);
+        return new CircleDtoInV2(parameters.get(DIAMETER_PARAM_NAME));
     }
 
     @Override
@@ -49,6 +51,6 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
 
     @Override
     public void validateParams(Map<String, BigDecimal> parameters) {
-        CircleValidator.validateParams(parameters, "diameter");
+        CircleValidator.validateParams(parameters, DIAMETER_PARAM_NAME);
     }
 }

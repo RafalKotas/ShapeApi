@@ -43,6 +43,5 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
     @Override
     public void validateEntity(Circle entity) {
         CircleValidator.validateEntity(entity);
-        return new CircleDtoOutV1(entity.getRadius());
     }
 }

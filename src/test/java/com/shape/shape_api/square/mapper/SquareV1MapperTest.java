@@ -80,7 +80,7 @@ class SquareV1MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(square));
 
         // then
-        assertEquals("Square entity must not be null", exception.getMessage());
+        assertEquals("Entity of type Square must not be null", exception.getMessage());
     }
 
     @Test

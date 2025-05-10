@@ -76,7 +76,7 @@ class CircleV1MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(circle));
 
         // then
-        assertEquals("Circle entity must not be null", exception.getMessage());
+        assertEquals("Entity of type Circle must not be null", exception.getMessage());
     }
 
     @Test

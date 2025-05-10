@@ -33,7 +33,7 @@ class SquareV2MapperTest {
     @Test
     void shouldMapParametersToSquareDTOv2() {
         // given
-        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(25L));
+        Map<String, BigDecimal> parameters = Map.of("side", BigDecimal.valueOf(25L));
 
         // when
         SquareDtoInV2 result = subject.mapFromParams(parameters);
@@ -74,7 +74,7 @@ class SquareV2MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(square));
 
         // then
-        assertEquals("Square entity must not be null", exception.getMessage());
+        assertEquals("Entity of type Square must not be null", exception.getMessage());
     }
 
     @Test

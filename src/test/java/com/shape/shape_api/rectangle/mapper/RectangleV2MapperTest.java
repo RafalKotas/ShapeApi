@@ -122,7 +122,7 @@ class RectangleV2MapperTest {
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
 
         // then
-        assertEquals("Rectangle entity must not be null", exception.getMessage());
+        assertEquals("Entity of type Rectangle must not be null", exception.getMessage());
     }
 
     @Test

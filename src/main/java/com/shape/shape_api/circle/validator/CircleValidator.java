@@ -21,10 +21,10 @@ public class CircleValidator {
     }
 
     public static void validateEntity(Circle circle) {
-        Circle validatedCircle = Optional.ofNullable(circle)
+        Optional.ofNullable(circle)
                 .orElseThrow(() -> new InvalidEntityException("Circle entity must not be null"));
 
-        Optional.ofNullable(validatedCircle.getRadius())
+        Optional.ofNullable(circle.getRadius())
                 .orElseThrow(() -> new InvalidEntityException("Radius must not be null"));
     }
 }

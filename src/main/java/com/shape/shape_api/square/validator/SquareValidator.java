@@ -12,21 +12,19 @@ import java.util.Optional;
 public class SquareValidator {
 
     public static void validateParams(Map<String, BigDecimal> parameters, String aKey) {
-        BigDecimal value = parameters.get(aKey);
-
         BigDecimal a = Optional.ofNullable(parameters.get(aKey))
                 .orElseThrow(() -> new MissingParameterException("Missing required parameter: '" + aKey + "'"));
 
-        if (value.compareTo(BigDecimal.ZERO) <= 0) {
+        if (a.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidShapeParameterValueException("'" + a + "' must be greater than 0");
         }
     }
 
     public static void validateEntity(Square square) {
-        Square validatedSquare = Optional.ofNullable(square)
+        Optional.ofNullable(square)
                 .orElseThrow(() -> new InvalidEntityException("Square entity must not be null"));
 
-        Optional.ofNullable(validatedSquare.getA())
+        Optional.ofNullable(square.getA())
                 .orElseThrow(() -> new InvalidEntityException("Side 'a' must not be null"));
     }
 }

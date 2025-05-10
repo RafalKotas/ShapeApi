@@ -29,13 +29,13 @@ public class RectangleValidator {
     }
 
     public static void validateEntity(Rectangle rectangle) {
-        Rectangle validatedRectangle = Optional.ofNullable(rectangle)
+        Optional.ofNullable(rectangle)
                 .orElseThrow(() -> new InvalidEntityException("Rectangle entity must not be null"));
 
-        Optional.ofNullable(validatedRectangle.getHeight())
+        Optional.ofNullable(rectangle.getHeight())
                 .orElseThrow(() -> new InvalidEntityException("Height must not be null"));
 
-        Optional.ofNullable(validatedRectangle.getWidth())
+        Optional.ofNullable(rectangle.getWidth())
                 .orElseThrow(() -> new InvalidEntityException("Width must not be null"));
     }
 }

@@ -21,6 +21,11 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
     }
 
     @Override
+    public Class<Circle> getEntityClass() {
+        return Circle.class;
+    }
+
+    @Override
     public CircleDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
         CircleValidator.validateParams(parameters, "diameter");
         return new CircleDtoInV2(parameters.get("diameter"));
@@ -28,13 +33,22 @@ public class CircleV2Mapper implements ShapeMapper<CircleDtoInV2, CircleDtoOutV2
 
     @Override
     public Circle mapToEntity(CircleDtoInV2 dto) {
-        BigDecimal radius = radiusFromDiameter(dto.getDiameter());
-        return new Circle(radius);
+        return new Circle(radiusFromDiameter(dto.getDiameter()));
     }
 
     @Override
     public CircleDtoOutV2 mapToDTO(Circle entity) {
+        return validateThenMap(entity,
+                c -> new CircleDtoOutV2(entity.getRadius().multiply(BigDecimal.valueOf(2))));
+    }
+
+    @Override
+    public void validateEntity(Circle entity) {
         CircleValidator.validateEntity(entity);
-        return new CircleDtoOutV2(entity.getRadius().multiply(BigDecimal.valueOf(2)));
+    }
+
+    @Override
+    public void validateParams(Map<String, BigDecimal> parameters) {
+        CircleValidator.validateParams(parameters, "diameter");
     }
 }

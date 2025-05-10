@@ -19,9 +19,18 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
     }
 
     @Override
+    public Class<Square> getEntityClass() {
+        return Square.class;
+    }
+
+    @Override
     public SquareDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
+        return validateThenMapFromParams(parameters, p -> new SquareDtoInV1(p.get("a")));
+    }
+
+    @Override
+    public void validateParams(Map<String, BigDecimal> parameters) {
         SquareValidator.validateParams(parameters, "a");
-        return new SquareDtoInV1(parameters.get("a"));
     }
 
     @Override
@@ -32,7 +41,13 @@ public class SquareV1Mapper implements ShapeMapper<SquareDtoInV1, SquareDtoOutV1
 
     @Override
     public SquareDtoOutV1 mapToDTO(Square entity) {
+        return validateThenMap(entity,
+                s -> new SquareDtoOutV1(s.getA())
+        );
+    }
+
+    @Override
+    public void validateEntity(Square entity) {
         SquareValidator.validateEntity(entity);
-        return new SquareDtoOutV1(entity.getA());
     }
 }

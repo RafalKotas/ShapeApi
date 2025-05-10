@@ -19,9 +19,13 @@ public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, Rectangl
     }
 
     @Override
+    public Class<Rectangle> getEntityClass() {
+        return Rectangle.class;
+    }
+
+    @Override
     public RectangleDtoInV2 mapFromParams(Map<String, BigDecimal> parameters) {
-        RectangleValidator.validateParams(parameters, "h", "w");
-        return new RectangleDtoInV2(parameters.get("h"), parameters.get("w"));
+        return validateThenMapFromParams(parameters, p -> new RectangleDtoInV2(p.get("h"), p.get("w")));
     }
 
     @Override
@@ -31,7 +35,18 @@ public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, Rectangl
 
     @Override
     public RectangleDtoOutV2 mapToDTO(Rectangle entity) {
+        return validateThenMap(entity,
+                rect -> new RectangleDtoOutV2(rect.getHeight(), rect.getWidth())
+        );
+    }
+
+    @Override
+    public void validateParams(Map<String, BigDecimal> parameters) {
+        RectangleValidator.validateParams(parameters, "h", "w");
+    }
+
+    @Override
+    public void validateEntity(Rectangle entity) {
         RectangleValidator.validateEntity(entity);
-        return new RectangleDtoOutV2(entity.getHeight(), entity.getWidth());
     }
 }

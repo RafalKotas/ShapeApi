@@ -19,6 +19,11 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
     }
 
     @Override
+    public Class<Circle> getEntityClass() {
+        return Circle.class;
+    }
+
+    @Override
     public CircleDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
         CircleValidator.validateParams(parameters, "radius");
         return new CircleDtoInV1(parameters.get("radius"));
@@ -31,6 +36,12 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
 
     @Override
     public CircleDtoOutV1 mapToDTO(Circle entity) {
+        return validateThenMap(entity, c -> new CircleDtoOutV1(entity.getRadius())
+        );
+    }
+
+    @Override
+    public void validateEntity(Circle entity) {
         CircleValidator.validateEntity(entity);
         return new CircleDtoOutV1(entity.getRadius());
     }

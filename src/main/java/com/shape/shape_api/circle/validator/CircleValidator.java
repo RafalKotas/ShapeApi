@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public class CircleValidator {
 
+    private CircleValidator() {
+    }
+
     public static void validateParams(Map<String, BigDecimal> parameters, String radiusKey) {
         BigDecimal radius = Optional.ofNullable(parameters.get(radiusKey))
                 .orElseThrow(() -> new MissingParameterException("Missing required parameter: '" + radiusKey + "'"));

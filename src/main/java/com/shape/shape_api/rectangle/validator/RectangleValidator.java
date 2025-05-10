@@ -12,6 +12,9 @@ import java.util.Optional;
 
 public class RectangleValidator {
 
+    private RectangleValidator() {
+    }
+
     public static void validateParams(Map<String, BigDecimal> parameters, String heightKey, String widthKey) {
         BigDecimal height = Optional.ofNullable(parameters.get(heightKey))
                 .orElseThrow(() -> new MissingParameterException("Missing required parameter: '" + heightKey + "'"));

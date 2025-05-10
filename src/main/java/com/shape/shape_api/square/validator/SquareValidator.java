@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public class SquareValidator {
 
+    private SquareValidator() {
+    }
+
     public static void validateParams(Map<String, BigDecimal> parameters, String aKey) {
         BigDecimal a = Optional.ofNullable(parameters.get(aKey))
                 .orElseThrow(() -> new MissingParameterException("Missing required parameter: '" + aKey + "'"));

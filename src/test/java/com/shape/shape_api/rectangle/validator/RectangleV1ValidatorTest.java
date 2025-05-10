@@ -1,9 +1,10 @@
 package com.shape.shape_api.rectangle.validator;
 
 import com.shape.shape_api.exception.InvalidEntityException;
-import com.shape.shape_api.exception.InvalidShapeParameterException;
+import com.shape.shape_api.exception.InvalidShapeParameterValueException;
 import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.rectangle.model.Rectangle;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -11,26 +12,33 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class RectangleValidatorTest {
+class RectangleV1ValidatorTest {
+
+    RectangleV1Validator subject;
+
+    @BeforeEach
+    void setUp() {
+        subject = new RectangleV1Validator();
+    }
 
     @Test
     void shouldThrowWhenHeightParamIsNull() {
         // given
-        Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("width", BigDecimal.TEN);
 
         // when / then
         assertThrows(MissingParameterException.class,
-                () -> RectangleValidator.validateParams(params, "h", "w"));
+                () -> subject.validateParams(params));
     }
 
     @Test
     void shouldThrowWhenWidthParamIsNull() {
         // given
-        Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("height", BigDecimal.TEN);
 
         // when / then
         assertThrows(MissingParameterException.class,
-                () -> RectangleValidator.validateParams(params, "h", "w"));
+                () -> subject.validateParams(params));
     }
 
     @Test
@@ -40,34 +48,34 @@ class RectangleValidatorTest {
 
         // when / then
         assertThrows(MissingParameterException.class,
-                () -> RectangleValidator.validateParams(params, "h", "w"));
+                () -> subject.validateParams(params));
     }
 
     @Test
     void shouldThrowWhenEntityIsNull() {
         // when / then
         assertThrows(InvalidEntityException.class,
-                () -> RectangleValidator.validateEntity(null));
+                () -> subject.validateEntity(null));
     }
 
     @Test
     void shouldThrowWhenHeightIsZero() {
         // given
-        Map<String, BigDecimal> params = Map.of("h", BigDecimal.ZERO, "w", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("height", BigDecimal.ZERO, "width", BigDecimal.TEN);
 
         // when / then
-        assertThrows(InvalidShapeParameterException.class,
-                () -> RectangleValidator.validateParams(params, "h", "w"));
+        assertThrows(InvalidShapeParameterValueException.class,
+                () -> subject.validateParams(params));
     }
 
     @Test
     void shouldThrowWhenWidthIsZero() {
         // given
-        Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN, "w", BigDecimal.valueOf(-5));
+        Map<String, BigDecimal> params = Map.of("height", BigDecimal.TEN, "width", BigDecimal.valueOf(-5));
 
         // when / then
-        assertThrows(InvalidShapeParameterException.class,
-                () -> RectangleValidator.validateParams(params, "h", "w"));
+        assertThrows(InvalidShapeParameterValueException.class,
+                () -> subject.validateParams(params));
     }
 
     @Test
@@ -77,7 +85,7 @@ class RectangleValidatorTest {
 
         // when / then
         assertThrows(InvalidEntityException.class,
-                () -> RectangleValidator.validateEntity(rectangle));
+                () -> subject.validateEntity(rectangle));
     }
 
     @Test
@@ -87,6 +95,6 @@ class RectangleValidatorTest {
 
         // when / then
         assertThrows(InvalidEntityException.class,
-                () -> RectangleValidator.validateEntity(rectangle));
+                () -> subject.validateEntity(rectangle));
     }
 }

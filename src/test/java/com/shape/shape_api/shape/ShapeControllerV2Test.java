@@ -1,5 +1,6 @@
 package com.shape.shape_api.shape;
 
+import com.shape.shape_api.shape.dto.ShapeDTO;
 import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

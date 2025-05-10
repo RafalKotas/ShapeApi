@@ -1,5 +1,8 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.controller;
 
+import com.shape.shape_api.shape.ShapeCreationRequest;
+import com.shape.shape_api.shape.ShapeService;
+import com.shape.shape_api.shape.dto.ShapeDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -7,9 +10,10 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.shape.shape_api.documentation.SwaggerDescriptions.*;
@@ -17,13 +21,13 @@ import static com.shape.shape_api.documentation.SwaggerResponseCodes.BAD_REQUEST
 import static com.shape.shape_api.documentation.SwaggerResponseCodes.OK_200;
 
 @RestController
-@RequestMapping("/api/v1/shapes")
-@Tag(name = SHAPE_CONTROLLER_V1_TAG, description = SHAPE_CONTROLLER_V1_DESCRIPTION)
-public class ShapeControllerV1 {
+@RequestMapping("/api/v2/shapes")
+@Tag(name = SHAPE_CONTROLLER_V2_TAG, description = SHAPE_CONTROLLER_V2_DESCRIPTION)
+public class ShapeControllerV2 {
 
     private final ShapeService shapeService;
 
-    public ShapeControllerV1(ShapeService shapeService) {
+    public ShapeControllerV2(ShapeService shapeService) {
         this.shapeService = shapeService;
     }
 
@@ -36,25 +40,24 @@ public class ShapeControllerV1 {
                     @ApiResponse(responseCode = BAD_REQUEST_400, description = BAD_REQUEST_RESPONSE)
             }
     )
-
-    public Object createShape(
+    public ResponseEntity<ShapeDTO> createShape(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = SHAPE_REQUEST_BODY_DESCRIPTION,
                     required = true,
                     content = @Content(
                             mediaType = APPLICATION_JSON,
                             examples = @ExampleObject(
-                                    name = CIRCLE_EXAMPLE_NAME,
-                                    summary = CIRCLE_EXAMPLE_SUMMARY,
-                                    value = CIRCLE_REQUEST_EXAMPLE
+                                    name = RECTANGLE_EXAMPLE_NAME,
+                                    summary = RECTANGLE_EXAMPLE_SUMMARY,
+                                    value = RECTANGLE_V2_REQUEST_EXAMPLE
                             )
                     )
             )
-            @Valid @RequestBody ShapeCreationRequest request
+            @RequestBody @Valid ShapeCreationRequest request
     ) {
-        return shapeService.createShape(VERSION_1, request.getType(), request.getParameters());
+        ShapeDTO shapeDTO = shapeService.createShape(VERSION_2, request.getType(), request.getParameters());
+        return ResponseEntity.ok(shapeDTO);
     }
-
 
     @GetMapping
     @Operation(
@@ -67,10 +70,11 @@ public class ShapeControllerV1 {
     )
     public List<ShapeDTO> getShapesByType(
             @RequestParam
-            @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION, example = SQUARE)
-            @NotBlank(message = NOT_BLANK_VALIDATION_INFO) String type
-    ) {
-        return shapeService.getShapesByType(VERSION_1, type);
+            @Parameter(description = SHAPE_TYPE_PARAM_DESCRIPTION_SHORT, example = CIRCLE) String type) {
+
+        List<ShapeDTO> shapeDTOS = shapeService.getShapesByType(VERSION_2, type);
+
+        return new ArrayList<>(shapeDTOS);
     }
 }
 

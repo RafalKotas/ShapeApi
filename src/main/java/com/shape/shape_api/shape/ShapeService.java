@@ -2,6 +2,8 @@ package com.shape.shape_api.shape;
 
 import com.shape.shape_api.domain.Shape;
 import com.shape.shape_api.exception.ShapeNotSupportedException;
+import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.shape.handler.ShapeHandler;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

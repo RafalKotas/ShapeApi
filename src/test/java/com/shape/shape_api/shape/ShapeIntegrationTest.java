@@ -149,13 +149,13 @@ class ShapeIntegrationTest {
     void shouldGetAllSquaresSuccessfully() {
         // given
         String squareJson = """
-    {
-      "type": "square",
-      "parameters": {
-        "a": 10
-      }
-    }
-    """;
+        {
+          "type": "square",
+          "parameters": {
+            "side": 10
+          }
+        }
+        """;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -164,7 +164,7 @@ class ShapeIntegrationTest {
         ResponseEntity<Map> postResponse = restTemplate.postForEntity(baseUrl, request, Map.class);
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
 
-        // when - retrieve squares
+        // when
         ResponseEntity<List> getResponse = restTemplate.exchange(
                 baseUrl + "?type=square",
                 HttpMethod.GET,
@@ -172,14 +172,13 @@ class ShapeIntegrationTest {
                 new ParameterizedTypeReference<>() {}
         );
 
-        // then - check retrieval status and values
+        // then
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
         List<?> shapes = getResponse.getBody();
         assertThat(shapes).isNotNull().isNotEmpty();
 
         Map<?, ?> shape = (Map<?, ?>) shapes.get(0);
 
-        // Use BigDecimal for exact comparison
         BigDecimal side = new BigDecimal(shape.get("side").toString());
         assertEquals(0, BigDecimal.valueOf(10L).compareTo(side), "The side length should match the expected value");
     }

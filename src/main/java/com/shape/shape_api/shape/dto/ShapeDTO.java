@@ -1,4 +1,4 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.dto;
 
 public abstract class ShapeDTO {
     private String type;

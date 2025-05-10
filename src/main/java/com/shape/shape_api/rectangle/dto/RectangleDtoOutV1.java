@@ -1,13 +1,9 @@
 package com.shape.shape_api.rectangle.dto;
 
-import com.shape.shape_api.shape.ShapeDTO;
-import lombok.Getter;
-import lombok.Setter;
+import com.shape.shape_api.shape.dto.ShapeDTO;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 public class RectangleDtoOutV1 extends ShapeDTO {
 
     private BigDecimal height;
@@ -22,5 +18,21 @@ public class RectangleDtoOutV1 extends ShapeDTO {
 
     public RectangleDtoOutV1() {
         super("v1:rectangle");
+    }
+
+    public BigDecimal getHeight() {
+        return this.height;
+    }
+
+    public BigDecimal getWidth() {
+        return this.width;
+    }
+
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    public void setWidth(BigDecimal width) {
+        this.width = width;
     }
 }

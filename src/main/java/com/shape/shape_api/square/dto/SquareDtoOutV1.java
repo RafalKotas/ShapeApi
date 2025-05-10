@@ -1,6 +1,6 @@
 package com.shape.shape_api.square.dto;
 
-import com.shape.shape_api.shape.ShapeDTO;
+import com.shape.shape_api.shape.dto.ShapeDTO;
 import lombok.Getter;
 import lombok.Setter;
 

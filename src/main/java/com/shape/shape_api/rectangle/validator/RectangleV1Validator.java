@@ -6,7 +6,8 @@ import com.shape.shape_api.shape.validator.ShapeValidator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class RectangleV1Validator implements ShapeValidator<Rectangle> {
@@ -18,13 +19,16 @@ public class RectangleV1Validator implements ShapeValidator<Rectangle> {
 
     @Override
     public void validateEntity(Rectangle rectangle) {
-        Optional.ofNullable(rectangle)
-                .orElseThrow(() -> new InvalidEntityException("Rectangle must not be null"));
+        if (isNull(rectangle)) {
+            throw new InvalidEntityException("Rectangle must not be null");
+        }
 
-        Optional.ofNullable(rectangle.getHeight())
-                .orElseThrow(() -> new InvalidEntityException("Height must not be null"));
+        if (rectangle.getHeight() == null) {
+            throw new InvalidEntityException("Height must not be null");
+        }
 
-        Optional.ofNullable(rectangle.getWidth())
-                .orElseThrow(() -> new InvalidEntityException("Width must not be null"));
+        if (rectangle.getWidth() == null) {
+            throw new InvalidEntityException("Width must not be null");
+        }
     }
 }

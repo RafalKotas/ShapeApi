@@ -6,7 +6,8 @@ import com.shape.shape_api.shape.validator.ShapeValidator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class CircleV1Validator implements ShapeValidator<Circle> {
@@ -18,10 +19,12 @@ public class CircleV1Validator implements ShapeValidator<Circle> {
 
     @Override
     public void validateEntity(Circle circle) {
-        Optional.ofNullable(circle)
-                .orElseThrow(() -> new InvalidEntityException("Circle must not be null"));
+        if (isNull(circle)) {
+            throw new InvalidEntityException("Circle must not be null");
+        }
 
-        Optional.ofNullable(circle.getRadius())
-                .orElseThrow(() -> new InvalidEntityException("Radius must not be null"));
+        if (circle.getRadius() == null) {
+            throw new InvalidEntityException("Radius must not be null");
+        }
     }
 }

@@ -3,8 +3,8 @@ package com.shape.shape_api.circle.mapper;
 import com.shape.shape_api.circle.dto.CircleDtoInV1;
 import com.shape.shape_api.circle.dto.CircleDtoOutV1;
 import com.shape.shape_api.circle.model.Circle;
-import com.shape.shape_api.circle.validator.CircleValidator;
-import com.shape.shape_api.shape.ShapeMapper;
+import com.shape.shape_api.circle.validator.CircleV1Validator;
+import com.shape.shape_api.shape.mapper.ShapeMapper;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,6 +12,12 @@ import java.util.Map;
 
 @Component
 public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1, Circle> {
+
+    private final CircleV1Validator validator;
+
+    public CircleV1Mapper(CircleV1Validator validator) {
+        this.validator = validator;
+    }
 
     @Override
     public String getKey() {
@@ -25,8 +31,7 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
 
     @Override
     public CircleDtoInV1 mapFromParams(Map<String, BigDecimal> parameters) {
-        CircleValidator.validateParams(parameters, "radius");
-        return new CircleDtoInV1(parameters.get("radius"));
+        return validateThenMapFromParams(parameters, p -> new CircleDtoInV1(p.get("radius")));
     }
 
     @Override
@@ -42,6 +47,11 @@ public class CircleV1Mapper implements ShapeMapper<CircleDtoInV1, CircleDtoOutV1
 
     @Override
     public void validateEntity(Circle entity) {
-        CircleValidator.validateEntity(entity);
+        validator.validateEntity(entity);
+    }
+
+    @Override
+    public void validateParams(Map<String, BigDecimal> parameters) {
+        validator.validateParams(parameters);
     }
 }

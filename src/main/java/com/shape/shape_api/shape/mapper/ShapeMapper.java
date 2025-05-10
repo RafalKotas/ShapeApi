@@ -1,4 +1,4 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.mapper;
 
 import com.shape.shape_api.exception.InvalidEntityException;
 

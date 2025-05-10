@@ -3,8 +3,8 @@ package com.shape.shape_api.rectangle.mapper;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV2;
 import com.shape.shape_api.rectangle.model.Rectangle;
-import com.shape.shape_api.rectangle.validator.RectangleValidator;
-import com.shape.shape_api.shape.ShapeMapper;
+import com.shape.shape_api.rectangle.validator.RectangleV2Validator;
+import com.shape.shape_api.shape.mapper.ShapeMapper;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,6 +12,12 @@ import java.util.Map;
 
 @Component
 public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, RectangleDtoOutV2, Rectangle> {
+
+    private final RectangleV2Validator validator;
+
+    public RectangleV2Mapper(RectangleV2Validator validator) {
+        this.validator = validator;
+    }
 
     @Override
     public String getKey() {
@@ -42,11 +48,11 @@ public class RectangleV2Mapper implements ShapeMapper<RectangleDtoInV2, Rectangl
 
     @Override
     public void validateParams(Map<String, BigDecimal> parameters) {
-        RectangleValidator.validateParams(parameters, "h", "w");
+        validator.validateParams(parameters);
     }
 
     @Override
     public void validateEntity(Rectangle entity) {
-        RectangleValidator.validateEntity(entity);
+        validator.validateEntity(entity);
     }
 }

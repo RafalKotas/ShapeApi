@@ -1,10 +1,10 @@
 package com.shape.shape_api.square.mapper;
 
-import com.shape.shape_api.shape.ShapeMapper;
+import com.shape.shape_api.shape.mapper.ShapeMapper;
 import com.shape.shape_api.square.dto.SquareDtoInV2;
 import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import com.shape.shape_api.square.model.Square;
-import com.shape.shape_api.square.validator.SquareValidator;
+import com.shape.shape_api.square.validator.SquareV2Validator;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,6 +12,12 @@ import java.util.Map;
 
 @Component
 public class SquareV2Mapper implements ShapeMapper<SquareDtoInV2, SquareDtoOutV2, Square> {
+
+    private final SquareV2Validator validator;
+
+    public SquareV2Mapper(SquareV2Validator validator) {
+        this.validator = validator;
+    }
 
     @Override
     public String getKey() {
@@ -30,7 +36,7 @@ public class SquareV2Mapper implements ShapeMapper<SquareDtoInV2, SquareDtoOutV2
 
     @Override
     public void validateParams(Map<String, BigDecimal> parameters) {
-        SquareValidator.validateParams(parameters, "side");
+        validator.validateParams(parameters);
     }
 
     @Override
@@ -48,7 +54,7 @@ public class SquareV2Mapper implements ShapeMapper<SquareDtoInV2, SquareDtoOutV2
 
     @Override
     public void validateEntity(Square entity) {
-        SquareValidator.validateEntity(entity);
+        validator.validateEntity(entity);
     }
 }
 

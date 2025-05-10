@@ -2,6 +2,8 @@ package com.shape.shape_api.shape;
 
 import com.shape.shape_api.domain.Shape;
 import com.shape.shape_api.exception.ShapeNotSupportedException;
+import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.shape.mapper.ShapeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

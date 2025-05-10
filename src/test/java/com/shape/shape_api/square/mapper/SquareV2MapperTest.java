@@ -5,6 +5,8 @@ import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.square.dto.SquareDtoInV2;
 import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import com.shape.shape_api.square.model.Square;
+import com.shape.shape_api.square.validator.SquareV2Validator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -13,10 +15,18 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 class SquareV2MapperTest {
 
-    private final SquareV2Mapper subject = new SquareV2Mapper();
+    private SquareV2Mapper subject;
+    private SquareV2Validator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = mock(SquareV2Validator.class);
+        subject = new SquareV2Mapper(validator);
+    }
 
     @Test
     void shouldMapSquareDTOv2ToSquareEntity() {
@@ -27,21 +37,19 @@ class SquareV2MapperTest {
         Square result = subject.mapToEntity(squareDTOv2);
 
         // then
-        assertEquals(0, BigDecimal.valueOf(10L).compareTo(result.getA()));
+        assertEquals(new BigDecimal("10"), result.getA());
     }
 
     @Test
     void shouldMapParametersToSquareDTOv2() {
         // given
-        Map<String, BigDecimal> parameters = Map.of("side", BigDecimal.valueOf(25L));
+        Map<String, BigDecimal> params = Map.of("side", BigDecimal.valueOf(25L));
 
         // when
-        SquareDtoInV2 result = subject.mapFromParams(parameters);
+        SquareDtoInV2 result = subject.mapFromParams(params);
 
         // then
-        BigDecimal expectedA = BigDecimal.valueOf(25L);
-        assertEquals(0, expectedA.compareTo(result.getSide()),
-                "The result SquareDtoInV2 a should match the expected square a(15L)");
+        assertEquals(new BigDecimal("25"), result.getSide(), "The result SquareDtoInV2 a should match the expected square a(15L)");
     }
 
     @Test
@@ -49,8 +57,17 @@ class SquareV2MapperTest {
         // given
         Map<String, BigDecimal> params = new HashMap<>();
 
+        doThrow(new MissingParameterException("Missing required parameter: 'side'"))
+                .when(validator).validateParams(params);
+
         // when & then
-        assertThrows(MissingParameterException.class, () -> subject.mapFromParams(params));
+        MissingParameterException exception = assertThrows(
+                MissingParameterException.class,
+                () -> subject.mapFromParams(params)
+        );
+
+        assertEquals("Missing required parameter: 'side'", exception.getMessage());
+        verify(validator).validateParams(params);
     }
 
     @Test
@@ -63,6 +80,7 @@ class SquareV2MapperTest {
 
         // then
         assertEquals(new BigDecimal("1230.22"), dto.getSide());
+        verify(validator).validateEntity(square);
     }
 
     @Test
@@ -81,6 +99,8 @@ class SquareV2MapperTest {
     void shouldThrowExceptionWhenSideAIsNull() {
         // given
         Square square = new Square(null);
+        doThrow(new InvalidEntityException("Side 'a' must not be null"))
+                .when(validator).validateEntity(square);
 
         // when
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(square));

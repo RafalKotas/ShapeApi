@@ -5,18 +5,28 @@ import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
 import com.shape.shape_api.square.model.Square;
+import com.shape.shape_api.square.validator.SquareV1Validator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class SquareV1MapperTest {
 
-    final SquareV1Mapper subject = new SquareV1Mapper();
+    private SquareV1Mapper subject;
+    private SquareV1Validator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = mock(SquareV1Validator.class);
+        subject = new SquareV1Mapper(validator);
+    }
+
 
     @Test
     void shouldMapSquareDTOv1ToSquareEntity() {
@@ -27,37 +37,41 @@ class SquareV1MapperTest {
         Square result = subject.mapToEntity(squareDTOv1);
 
         // then
-        BigDecimal expectedA = BigDecimal.valueOf(10L);
-        assertEquals(0, expectedA.compareTo(result.getA()),
-                "The result square a should match the expected square a(10L)");
+        assertEquals(new BigDecimal("10"), result.getA());
     }
 
     @Test
-    void shouldMapParametersToSquareDTOv1() {
+    void shouldValidateParamsAndMapSuccessfully() {
         // given
-        Map<String, BigDecimal> parameters = Map.of("a", BigDecimal.valueOf(15L));
+        Map<String, BigDecimal> params = Map.of("a", BigDecimal.valueOf(15L));
 
         // when
-        SquareDtoInV1 result = subject.mapFromParams(parameters);
+        SquareDtoInV1 result = subject.mapFromParams(params);
 
         // then
-        BigDecimal expectedA = BigDecimal.valueOf(15L);
-        assertEquals(0, expectedA.compareTo(result.getA()),
+        assertEquals(0, BigDecimal.valueOf(15L).compareTo(result.getA()),
                 "The result SquareDtoInV1 a should match the expected square a(15L)");
+        verify(validator).validateParams(params);
     }
 
     @Test
-    void shouldThrowExceptionWhenAParamIsMissing() {
+    void shouldThrowExceptionOnEmptyParams() {
         // given
-        Map<String, BigDecimal> parameters = Map.of();
+        Map<String, BigDecimal> params = Map.of();
+        when(validator.getRequiredParams()).thenReturn(List.of("a"));
 
-        // when
-        Executable action = () -> subject.mapFromParams(parameters);
+        doThrow(new MissingParameterException("Missing required parameter: 'a'"))
+                .when(validator).validateParams(params);
 
-        // then
-        assertThrows(MissingParameterException.class, action, "Empty parameters should throw IllegalArgumentException");
+        // when / then
+        MissingParameterException ex = assertThrows(
+                MissingParameterException.class,
+                () -> subject.mapFromParams(params)
+        );
+
+        assertEquals("Missing required parameter: 'a'", ex.getMessage());
+        verify(validator).validateParams(params);
     }
-
 
     @Test
     void shouldMapSquareEntityToSquareDtoOutV1() {
@@ -68,7 +82,9 @@ class SquareV1MapperTest {
         SquareDtoOutV1 dto = subject.mapToDTO(square);
 
         // then
+        assertNotNull(dto);
         assertEquals(new BigDecimal("10"), dto.getSideA());
+        verify(validator).validateEntity(square);
     }
 
     @Test
@@ -87,11 +103,14 @@ class SquareV1MapperTest {
     void shouldThrowExceptionWhenSideAIsNull() {
         // given
         Square square = new Square(null);
+        doThrow(new InvalidEntityException("Side 'a' must not be null"))
+                .when(validator).validateEntity(square);
 
         // when
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(square));
 
         // then
         assertEquals("Side 'a' must not be null", exception.getMessage());
+        verify(validator).validateEntity(square);
     }
 }

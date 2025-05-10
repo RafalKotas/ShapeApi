@@ -5,17 +5,26 @@ import com.shape.shape_api.exception.MissingParameterException;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV2;
 import com.shape.shape_api.rectangle.model.Rectangle;
+import com.shape.shape_api.rectangle.validator.RectangleV2Validator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class RectangleV2MapperTest {
 
-    final RectangleV2Mapper subject = new RectangleV2Mapper();
+    private RectangleV2Mapper subject;
+    private RectangleV2Validator validator;
+
+    @BeforeEach
+    void setup() {
+        validator = mock(RectangleV2Validator.class);
+        subject = new RectangleV2Mapper(validator);
+    }
 
     @Test
     void shouldMapRectangleDTOv2ToRectangleEntity() {
@@ -26,78 +35,62 @@ class RectangleV2MapperTest {
         Rectangle result = subject.mapToEntity(rectangleDtoInV2);
 
         // then
-        BigDecimal expectedHeight = BigDecimal.valueOf(10L);
-        BigDecimal expectedWidth = BigDecimal.valueOf(20L);
-        assertEquals(0, expectedHeight.compareTo(result.getHeight()),
-                "The result rectangle height should match the expected rectangle height(20L)");
-        assertEquals(0, expectedWidth.compareTo(result.getWidth()),
-                "The result rectangle width should match the expected rectangle width(20L)");
+        assertEquals(BigDecimal.valueOf(10L), result.getHeight(), "The result rectangle height should match the expected rectangle height(20L)");
+        assertEquals(BigDecimal.valueOf(20L), result.getWidth(), "The result rectangle width should match the expected rectangle width(20L)");
     }
 
     @Test
-    void shouldMapParametersToRectangleDTOv2() {
+    void shouldMapParametersToRectangleDtoInV2() {
         // given
-        Map<String, BigDecimal> parameters = Map.of("h", BigDecimal.valueOf(10L), "w", BigDecimal.valueOf(20L));
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.valueOf(10L), "w", BigDecimal.valueOf(20L));
 
         // when
-        RectangleDtoInV2 result = subject.mapFromParams(parameters);
+        RectangleDtoInV2 result = subject.mapFromParams(params);
 
         // then
         assertNotNull(result);
-        BigDecimal expectedHeight = BigDecimal.valueOf(10L);
-        BigDecimal expectedWidth = BigDecimal.valueOf(20L);
-        assertEquals(0, expectedHeight.compareTo(result.getH()),
-                "The result rectangle h should match the expected rectangle height(10L)");
-        assertEquals(0, expectedWidth.compareTo(result.getW()),
-                "The result rectangle w should match the expected rectangle width(20L)");
+        assertEquals(BigDecimal.valueOf(10L), result.getH(), "The result rectangle h should match the expected rectangle height(10L)");
+        assertEquals(BigDecimal.valueOf(20L), result.getW(), "The result rectangle w should match the expected rectangle width(20L)");
     }
 
     @Test
-    void shouldThrowExceptionWhenHIsMissing() {
+    void shouldThrowExceptionWhenHParamIsNull() {
         // given
-        Map<String, BigDecimal> parameters = Map.of("w", BigDecimal.valueOf(20L));
-
-        // when
-        Executable action = () -> subject.mapFromParams(parameters);
-
-        // then
-        assertThrows(MissingParameterException.class, action);
-    }
-
-    @Test
-    void shouldThrowExceptionWhenHParamIsMissing() {
         Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
+        doThrow(new MissingParameterException("Missing required parameter: 'h'"))
+                .when(validator).validateParams(params);
 
-        MissingParameterException exception = assertThrows(
-                MissingParameterException.class,
-                () -> subject.mapFromParams(params)
-        );
-
-        assertEquals("Missing required parameter: 'h'", exception.getMessage());
+        // when / then
+        MissingParameterException ex = assertThrows(MissingParameterException.class, () -> subject.mapFromParams(params));
+        assertEquals("Missing required parameter: 'h'", ex.getMessage());
+        verify(validator).validateParams(params);
     }
 
+
     @Test
-    void shouldThrowExceptionWhenWParamIsMissing() {
+    void shouldThrowExceptionWhenWParamIsNull() {
+        // given
         Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
+        doThrow(new MissingParameterException("Missing required parameter: 'w'"))
+                .when(validator).validateParams(params);
 
-        MissingParameterException exception = assertThrows(
-                MissingParameterException.class,
-                () -> subject.mapFromParams(params)
-        );
-
-        assertEquals("Missing required parameter: 'w'", exception.getMessage());
+        // when / then
+        MissingParameterException ex = assertThrows(MissingParameterException.class, () -> subject.mapFromParams(params));
+        assertEquals("Missing required parameter: 'w'", ex.getMessage());
+        verify(validator).validateParams(params);
     }
 
     @Test
     void shouldThrowExceptionOnEmptyParams() {
         // given
         Map<String, BigDecimal> params = Map.of();
+        doThrow(new MissingParameterException("Missing required parameter: 'h'"))
+                .when(validator).validateParams(params);
 
-        // when
-        Executable action = () -> subject.mapFromParams(params);
-
-        // then
-        assertThrows(MissingParameterException.class, action, "Empty parameters should throw IllegalArgumentException");
+        // when / then
+        MissingParameterException ex = assertThrows(MissingParameterException.class, () -> subject.mapFromParams(params));
+        assertEquals("Missing required parameter: 'h'", ex.getMessage());
+        verify(validator).validateParams(params);
     }
 
     @Test
@@ -118,10 +111,8 @@ class RectangleV2MapperTest {
         // given
         Rectangle rectangle = null;
 
-        // when
+        // when / then
         InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
-
-        // then
         assertEquals("Entity of type Rectangle must not be null", exception.getMessage());
     }
 
@@ -129,35 +120,36 @@ class RectangleV2MapperTest {
     void shouldThrowExceptionIfRectangleHasNullHeight() {
         // given
         Rectangle rectangle = new Rectangle(null, new BigDecimal("10"));
+        doThrow(new InvalidEntityException("Height must not be null")).when(validator).validateEntity(rectangle);
 
-        // when
-        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
-
-        // then
-        assertEquals("Height must not be null", exception.getMessage());
+        // when / then
+        InvalidEntityException ex = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
+        assertEquals("Height must not be null", ex.getMessage());
+        verify(validator).validateEntity(rectangle);
     }
+
 
     @Test
     void shouldThrowExceptionIfRectangleHasNullWidth() {
         // given
         Rectangle rectangle = new Rectangle(new BigDecimal("5"), null);
+        doThrow(new InvalidEntityException("Width must not be null")).when(validator).validateEntity(rectangle);
 
-        // when
-        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
-
-        // then
-        assertEquals("Width must not be null", exception.getMessage());
+        // when / then
+        InvalidEntityException ex = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
+        assertEquals("Width must not be null", ex.getMessage());
+        verify(validator).validateEntity(rectangle);
     }
 
     @Test
     void shouldThrowExceptionIfRectangleHasNullHeightAndWidth() {
         // given
         Rectangle rectangle = new Rectangle(null, null);
+        doThrow(new InvalidEntityException("Height must not be null")).when(validator).validateEntity(rectangle);
 
-        // when
-        InvalidEntityException exception = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
-
-        // then
-        assertEquals("Height must not be null", exception.getMessage());
+        // when / then
+        InvalidEntityException ex = assertThrows(InvalidEntityException.class, () -> subject.mapToDTO(rectangle));
+        assertEquals("Height must not be null", ex.getMessage());
+        verify(validator).validateEntity(rectangle);
     }
 }

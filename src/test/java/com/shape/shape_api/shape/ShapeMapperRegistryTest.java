@@ -1,9 +1,9 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.model.Shape;
-import com.shape.shape_api.model.Square;
-import com.shape.shape_api.square.v1.SquareV1Mapper;
-import com.shape.shape_api.square.v1.dto.SquareDtoInV1;
+import com.shape.shape_api.domain.Shape;
+import com.shape.shape_api.square.dto.SquareDtoInV1;
+import com.shape.shape_api.square.mapper.SquareV1Mapper;
+import com.shape.shape_api.square.model.Square;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,14 +57,14 @@ class ShapeMapperRegistryTest {
     void shouldThrowExceptionWhenMapperIsNull() {
         // given
         subject = new ShapeMapperRegistry(Collections.emptyList());
-        String key = "nonExistingShape";
+        String key = "tenDimensionSquare";
         Map<String, BigDecimal> parameters = Map.of("param1", BigDecimal.valueOf(1L));
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> subject.mapParametersToDto(key, parameters));
 
         // then
-        assertEquals("No mapper found for shape type: " + key, exception.getMessage());
+        assertEquals("Unknown shape type: No mapper found for shape type: " + key, exception.getMessage());
     }
 
 
@@ -76,11 +76,11 @@ class ShapeMapperRegistryTest {
         // when
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> subject.mapEntityToDto("nonexistent:key", shape)
+                () -> subject.mapEntityToDto("ellipse", shape)
         );
 
         // then
-        assertEquals("No mapper found for shape type: nonexistent:key", exception.getMessage());
+        assertEquals("Unknown shape type: No mapper found for shape type: ellipse", exception.getMessage());
     }
 
     @Test
@@ -91,10 +91,10 @@ class ShapeMapperRegistryTest {
         // when
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> subject.mapParametersToEntity("nonexistent:key", params)
+                () -> subject.mapParametersToEntity("equilateral_triangle", params)
         );
 
         // then
-        assertEquals("No mapper found for shape type: nonexistent:key", exception.getMessage());
+        assertEquals("Unknown shape type: No mapper found for shape type: equilateral_triangle", exception.getMessage());
     }
 }

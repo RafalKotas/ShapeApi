@@ -1,7 +1,9 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.common.exception.ShapeNotSupportedException;
-import com.shape.shape_api.model.Shape;
+import com.shape.shape_api.domain.Shape;
+import com.shape.shape_api.exception.ShapeNotSupportedException;
+import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.shape.handler.ShapeHandler;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -45,12 +48,11 @@ public class ShapeService {
         String fullType = version + ":" + type;
         log.info("Creating shape with fullType={}", fullType);
 
-        ShapeHandler<? extends ShapeDTO, ? extends Shape> handler = shapeHandlers.get(fullType);
-
-        if (handler == null) {
-            log.error("No handler found for type={}", fullType);
-            throw new ShapeNotSupportedException(fullType);
-        }
+        ShapeHandler<? extends ShapeDTO, ? extends Shape> handler = Optional.ofNullable(shapeHandlers.get(fullType))
+                .orElseThrow(() -> {
+                    log.error("No handler found for type={}", fullType);
+                    return new ShapeNotSupportedException(fullType);
+                });
 
         ShapeDTO dto = shapeMapperRegistry.mapParametersToDto(fullType, parameters);
 
@@ -63,8 +65,6 @@ public class ShapeService {
         return shapeMapperRegistry.mapEntityToDto(fullType, shape);
     }
 
-
-
     /**
      * Retrieves all shape entities based on version and shape type.
      *
@@ -74,10 +74,8 @@ public class ShapeService {
      */
     public List<ShapeDTO> getShapesByType(String version, String type) {
         String fullType = version + ":" + type;
-        ShapeHandler<? extends ShapeDTO, ? extends Shape> shapeHandler = shapeHandlers.get(fullType);
-        if (shapeHandler == null) {
-            throw new ShapeNotSupportedException(fullType);
-        }
+        ShapeHandler<? extends ShapeDTO, ? extends Shape> shapeHandler = Optional.ofNullable(shapeHandlers.get(fullType))
+                .orElseThrow(() -> new ShapeNotSupportedException(fullType));
 
         log.info("getShapesByType (for version={} and type={})", version, type);
         List<? extends Shape> shapes = shapeHandler.getAllShapes();

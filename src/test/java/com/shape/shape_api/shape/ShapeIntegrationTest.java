@@ -1,7 +1,7 @@
 package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shape.shape_api.model.Rectangle;
+import com.shape.shape_api.rectangle.model.Rectangle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,8 +110,8 @@ class ShapeIntegrationTest {
         // then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         Map responseBody = response.getBody();
-        assertEquals("CONSTRAINT_VIOLATION", responseBody.get("errorCode"));
-        assertEquals("Side 'w' must be greater than 0", responseBody.get("message"));
+        assertEquals("INVALID_SHAPE_PARAMETER_VALUE", responseBody.get("errorCode"));
+        assertEquals("Parameter 'w' must be greater than 0", responseBody.get("message"));
         assertEquals(400, responseBody.get("httpCode"));
     }
 
@@ -119,13 +119,13 @@ class ShapeIntegrationTest {
     void shouldCreateCircleSuccessfully() {
         // given
         String circleJson = """
-    {
-      "type": "circle",
-      "parameters": {
-        "diameter": 12
-      }
-    }
-    """;
+            {
+              "type": "circle",
+              "parameters": {
+                "diameter": 12
+              }
+            }
+        """;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -149,13 +149,13 @@ class ShapeIntegrationTest {
     void shouldGetAllSquaresSuccessfully() {
         // given
         String squareJson = """
-    {
-      "type": "square",
-      "parameters": {
-        "a": 10
-      }
-    }
-    """;
+        {
+          "type": "square",
+          "parameters": {
+            "side": 10
+          }
+        }
+        """;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -164,7 +164,7 @@ class ShapeIntegrationTest {
         ResponseEntity<Map> postResponse = restTemplate.postForEntity(baseUrl, request, Map.class);
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
 
-        // when - retrieve squares
+        // when
         ResponseEntity<List> getResponse = restTemplate.exchange(
                 baseUrl + "?type=square",
                 HttpMethod.GET,
@@ -172,14 +172,13 @@ class ShapeIntegrationTest {
                 new ParameterizedTypeReference<>() {}
         );
 
-        // then - check retrieval status and values
+        // then
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
         List<?> shapes = getResponse.getBody();
         assertThat(shapes).isNotNull().isNotEmpty();
 
         Map<?, ?> shape = (Map<?, ?>) shapes.get(0);
 
-        // Use BigDecimal for exact comparison
         BigDecimal side = new BigDecimal(shape.get("side").toString());
         assertEquals(0, BigDecimal.valueOf(10L).compareTo(side), "The side length should match the expected value");
     }

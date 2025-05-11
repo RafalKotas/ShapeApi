@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,6 +59,22 @@ class ShapeCreationRequestTest {
         // then
         assertEquals(1, violations.size());
         assertEquals("Parameters must not be null", violations.iterator().next().getMessage());
+    }
+
+    @Test
+    void shouldSetTypeAndParameters() {
+        // given
+        ShapeCreationRequest request = new ShapeCreationRequest("square", new HashMap<>());
+
+        // when
+        Map<String, BigDecimal> params = new HashMap<>();
+        params.put("side", BigDecimal.TEN);
+        request.setType("rectangle");
+        request.setParameters(params);
+
+        // then
+        assertEquals("rectangle", request.getType());
+        assertEquals(BigDecimal.TEN, request.getParameters().get("side"));
     }
 
 }

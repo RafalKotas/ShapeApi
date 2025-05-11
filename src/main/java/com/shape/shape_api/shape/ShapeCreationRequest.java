@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static com.shape.shape_api.shape.docs.SwaggerDescriptions.*;
+import static com.shape.shape_api.documentation.SwaggerDescriptions.*;
 
 @Schema(description = SHAPE_CREATION_REQUEST_DESCRIPTION)
+@Getter
+@Setter
 public class ShapeCreationRequest {
 
     @Schema(description = SHAPE_TYPE_DESCRIPTION, example = RECTANGLE)
@@ -21,24 +23,8 @@ public class ShapeCreationRequest {
             example = SHAPE_PARAMETERS_EXAMPLE)
     private Map<String, BigDecimal> parameters;
 
-    public ShapeCreationRequest(@NotBlank(message = SHAPE_TYPE_NOT_EMPTY) String type, @NotNull(message = SHAPE_PARAMETERS_NOT_NULL) Map<String, BigDecimal> parameters) {
+    public ShapeCreationRequest(String type, Map<String, BigDecimal> parameters) {
         this.type = type;
-        this.parameters = parameters;
-    }
-
-    public @NotBlank(message = SHAPE_TYPE_NOT_EMPTY) String getType() {
-        return this.type;
-    }
-
-    public @NotNull(message = SHAPE_PARAMETERS_NOT_NULL) Map<String, BigDecimal> getParameters() {
-        return this.parameters;
-    }
-
-    public void setType(@NotBlank(message = SHAPE_TYPE_NOT_EMPTY) String type) {
-        this.type = type;
-    }
-
-    public void setParameters(@NotNull(message = SHAPE_PARAMETERS_NOT_NULL) Map<String, BigDecimal> parameters) {
         this.parameters = parameters;
     }
 }

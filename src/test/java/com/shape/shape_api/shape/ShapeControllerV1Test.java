@@ -1,6 +1,8 @@
 package com.shape.shape_api.shape;
 
-import com.shape.shape_api.square.v1.dto.SquareDtoOutV1;
+import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.square.dto.SquareDtoOutV1;
+import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -13,11 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,6 +93,39 @@ class ShapeControllerV1Test {
                 .andExpect(jsonPath("$.errorCode").value("CONSTRAINT_VIOLATION"))
                 .andExpect(jsonPath("$.message").value("Side 'a' must be greater than 0"))
                 .andExpect(jsonPath("$.httpCode").value(400));
+    }
+
+    @Test
+    void shouldGetShapesSuccessfullyForValidType() throws Exception {
+        // given
+        String type = "square";
+        SquareDtoOutV2 squareDtoOutV2 = new SquareDtoOutV2(BigDecimal.valueOf(5L));
+        List<ShapeDTO> shapeDTOS = List.of(squareDtoOutV2);
+
+        when(shapeService.getShapesByType("v2", type)).thenReturn(shapeDTOS);
+
+        // when & then
+        mockMvc.perform(get("/api/v2/shapes")
+                        .param("type", type)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].side").value(5));
+    }
+
+    @Test
+    void shouldReturnEmptyListForUnknownShapeType() throws Exception {
+        // given
+        String type = "trapezoid";
+        List<ShapeDTO> shapes = List.of();
+
+        when(shapeService.getShapesByType("v1", type)).thenReturn(shapes);
+
+        // when & then
+        mockMvc.perform(get("/api/v1/shapes")
+                        .param("type", type)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
     }
 
 }

@@ -7,10 +7,13 @@ import com.shape.shape_api.shape.handler.ShapeHandler;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
 import com.shape.shape_api.square.model.Square;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -85,6 +89,31 @@ class ShapeServiceTest {
 
         // then
         assertEquals("Unknown shape type: v1:triangle", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowConstraintViolationExceptionWhenDtoIsInvalid() {
+        // given
+        String version = "v2";
+        String type = "circle";
+        Map<String, BigDecimal> parameters = Map.of();
+        String fullType = version + ":" + type;
+
+        ShapeDTO invalidDto = mock(ShapeDTO.class);
+        Set<ConstraintViolation<Object>> violations = Set.of(mock(ConstraintViolation.class));
+
+        ShapeMapperRegistry mapperRegistry = mock(ShapeMapperRegistry.class);
+        when(mapperRegistry.mapParametersToDto(fullType, Map.of())).thenReturn(invalidDto);
+        when(validator.validate(any())).thenReturn(violations);
+
+        ShapeService service = new ShapeService(Map.of(fullType, mock(ShapeHandler.class)), mapperRegistry, validator);
+
+        // when
+        Executable executable = () -> service.createShape(version, type, parameters);
+
+        // then
+        ConstraintViolationException ex = assertThrows(ConstraintViolationException.class, executable);
+        assertEquals("Validation failed", ex.getMessage());
     }
 
 }

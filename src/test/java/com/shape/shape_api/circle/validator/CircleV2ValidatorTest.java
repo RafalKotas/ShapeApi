@@ -1,9 +1,9 @@
-package com.shape.shape_api.square.validator;
+package com.shape.shape_api.circle.validator;
 
+import com.shape.shape_api.circle.model.Circle;
 import com.shape.shape_api.exception.InvalidEntityException;
 import com.shape.shape_api.exception.InvalidShapeParameterValueException;
 import com.shape.shape_api.exception.MissingParameterException;
-import com.shape.shape_api.square.model.Square;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,26 +13,26 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SquareV1ValidatorTest {
+class CircleV2ValidatorTest {
 
-    SquareV1Validator subject;
+    CircleV2Validator subject;
 
     @BeforeEach
     void setUp() {
-        subject = new SquareV1Validator();
+        subject = new CircleV2Validator();
     }
 
     @Test
-    void shouldNotThrowWhenSquareIsValid() {
+    void shouldNotThrowWhenCircleIsValid() {
         // given
-        Square square = new Square(BigDecimal.TEN);
+        Circle circle = new Circle(BigDecimal.TEN);
 
         // when / then
-        assertDoesNotThrow(() -> subject.validateEntity(square));
+        assertDoesNotThrow(() -> subject.validateEntity(circle));
     }
 
     @Test
-    void shouldThrowWhenSideParamIsNull() {
+    void shouldThrowWhenDiameterParamIsNull() {
         // given
         Map<String, BigDecimal> params = Map.of();
 
@@ -42,9 +42,9 @@ class SquareV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenSideParamIsZero() {
+    void shouldThrowWhenDiameterParamIsZero() {
         // given
-        Map<String, BigDecimal> params = Map.of("a", BigDecimal.ZERO);
+        Map<String, BigDecimal> params = Map.of("diameter", BigDecimal.ZERO);
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -52,9 +52,9 @@ class SquareV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenSideParamIsNegative() {
+    void shouldThrowWhenDiameterParamIsNegative() {
         // given
-        Map<String, BigDecimal> params = Map.of("a", new BigDecimal("-10"));
+        Map<String, BigDecimal> params = Map.of("diameter", new BigDecimal("-10"));
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -63,16 +63,18 @@ class SquareV1ValidatorTest {
 
     @Test
     void shouldThrowWhenEntityIsNull() {
+        // when / then
         assertThrows(InvalidEntityException.class,
                 () -> subject.validateEntity(null));
     }
 
     @Test
-    void shouldThrowWhenSideIsNullInEntity() {
-        Square square = new Square(null);
+    void shouldThrowWhenRadiusIsNullInEntity() {
+        // given
+        Circle circle = new Circle(null);
 
+        // when / then
         assertThrows(InvalidEntityException.class,
-                () -> subject.validateEntity(square));
+                () -> subject.validateEntity(circle));
     }
-
 }

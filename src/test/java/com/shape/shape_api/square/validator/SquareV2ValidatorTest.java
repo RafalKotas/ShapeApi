@@ -13,17 +13,17 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SquareV1ValidatorTest {
+class SquareV2ValidatorTest {
 
-    SquareV1Validator subject;
+    SquareV2Validator subject;
 
     @BeforeEach
     void setUp() {
-        subject = new SquareV1Validator();
+        subject = new SquareV2Validator();
     }
 
     @Test
-    void shouldNotThrowWhenSquareIsValid() {
+    void shouldNotThrowWhenCircleIsValid() {
         // given
         Square square = new Square(BigDecimal.TEN);
 
@@ -32,7 +32,7 @@ class SquareV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenSideParamIsNull() {
+    void shouldThrowWhenDiameterParamIsNull() {
         // given
         Map<String, BigDecimal> params = Map.of();
 
@@ -42,9 +42,9 @@ class SquareV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenSideParamIsZero() {
+    void shouldThrowWhenDiameterParamIsZero() {
         // given
-        Map<String, BigDecimal> params = Map.of("a", BigDecimal.ZERO);
+        Map<String, BigDecimal> params = Map.of("side", BigDecimal.ZERO);
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -52,9 +52,9 @@ class SquareV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenSideParamIsNegative() {
+    void shouldThrowWhenDiameterParamIsNegative() {
         // given
-        Map<String, BigDecimal> params = Map.of("a", new BigDecimal("-10"));
+        Map<String, BigDecimal> params = Map.of("side", new BigDecimal("-10"));
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -63,16 +63,18 @@ class SquareV1ValidatorTest {
 
     @Test
     void shouldThrowWhenEntityIsNull() {
+        // when / then
         assertThrows(InvalidEntityException.class,
                 () -> subject.validateEntity(null));
     }
 
     @Test
-    void shouldThrowWhenSideIsNullInEntity() {
+    void shouldThrowWhenRadiusIsNullInEntity() {
+        // given
         Square square = new Square(null);
 
+        // when / then
         assertThrows(InvalidEntityException.class,
                 () -> subject.validateEntity(square));
     }
-
 }

@@ -1,6 +1,5 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.dto;
 
-import com.shape.shape_api.shape.dto.ShapeDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

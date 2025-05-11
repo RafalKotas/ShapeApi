@@ -1,4 +1,4 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.dto;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

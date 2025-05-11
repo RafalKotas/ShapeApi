@@ -5,7 +5,7 @@ import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.dto.RectangleDtoOutV2;
 import com.shape.shape_api.rectangle.mapper.RectangleV2Mapper;
 import com.shape.shape_api.rectangle.model.Rectangle;
-import com.shape.shape_api.shape.ShapeRepository;
+import com.shape.shape_api.shape.repository.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

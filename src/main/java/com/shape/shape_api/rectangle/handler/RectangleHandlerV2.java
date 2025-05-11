@@ -3,8 +3,8 @@ package com.shape.shape_api.rectangle.handler;
 import com.shape.shape_api.rectangle.dto.RectangleDtoInV2;
 import com.shape.shape_api.rectangle.mapper.RectangleV2Mapper;
 import com.shape.shape_api.rectangle.model.Rectangle;
-import com.shape.shape_api.shape.ShapeRepository;
 import com.shape.shape_api.shape.handler.ShapeHandler;
+import com.shape.shape_api.shape.repository.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 

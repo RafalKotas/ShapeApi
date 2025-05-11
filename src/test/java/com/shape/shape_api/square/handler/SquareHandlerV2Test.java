@@ -1,7 +1,7 @@
 package com.shape.shape_api.square.handler;
 
 import com.shape.shape_api.domain.Shape;
-import com.shape.shape_api.shape.ShapeRepository;
+import com.shape.shape_api.shape.repository.ShapeRepository;
 import com.shape.shape_api.square.dto.SquareDtoInV2;
 import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import com.shape.shape_api.square.mapper.SquareV2Mapper;

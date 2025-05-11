@@ -1,9 +1,10 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.service;
 
 import com.shape.shape_api.domain.Shape;
 import com.shape.shape_api.exception.ShapeNotSupportedException;
 import com.shape.shape_api.shape.dto.ShapeDTO;
 import com.shape.shape_api.shape.handler.ShapeHandler;
+import com.shape.shape_api.shape.mapper.ShapeMapperRegistry;
 import com.shape.shape_api.square.dto.SquareDtoInV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
 import com.shape.shape_api.square.model.Square;

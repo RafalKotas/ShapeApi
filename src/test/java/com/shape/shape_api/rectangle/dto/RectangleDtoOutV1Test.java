@@ -10,10 +10,14 @@ class RectangleDtoOutV1Test {
 
     @Test
     void shouldAllowEmptyConstructorAndSetters() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1();
-        dto.setHeight(new BigDecimal("4"));
-        dto.setWidth(new BigDecimal("2"));
+        // given
+        BigDecimal height = new BigDecimal("4");
+        BigDecimal width = new BigDecimal("2");
 
+        // when
+        RectangleDtoOutV1 dto = new RectangleDtoOutV1(height, width);
+
+        // then
         assertEquals(new BigDecimal("4"), dto.getHeight());
         assertEquals(new BigDecimal("2"), dto.getWidth());
         assertEquals("v1:rectangle", dto.getType());

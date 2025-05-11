@@ -3,8 +3,8 @@ package com.shape.shape_api.circle.handler;
 import com.shape.shape_api.circle.dto.CircleDtoInV1;
 import com.shape.shape_api.circle.mapper.CircleV1Mapper;
 import com.shape.shape_api.circle.model.Circle;
-import com.shape.shape_api.shape.ShapeRepository;
 import com.shape.shape_api.shape.handler.ShapeHandler;
+import com.shape.shape_api.shape.repository.ShapeRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 package com.shape.shape_api.shape.controller;
 
-import com.shape.shape_api.shape.ShapeCreationRequest;
-import com.shape.shape_api.shape.ShapeService;
+import com.shape.shape_api.shape.dto.ShapeCreationRequest;
 import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.shape.service.ShapeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

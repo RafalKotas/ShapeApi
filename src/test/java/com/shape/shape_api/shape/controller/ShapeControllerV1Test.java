@@ -1,6 +1,8 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.controller;
 
 import com.shape.shape_api.shape.dto.ShapeDTO;
+import com.shape.shape_api.shape.mapper.ShapeMapperRegistry;
+import com.shape.shape_api.shape.service.ShapeService;
 import com.shape.shape_api.square.dto.SquareDtoOutV1;
 import com.shape.shape_api.square.dto.SquareDtoOutV2;
 import jakarta.validation.ConstraintViolation;

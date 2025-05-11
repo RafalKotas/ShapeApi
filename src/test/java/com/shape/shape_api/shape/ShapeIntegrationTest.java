@@ -2,6 +2,8 @@ package com.shape.shape_api.shape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shape.shape_api.rectangle.model.Rectangle;
+import com.shape.shape_api.shape.mapper.ShapeMapperRegistry;
+import com.shape.shape_api.shape.repository.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

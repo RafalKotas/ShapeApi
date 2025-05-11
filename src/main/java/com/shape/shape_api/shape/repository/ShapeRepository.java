@@ -1,4 +1,4 @@
-package com.shape.shape_api.shape;
+package com.shape.shape_api.shape.repository;
 
 import com.shape.shape_api.domain.Shape;
 import org.springframework.data.jpa.repository.JpaRepository;

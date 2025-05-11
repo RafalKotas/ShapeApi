@@ -5,7 +5,7 @@ import com.shape.shape_api.circle.dto.CircleDtoOutV1;
 import com.shape.shape_api.circle.mapper.CircleV1Mapper;
 import com.shape.shape_api.circle.model.Circle;
 import com.shape.shape_api.domain.Shape;
-import com.shape.shape_api.shape.ShapeRepository;
+import com.shape.shape_api.shape.repository.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

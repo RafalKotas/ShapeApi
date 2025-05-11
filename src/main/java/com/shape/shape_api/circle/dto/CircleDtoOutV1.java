@@ -4,8 +4,6 @@ import com.shape.shape_api.shape.dto.ShapeDTO;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 public class CircleDtoOutV1 extends ShapeDTO {
 
     private static final String V1_CIRCLE_TYPE = "v1:circle";
@@ -19,6 +17,14 @@ public class CircleDtoOutV1 extends ShapeDTO {
 
     public CircleDtoOutV1() {
         super(V1_CIRCLE_TYPE);
+    }
+
+    public BigDecimal getRadius() {
+        return this.radius;
+    }
+
+    public void setRadius(BigDecimal radius) {
+        this.radius = radius;
     }
 }
 

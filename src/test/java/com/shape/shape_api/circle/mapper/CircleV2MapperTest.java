@@ -105,4 +105,16 @@ class CircleV2MapperTest {
         // then
         assertEquals("Radius must not be null", exception.getMessage());
     }
+
+    @Test
+    void shouldDelegateParamValidationToValidator() {
+        // given
+        Map<String, BigDecimal> params = Map.of("diameter", BigDecimal.valueOf(30));
+
+        // when
+        subject.validateParams(params);
+
+        // then
+        verify(validator).validateParams(params);
+    }
 }

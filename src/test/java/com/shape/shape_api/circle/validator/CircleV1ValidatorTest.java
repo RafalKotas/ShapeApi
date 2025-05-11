@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CircleV1ValidatorTest {
@@ -19,6 +20,15 @@ class CircleV1ValidatorTest {
     @BeforeEach
     void setUp() {
         subject = new CircleV1Validator();
+    }
+
+    @Test
+    void shouldNotThrowWhenCircleIsValid() {
+        // given
+        Circle circle = new Circle(BigDecimal.TEN);
+
+        // when / then
+        assertDoesNotThrow(() -> subject.validateEntity(circle));
     }
 
     @Test

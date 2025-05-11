@@ -9,17 +9,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RectangleDtoOutV2Test {
 
     @Test
-    void shouldConstructRectangleDtoOutV2WithHeightAndWidth() {
+    void shouldSetAndGetHAndWCorrectly() {
         // given
-        BigDecimal h = new BigDecimal("10.5");
-        BigDecimal w = new BigDecimal("15.5");
+        RectangleDtoOutV2 dto = new RectangleDtoOutV2();
 
         // when
-        RectangleDtoOutV2 dto = new RectangleDtoOutV2(h, w);
+        dto.setH(new BigDecimal("52615.82"));
+        dto.setW(new BigDecimal("70043.55"));
 
         // then
-        assertEquals(new BigDecimal("10.5"), dto.getH());
-        assertEquals(new BigDecimal("15.5"), dto.getW());
+        assertEquals(new BigDecimal("52615.82"), dto.getH());
+        assertEquals(new BigDecimal("70043.55"), dto.getW());
+        assertEquals("v2:rectangle", dto.getType());
+    }
+
+    @Test
+    void shouldInitializeWithConstructorProperly() {
+        // given / when
+        RectangleDtoOutV2 dto = new RectangleDtoOutV2(new BigDecimal("70025.37"),
+                new BigDecimal("219052.54"));
+
+        // then
+        assertEquals(new BigDecimal("70025.37"), dto.getH());
+        assertEquals( new BigDecimal("219052.54"), dto.getW());
         assertEquals("v2:rectangle", dto.getType());
     }
 }

@@ -6,11 +6,11 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RectangleDtoOutV1Test {
+public class RectangleDtoInV1Test {
 
     @Test
     void shouldAllowEmptyConstructorAndSetters() {
-        RectangleDtoOutV1 dto = new RectangleDtoOutV1();
+        RectangleDtoInV1 dto = new RectangleDtoInV1();
         dto.setHeight(new BigDecimal("4"));
         dto.setWidth(new BigDecimal("2"));
 

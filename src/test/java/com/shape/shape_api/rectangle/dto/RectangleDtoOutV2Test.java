@@ -15,10 +15,11 @@ class RectangleDtoOutV2Test {
         BigDecimal width = new BigDecimal("15.5");
 
         // when
-        RectangleDtoOutV2 rectangleDto = new RectangleDtoOutV2(height, width);
+        RectangleDtoOutV2 dto = new RectangleDtoOutV2(height, width);
 
         // then
-        assertEquals(height, rectangleDto.getH());
-        assertEquals(width, rectangleDto.getW());
+        assertEquals(height, dto.getH());
+        assertEquals(width, dto.getW());
+        assertEquals("v2:rectangle", dto.getType());
     }
 }

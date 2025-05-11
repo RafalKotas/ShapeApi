@@ -13,19 +13,19 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class RectangleV1ValidatorTest {
+class RectangleV2ValidatorTest {
 
-    RectangleV1Validator subject;
+    RectangleV2Validator subject;
 
     @BeforeEach
     void setUp() {
-        subject = new RectangleV1Validator();
+        subject = new RectangleV2Validator();
     }
 
     @Test
-    void shouldThrowWhenHeightParamIsNull() {
+    void shouldThrowWhenHParamIsNull() {
         // given
-        Map<String, BigDecimal> params = Map.of("width", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("w", BigDecimal.TEN);
 
         // when / then
         assertThrows(MissingParameterException.class,
@@ -33,9 +33,9 @@ class RectangleV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenWidthParamIsNull() {
+    void shouldThrowWhenWParamIsNull() {
         // given
-        Map<String, BigDecimal> params = Map.of("height", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN);
 
         // when / then
         assertThrows(MissingParameterException.class,
@@ -43,7 +43,7 @@ class RectangleV1ValidatorTest {
     }
 
     @Test
-    void shouldThrowWhenBothHeightAndWidthParamsAreNull() {
+    void shouldThrowWhenBothHAndWParamsAreNull() {
         // given
         Map<String, BigDecimal> params = Map.of();
 
@@ -72,7 +72,7 @@ class RectangleV1ValidatorTest {
     @Test
     void shouldThrowWhenHeightIsZero() {
         // given
-        Map<String, BigDecimal> params = Map.of("height", BigDecimal.ZERO, "width", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.ZERO, "w", BigDecimal.TEN);
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -82,7 +82,7 @@ class RectangleV1ValidatorTest {
     @Test
     void shouldThrowWhenHeightIsNegative() {
         // given
-        Map<String, BigDecimal> params = Map.of("height", BigDecimal.valueOf(-0.5), "width", BigDecimal.TEN);
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.valueOf(-0.5), "w", BigDecimal.TEN);
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -102,7 +102,7 @@ class RectangleV1ValidatorTest {
     @Test
     void shouldThrowWhenWidthIsZero() {
         // given
-        Map<String, BigDecimal> params = Map.of("height", BigDecimal.TEN, "width", BigDecimal.ZERO);
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN, "w", BigDecimal.ZERO);
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,
@@ -112,7 +112,7 @@ class RectangleV1ValidatorTest {
     @Test
     void shouldThrowWhenWidthIsNegative() {
         // given
-        Map<String, BigDecimal> params = Map.of("height", BigDecimal.TEN, "width",  BigDecimal.valueOf(-23.53));
+        Map<String, BigDecimal> params = Map.of("h", BigDecimal.TEN, "w",  BigDecimal.valueOf(-23.53));
 
         // when / then
         assertThrows(InvalidShapeParameterValueException.class,

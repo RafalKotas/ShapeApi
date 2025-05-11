@@ -4,8 +4,6 @@ import com.shape.shape_api.shape.dto.ShapeDTO;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 public class RectangleDtoInV2 extends ShapeDTO {
 
     private static final String V2_RECTANGLE_TYPE = "v2:rectangle";
@@ -21,5 +19,21 @@ public class RectangleDtoInV2 extends ShapeDTO {
 
     public RectangleDtoInV2() {
         super(V2_RECTANGLE_TYPE);
+    }
+
+    public BigDecimal getH() {
+        return this.h;
+    }
+
+    public BigDecimal getW() {
+        return this.w;
+    }
+
+    public void setH(BigDecimal h) {
+        this.h = h;
+    }
+
+    public void setW(BigDecimal w) {
+        this.w = w;
     }
 }

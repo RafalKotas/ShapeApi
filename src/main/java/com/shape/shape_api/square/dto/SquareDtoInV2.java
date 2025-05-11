@@ -4,8 +4,6 @@ import com.shape.shape_api.shape.dto.ShapeDTO;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 public class SquareDtoInV2 extends ShapeDTO {
 
     private static final String V2_SQUARE_TYPE = "v2:square";
@@ -19,5 +17,13 @@ public class SquareDtoInV2 extends ShapeDTO {
 
     public SquareDtoInV2() {
         super(V2_SQUARE_TYPE);
+    }
+
+    public BigDecimal getSide() {
+        return this.side;
+    }
+
+    public void setSide(BigDecimal side) {
+        this.side = side;
     }
 }

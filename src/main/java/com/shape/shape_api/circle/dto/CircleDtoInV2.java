@@ -1,7 +1,6 @@
 package com.shape.shape_api.circle.dto;
 
 import com.shape.shape_api.shape.dto.ShapeDTO;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 

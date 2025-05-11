@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static java.util.Objects.isNull;
-
 @Component
 public class CircleV2Validator implements ShapeValidator<Circle> {
 
@@ -19,7 +17,7 @@ public class CircleV2Validator implements ShapeValidator<Circle> {
 
     @Override
     public void validateEntity(Circle circle) {
-        if (isNull(circle)) {
+        if (circle == null) {
             throw new InvalidEntityException("Circle must not be null");
         }
 
